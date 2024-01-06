@@ -1,0 +1,1 @@
+import{_ as t,c as e,o,a as s}from"./index-9MPwhWat.js";const a={data(){return{data:{}}},mounted(){}},c={class:"about"},n=s("h1",null,"This is an about page",-1),r=[n];function _(d,i,u,p,l,f){return o(),e("div",c,r)}const m=t(a,[["render",_]]);export{m as default};
