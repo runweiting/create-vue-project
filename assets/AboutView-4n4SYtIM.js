@@ -1,0 +1,1 @@
+import{_ as e,c as t,o,a}from"./index-QNOgj1_c.js";const s={data(){return{data:{}}},mounted(){}},n=a("h1",null,"This is an about page",-1),c=[n];function r(_,d,i,u,p,l){return o(),t("div",null,c)}const h=e(s,[["render",r]]);export{h as default};
