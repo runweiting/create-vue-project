@@ -65,7 +65,7 @@ export default {
 </script>
 
 <template>
-  <div class="col-md-8">
+  <div class="col-md-8 py-4">
     <h2>{{ title }}</h2>
     <table class="table table-hover">
       <thead>
