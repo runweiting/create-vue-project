@@ -13,6 +13,10 @@ const router = createRouter({
   routes: [
     // 指定路由和對應的元件
     {
+      path: '/',
+      redirect: '/week1', // 設定根路徑的重定向
+    },
+    {
       path: '/week1',
       // name 的值必須與 RouterLink 中一致
       name: 'week1',
