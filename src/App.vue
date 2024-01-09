@@ -1,85 +1,54 @@
-<script setup>
+<!-- App.vue 用途：
+  App.vue 主組件是整個應用程式的入口點，包含應用程式的整體佈局、路由配置、全域樣式，以及可能的全域行為 -->
+<!-- 資料夾 的用途：
+  # src/components 放子元件、utils.js
+  # src/router 放 index.js 使用 createRouter 進行路由配置，根據不同 URL 顯示不同的頁面組件
+  # src/views 放 xxxView.vue 等頁面組件，包含了該頁面的模板、資料、樣式等，用於渲染和呈現特定的內容 -->
+
+<script>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
+  <!-- 放置每頁重複出現的 HTML：如導航欄 -->
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+    <nav class="nav nav-pills justify-content-end gap-2">
+      <!-- RouterLink 生成路由鏈接，編譯後轉為 a 標籤，to 代表即將進入的路由 -->
+      <RouterLink :to="{ name: 'week1' }" class="nav-link active text-decoration-none">第一週主線作業</RouterLink>
+      <RouterLink :to="{ name: 'week2' }" class="nav-link text-decoration-none">第二週主線作業-前台</RouterLink>
+      <RouterLink :to="{ name: 'admin' }" class="nav-link text-decoration-none">第二週主線作業-後台</RouterLink>
+    </nav>
   </header>
 
-  <RouterView />
+  <!-- 放置主要內容 -->
+  <main>
+    <!-- <RouterView> 渲染路由內容 -->
+    <RouterView />
+  </main>
+
+  <!-- 放置每頁重複出現的 HTML：如頁尾 -->
+  <footer>
+  </footer>
 </template>
 
+<!-- Global Styles 全域樣式：
+  設定全域樣式，例如背景色、字型、邊框等。使用 :root 或 body 元素是一種常見的做法。 
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+  }
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--primary-color);
+    color: #fff;
+  }-->
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+* {
+  outline: 1px solid yellowgreen
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.nav-link:hover {
+  background-color: #0d6efd;
+  color: white;
 }
 </style>

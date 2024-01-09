@@ -1,0 +1,98 @@
+<script>
+import Swal from 'sweetalert2';
+
+export default {
+  data() {
+    return {
+      // 新增 apiUrl、apiPath
+      apiUrl: import.meta.env.VITE_URL,
+      apiPath: import.meta.env.VITE_PATH,
+      user: {
+        "username": "",
+        "password": ""
+      },
+      products: [],
+      title: '產品列表'
+    }
+  },
+  created() {
+    // 從 cookies 讀取 token
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
+    // axios headers 預設寫法
+    this.axios.defaults.headers.common['Authorization'] = token;
+    // GET 取得後台產品列表
+    const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
+      this.axios
+      .get(url)
+      .then((res)=> {
+        this.products = res.data.products;
+        console.log(this.products)
+        })
+      .catch((err)=> {
+        console.log(err)
+        })
+  },
+  methods: {
+    // POST 登出
+    logout(){
+      const url = `${this.apiUrl}/logout`;
+      this.axios
+      .post(url)
+      .then((res)=> {
+        console.log(res.data);
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(()=>{
+          this.$router.push({ name: 'login' });
+        });
+        // 清空 user
+        this.user = {};
+        
+        })
+      .catch((err)=> {
+        console.log(err.response)
+        })
+    },
+    // $emit 是用於觸發自定義事件的方法
+    // $emit(eventName, payload) 觸發 eventName 的事件，並傳遞 payload 到父元件
+    ItemInfo(item) {
+      this.$emit('showProductDetail',item)
+    },
+  }
+}
+</script>
+
+<template>
+  <div class="col-md-8">
+    <h2>{{ title }}</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col" class="fw-bold">產品名稱</th>
+          <th scope="col" class="fw-bold">原價</th>
+          <th scope="col" class="fw-bold">售價</th>
+          <th scope="col" class="fw-bold">是否啟用</th>
+          <th scope="col" class="fw-bold">查看細節</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in products" :key="item.title">
+          <td>{{ item.title }}</td>
+          <td>{{ item.origin_price }}</td>
+          <td>{{ item.price }}</td>
+          <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
+          <td><button type="button" class="btn btn-primary" @click="ItemInfo(item)">查看細節</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex gap-2">
+      <p class="p-2 mb-0">{{ `目前有 ${this.products.length} 項產品` }}</p>
+      <button @click="logout" type="button" class="btn btn-warning">登出</button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+</style>
