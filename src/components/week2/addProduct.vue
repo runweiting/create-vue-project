@@ -20,6 +20,8 @@ export default {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
     // axios headers 預設寫法
     this.axios.defaults.headers.common['Authorization'] = token;
+    const url = `${this.apiUrl}/api/${this.apiPath}/products/all`;
+    this.axios.get(url).then((res)=>{console.log(res)})
   },
   methods: {
     upload() {

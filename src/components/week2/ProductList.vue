@@ -15,22 +15,12 @@ export default {
       title: '產品列表'
     }
   },
+  // created() 在初始化後立即調用，在讀取和掛載 DOM 之前，如設置初始數據、監聽事件等
   created() {
     // 從 cookies 讀取 token
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
     // axios headers 預設寫法
     this.axios.defaults.headers.common['Authorization'] = token;
-    // GET 取得後台產品列表
-    const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
-      this.axios
-      .get(url)
-      .then((res)=> {
-        this.products = res.data.products;
-        console.log(this.products)
-        })
-      .catch((err)=> {
-        console.log(err)
-        })
   },
   methods: {
     // POST 登出
@@ -60,7 +50,21 @@ export default {
     ItemInfo(item) {
       this.$emit('showProductDetail',item)
     },
-  }
+  },
+  // 初始化後，執行的第一個方法
+  mounted() {
+    // GET 取得後台產品列表
+    const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
+    this.axios
+    .get(url)
+    .then((res)=> {
+      this.products = res.data.products;
+      console.log(this.products)
+      })
+    .catch((err)=> {
+      console.log(err)
+      })
+  },
 }
 </script>
 
