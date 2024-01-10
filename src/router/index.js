@@ -37,7 +37,6 @@ const router = createRouter({
       path: '/week2-admin',
       name: 'admin',
       component: Week2AdminView,
-      // 添加 beforeEnter 钩子
       beforeEnter: (to, from, next) => {
         // 驗證是否有 token
         if (isUserLoggedIn()) {

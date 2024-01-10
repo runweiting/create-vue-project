@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-  <div class="col-md-4">
+  <div class="col-md-4 py-4">
     <h2>{{ title }}</h2>
     <div class="card w-100" style="width: 18rem;"> 
       <img :src="product.imageUrl" class="card-img-top" alt="">

@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     // $emit 是用於觸發自定義事件的方法
-    // $emit(eventName, payload) 觸發 eventName 的事件，並傳遞 payload 到父元件
+    // $emit(eventName, payload) 觸發 eventName 事件，並傳遞 payload 到 Week1View 父元件
     ItemInfo(item) {
       this.$emit('showProductDetail',item)
     }
@@ -68,8 +68,9 @@ export default {
 </script>
 
 <template>
-  <div class="col-md-8">
+  <div class="col-md-8 py-4">
     <h2>{{ title }}</h2>
+    <p class="text-secondary">請選擇一個商品查看細節</p>
     <table class="table table-hover">
       <thead>
         <tr>

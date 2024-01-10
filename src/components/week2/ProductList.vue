@@ -71,6 +71,7 @@ export default {
 <template>
   <div class="col-md-8 py-4">
     <h2>{{ title }}</h2>
+    <p class="text-secondary">請選擇一個商品查看細節</p>
     <table class="table table-hover">
       <thead>
         <tr>
