@@ -24,7 +24,6 @@ export default {
   methods: {
     // updateNavClass 接受兩個參數 to 和 from，分別代表即將進入的路由和即將離開的路由，藉此更新 activeNavLink 設為當前路由名稱
     updateNavClass(to, from) {
-      console.log(to.name);
       this.activeNavLink = to.name;
     },
   },
@@ -70,9 +69,9 @@ export default {
   }-->
 
 <style scoped>
-* {
+/* {
   outline: 1px solid yellowgreen
-}
+}*/
 .nav-link.active {
   background-color: #0d6efd;
   color: white;

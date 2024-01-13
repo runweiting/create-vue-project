@@ -19,7 +19,7 @@ export default {
       /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
     );
     // axios headers 預設寫法
-    this.axios.defaults.headers.common['Authorization'] = token    
+    this.axios.defaults.headers.common['Authorization'] = token;
   },
   methods: {
     // POST 登入及驗證
@@ -39,21 +39,30 @@ export default {
       .then((res)=> {
         // 將 expired 和 token 存入 cookies
         const { expired, token } = res.data;
-        document.cookie = `myToken=${token}; expired=${new Date(expired)}`;
+        document.cookie = `myToken=${token}; expires=${new Date(expired)}`;
         Swal.fire({
-          title: res.data.message,
+          title: `您已成功登入`,
           icon: 'success',
           confirmButtonText: 'OK'
-        })
+        }).then(()=>{
+          this.goToAdmin();
+        });
         // 清空 user
         this.user = {};
       })
       .catch((err)=> {
-        if (this.user.username === '' || this.user.password === ''){
+        if (err.response && err.response.status === 400){
           Swal.fire({
-          title: '請輸入登入信箱和密碼',
-          icon: 'error',
-          confirmButtonText: 'OK'
+            title: '登入帳號或密碼錯誤',
+            text: '請輸入正確的帳號和密碼',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          })
+        } else if (this.user.username === '' || this.user.password === ''){
+          Swal.fire({
+            title: '請輸入登入信箱和密碼',
+            icon: 'error',
+            confirmButtonText: 'OK'
           })
         }
       })
@@ -78,7 +87,7 @@ export default {
       .catch((err)=> {
         console.log(err.response);
         Swal.fire({
-          title: err.response.data.message,
+          title: `驗證錯誤，請重新登入`,
           icon: 'error',
           confirmButtonText: 'OK'
           })

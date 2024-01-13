@@ -47,7 +47,7 @@ export default {
 </script>
 
 <template>
-  <div class="col-md-8">
+  <div class="col-md-8 py-2">
     <h2>{{ title }}</h2>
     <div class="mb-3">
       <input @change="upload" class="form-control" type="file" id="formFile" placeholder="請輸入圖片連結">

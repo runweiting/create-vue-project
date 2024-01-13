@@ -34,12 +34,17 @@ export default {
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
-        }).then(()=>{
+        })
+        .then(()=>{
+          // 清空 user
+          this.user = {};
+          // 清除 token
+          document.cookie = "myToken=; expires=;";
+          // 清除 headers
+          this.axios.defaults.headers.common['Authorization'] = null;
+          // 導向登入頁面
           this.$router.push({ name: 'login' });
         });
-        // 清空 user
-        this.user = {};
-        
         })
       .catch((err)=> {
         console.log(err.response)
@@ -69,7 +74,7 @@ export default {
 </script>
 
 <template>
-  <div class="col-md-8 py-4">
+  <div class="col-md-8 mt-4 mb-4">
     <h2>{{ title }}</h2>
     <p class="text-secondary">請選擇一個商品查看細節</p>
     <table class="table table-hover">
