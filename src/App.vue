@@ -40,8 +40,8 @@ export default {
       <!-- RouterLink 生成路由鏈接，編譯後轉為 a 標籤，to 代表即將進入的路由 -->
       <!-- :class 綁定 active 判斷 activeNavLink 的值 -->
       <RouterLink :to="{ name: 'week1' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week1' }">第一週主線作業</RouterLink>
-      <RouterLink :to="{ name: 'week2' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2' }">第二週主線作業-登入</RouterLink>
-      <RouterLink :to="{ name: 'admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'admin'}">第二週主線作業-後台</RouterLink>
+      <RouterLink :to="{ name: 'week2' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2' }">第二週主線作業</RouterLink>
+      <RouterLink :to="{ name: 'week3-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week3-admin'}">第三週主線作業</RouterLink>
     </nav>
   </header>
 
@@ -69,9 +69,9 @@ export default {
   }-->
 
 <style scoped>
-/* {
+* {
   outline: 1px solid yellowgreen
-}*/
+}
 .nav-link.active {
   background-color: #0d6efd;
   color: white;

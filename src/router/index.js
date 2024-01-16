@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Week1View from '../views/Week1View.vue'
 import Week2LoginView from '../views/Week2LoginView.vue'
 import Week2AdminView from '../views/Week2AdminView.vue'
+import Week3AdminView from '../views/Week3AdminView.vue'
 import Swal from 'sweetalert2';
 import { isUserLoggedIn } from '../../src/components/utils/utils'
 
@@ -20,7 +21,6 @@ const router = createRouter({
       path: '/week1',
       // name 的值必須與 RouterLink 中一致
       name: 'week1',
-      // 非動態載入：在初始化時，一併直接導入
       component: Week1View
     },
     {
@@ -35,8 +35,33 @@ const router = createRouter({
     },
     {
       path: '/week2-admin',
-      name: 'admin',
+      name: 'week2-admin',
       component: Week2AdminView,
+      beforeEnter: (to, from, next) => {
+        // 驗證是否有 token
+        if (isUserLoggedIn()) {
+          // 已登入，可進入後台
+          Swal.fire({
+            title: '這是後台商品頁面',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          next();
+        } else {
+          // 未登入，導向登入頁面
+          Swal.fire({
+            title: '請先登入',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          next({ name: 'login' });
+        }
+      }
+    },
+    {
+      path: '/week3-admin',
+      name: 'week3-admin',
+      component: Week3AdminView,
       beforeEnter: (to, from, next) => {
         // 驗證是否有 token
         if (isUserLoggedIn()) {

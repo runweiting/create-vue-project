@@ -45,7 +45,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         }).then(()=>{
-          this.goToAdmin();
+          this.goToWeek2Admin();
         });
         // 清空 user
         this.user = {};
@@ -69,6 +69,14 @@ export default {
     },
     // POST 驗證是否登入
     checkLogin(){
+      if (!this.isUserLoggedIn()) {
+        Swal.fire({
+          title: '請輸入登入信箱和密碼',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
       const url = `${this.apiUrl}/api/user/check`;
       this.axios
       .post(url)
@@ -79,7 +87,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         }).then(()=>{
-          this.goToAdmin();
+          this.goToWeek2Admin();
         });
         // 清空 user
         this.user = {};
@@ -93,11 +101,16 @@ export default {
           })
       })
     },
+    // 驗證是否有 token
+    isUserLoggedIn(){
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      return !!token;
+    },
     // 如有 token 導向後台
-    goToAdmin(){
+    goToWeek2Admin(){
       if (this.isUserLoggedIn()) {
         // 已登入，可進入後台
-        this.$router.push({ name: 'admin' });
+        this.$router.push({ name: 'week2-admin' });
       } else {
         // 未登入，導向登入頁面
         Swal.fire({
@@ -108,10 +121,19 @@ export default {
         this.$router.push({ name: 'login' });
       }
     },
-    // 驗證是否有 token
-    isUserLoggedIn(){
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-      return !!token;
+    goToWeek3Admin(){
+      if (this.isUserLoggedIn()) {
+        // 已登入，可進入後台
+        this.$router.push({ name: 'week3-admin' });
+      } else {
+        // 未登入，導向登入頁面
+        Swal.fire({
+            title: '請先登入',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        this.$router.push({ name: 'week3-admin' });
+      }
     },
   }
 }
@@ -136,7 +158,7 @@ export default {
           <div class="d-flex gap-2">
             <button @click="login"  type="button" class="btn btn-primary">登入</button>
             <button @click="checkLogin" type="button" class="btn btn-primary">驗證登入 -> 前往後台</button>
-            <button @click="goToAdmin" type="button" class="btn btn-primary">前往後台</button>
+            <button @click="goToWeek3Admin" type="button" class="btn btn-primary">前往第三週主線任務</button>
           </div>
         </form>
         <p class="text-secondary text-center pt-5">&copy; create-vue-project</p>
