@@ -6,84 +6,72 @@ import Week3AdminView from '../views/Week3AdminView.vue'
 import Swal from 'sweetalert2';
 import { isUserLoggedIn } from '../../src/components/utils/utils'
 
-// 建立 VueRouter 實體物件
+// 1. 定義基本路由 baseRoutes
+const baseRoutes = [
+  {
+    path: '/',
+    redirect: '/week1', // 根路徑的重定向
+  },
+  {
+    path: '/week1',
+    name: 'week1',
+    component: Week1View
+  },
+];
+// 2. 定義後台相關路由 adminRoutes
+const adminRoutes = [
+  {
+    path: '/week2',
+    name: 'week2',
+    component: Week2LoginView,
+  },
+  {
+    path: '/week2-login',
+    name: 'login',
+    component: Week2LoginView,
+  },
+  {
+    path: '/week2-admin',
+    name: 'week2-admin',
+    component: Week2AdminView,
+    // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
+    meta: {
+      requiresAuth: true,
+      message: '這是後台商品頁面',
+    },
+  },
+  {
+    path: '/week3-admin',
+    name: 'week3-admin',
+    component: Week3AdminView,
+    meta: {
+      requiresAuth: true,
+      message: '這是後台商品頁面',
+    },
+  },
+];
+
+// 3. 建立 VueRouter 實體物件
 const router = createRouter({
-  // VueRouter 處理前端路由的方式
   // URL Hash(#錨點) 可藉由 #/切換至不同 # 位置，避免引發網頁重新讀取
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: [
-    // 指定路由和對應的元件
-    {
-      path: '/',
-      redirect: '/week1', 
-    },
-    {
-      path: '/week1',
-      // name 的值必須與 RouterLink 中一致
-      name: 'week1',
-      component: Week1View
-    },
-    {
-      path: '/week2',
-      name: 'week2',
-      component: Week2LoginView,
-    },
-    {
-      path: '/week2-login',
-      name: 'login',
-      component: Week2LoginView,
-    },
-    {
-      path: '/week2-admin',
-      name: 'week2-admin',
-      component: Week2AdminView,
-      beforeEnter: (to, from, next) => {
-        // 驗證是否有 token
-        if (isUserLoggedIn()) {
-          // 已登入，可進入後台
-          Swal.fire({
-            title: '這是後台商品頁面',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-          next();
-        } else {
-          // 未登入，導向登入頁面
-          Swal.fire({
-            title: '請先登入',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-          next({ name: 'login' });
-        }
-      }
-    },
-    {
-      path: '/week3-admin',
-      name: 'week3-admin',
-      component: Week3AdminView,
-      // beforeEnter: (to, from, next) => {
-      //   // 驗證是否有 token
-      //   if (isUserLoggedIn()) {
-      //     // 已登入，可進入後台
-      //     Swal.fire({
-      //       title: '這是後台商品頁面',
-      //       icon: 'success',
-      //       confirmButtonText: 'OK'
-      //     });
-      //     next();
-      //   } else {
-      //     // 未登入，導向登入頁面
-      //     Swal.fire({
-      //       title: '請先登入',
-      //       icon: 'error',
-      //       confirmButtonText: 'OK'
-      //     });
-      //     next({ name: 'login' });
-      //   }
-      // }
-    }
-  ]
-})
+  routes: [...baseRoutes, ...adminRoutes],
+});
 
+// 4. 全域前置守衛 router.beforeEach
+// 在每次路由切換前進行驗證。如果目標路由需要驗證 requiresAuth 為 true 並且用戶未登入，則彈出提醒框，並將用戶導向登入頁面
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isUserLoggedIn()) {
+    Swal.fire({
+      title: '請先登入',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+    next({ name: 'login' });
+  } else {
+    next();
+  }
+});
+
+// 5. 導出 Vue Router 實例
 export default router
