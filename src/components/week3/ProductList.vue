@@ -1,6 +1,9 @@
 <script>
 import Swal from 'sweetalert2';
 
+let editModal = null;
+let delModal = null;
+
 export default {
   data() {
     return {
@@ -10,16 +13,13 @@ export default {
       title: '可編輯的商品列表',
       // GET 商品列表
       products: [],
-      // POST 新增商品
+      // POST 新增商品 / PUT 編輯商品
+      // 是否為新增商品的情況，true 表示正在新增商品，false 表示正在編輯現有商品
+      isNew: false,
       showAddImgSection: false,
-      newData: {},
       tempData: {
         imagesUrl: [],
       },
-      myModal: null,
-      myModalTitle: '新增商品',
-      // PUT 編輯商品
-
     }
   },
   created() {
@@ -30,35 +30,13 @@ export default {
   },
   // 已掛載 DOM
   mounted() {
-    // 建立 myModal 實體
-    // 1. 先選取 DOM 元件
-    const modal = document.querySelector('#modal');
-    // 2. myModal 實體化
-    this.myModal = new bootstrap.Modal(modal);
-    // POST 驗證登入
-    const urlCheck = `${this.apiUrl}/api/user/check`;
-    this.axios
-    .post(urlCheck)
-    .then((res)=> {
-      console.log(res);
-      // GET 商品列表
-      const urlProducts = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
-      return this.axios.get(urlProducts);
-    })
-    .then((res)=> {
-      this.products = res.data.products;
-    })
-    .catch((err)=> {
-      console.log(err);
-      Swal.fire({
-        title: `驗證錯誤，請重新登入`,
-        icon: 'error',
-        confirmButtonText: 'OK'
-      })
-      .then(()=> {
-        this.$router.push({ name: 'login' });
-      })
+    // 建立 editModal delModal 實體
+    // Bootstrap Modal 中，keyboard 用於控制鍵盤，可接受 true (預設值)：允許操作，Esc 關閉 modal、false：禁用鍵盤， Esc 無法關閉 modal，keyboard: false 限制用戶只能按下 modal 內的按鈕，才能關閉 modal
+    editModal = new bootstrap.Modal(document.querySelector('#editModal'), { keyboard: false
     });
+    delModal = new bootstrap.Modal(document.querySelector('#delModal'), { keyboard: false
+    });
+    this.checkLogin();
   },
   computed: {
     productsLength() {
@@ -66,6 +44,39 @@ export default {
     }
   },
   methods: {
+    // POST 驗證登入
+    checkLogin() {
+      const url = `${this.apiUrl}/api/user/check`;
+      this.axios
+      .post(url)
+      .then((res)=> {
+        console.log(res);
+        this.getData();
+      })
+      .catch((err)=> {
+        console.log(err);
+        Swal.fire({
+          title: `驗證錯誤，請重新登入`,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        })
+        .then(()=> {
+          this.$router.push({ name: 'login' });
+        })
+      })
+    },
+    // GET 商品列表
+    getData() {
+      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
+      this.axios
+      .get(url)
+      .then((res)=> {
+      this.products = res.data.products;
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
+    },
     // POST 登出
     logout(){
       const url = `${this.apiUrl}/logout`;
@@ -93,12 +104,6 @@ export default {
         console.log(err.response)
         })
     },
-    openModal() {
-      this.myModal.show();
-    },
-    closeModal() {
-      this.myModal.hide();
-    },
     // 多圖新增 - 顯示圖片
     showAddImg() {
       // 在 imagesUrl 陣列寫入一個空字串，以觸發 v-if + v-for 渲染輸入框及刪除按鈕
@@ -117,24 +122,28 @@ export default {
         this.tempData.imagesUrl = [''];
       }
     },    
-    // POST 新增商品
-    addData() {
-      if(Array.isArray(this.tempData.imagesUrl)) {
-        this.newData = {
-          data: this.tempData,
-          id: new Date().getTime()
-        }
-      };
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
-      this.axios
-      .post(url, this.newData)
+    // POST 新增商品 / PUT 編輯商品
+    updateData() {
+      // 如果是新增商品
+      let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+      let method = 'post';
+      // 如果是既有商品
+      if (!this.isNew) {
+        url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempData.id}`;
+        method = 'put'
+      }
+      this.axios[method](url, {
+        data: this.tempData
+      })
       .then((res)=>{
         console.log(this.newData);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
-        }).then(()=> {
+        });
+        editModal.hide()
+        .then(()=> {
           // 重新整理頁面
           location.reload();
         })
@@ -149,8 +158,8 @@ export default {
       })
     },
     // DELETE 刪除商品
-    removeData(id) {
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${id}`;
+    removeData() {
+      const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempData.id}`;
       this.axios
       .delete(url)
       .then((res)=> {
@@ -172,7 +181,6 @@ export default {
         })
       })
     },
-    // PUT 編輯資料
   },
 }
 </script>
@@ -185,16 +193,19 @@ export default {
         <p class="p-2 mb-0">{{ `目前有 ${productsLength} 項商品` }}</p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
-          <button @click="openModal" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
+          <button @click="openModal('new')" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
           <button @click="logout" type="button" class="btn btn-warning">登出</button>
         </div>
       </div>
-      <!-- Modal -->
-      <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <!-- editModal -->
+      <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">{{ myModalTitle }}</h5>
+              <h5 class="modal-title" id="editModalLabel">
+                <span v-if="isNew">新增商品</span>
+                <span v-else>編輯商品</span>
+              </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -271,7 +282,27 @@ export default {
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
               <button 
-              @mousedown="addData" @mouseup="closeModal" type="button" class="btn btn-primary">確認</button>
+              @click="updateData" type="button" class="btn btn-primary">確認</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- delModal -->
+      <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="delModalLabel">刪除商品</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- 刪除商品 -->
+              <h4 class="fw-bold">刪除商品</h4>
+              <p class="fw-bold text-danger">{{ tempData.title }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+              <button @click="removeData" type="button" class="btn btn-danger">確認刪除</button>
             </div>
           </div>
         </div>
@@ -298,16 +329,14 @@ export default {
             <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
             <td>
               <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <button @click="openModal" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
-                <button @click="removeData(item.id)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+                <button @click="openModal('edit')" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
+                <button @click="openModal('delete')" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    
   </div>
 </template>
 
