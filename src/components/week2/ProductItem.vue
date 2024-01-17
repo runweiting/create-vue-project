@@ -1,8 +1,10 @@
 <script>
 export default {
+  // 6. props 接收 Week2AdminView <ProductItem> 傳來的 :product="selectedProduct" 渲染資料
   props: {
     product: Object
   },
+  // emits 用來聲明 ProductItem 可以發送的 'closeProductDetail' 事件
   emits: ['closeProductDetail'],
   data() {
     return {

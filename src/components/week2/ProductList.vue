@@ -50,8 +50,7 @@ export default {
         console.log(err.response)
         })
     },
-    // $emit 是用於觸發自定義事件的方法
-    // $emit(eventName, payload) 觸發 eventName 的事件，並傳遞 payload 到父元件
+    // 2. 執行 $emit 將'showProductDetail' 事件和 item 傳入 Week2AdminView <ProductList>
     ItemInfo(item) {
       this.$emit('showProductDetail',item)
     },
@@ -93,7 +92,10 @@ export default {
           <td>{{ item.origin_price }}</td>
           <td>{{ item.price }}</td>
           <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
-          <td><button type="button" class="btn btn-primary" @click="ItemInfo(item)">查看細節</button></td>
+          <td>
+            <!-- 1. 觸發 ItemInfo(item) -->
+            <button type="button" class="btn btn-primary" @click="ItemInfo(item)">查看細節</button>
+          </td>
         </tr>
       </tbody>
     </table>
