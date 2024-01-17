@@ -4,7 +4,12 @@ import Swal from 'sweetalert2';
 export default {
   data() {
     return {
+      // 新增 apiUrl、apiPath
+      apiUrl: import.meta.env.VITE_URL,
+      apiPath: import.meta.env.VITE_PATH,
       title: '可編輯的商品列表',
+      // GET 商品列表
+      products: [],
       // POST 新增商品
       showAddImgSection: false,
       newData: {},
@@ -17,6 +22,12 @@ export default {
 
     }
   },
+  created() {
+    // 從 cookies 讀取 token
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
+    // axios headers 預設寫法
+    this.axios.defaults.headers.common['Authorization'] = token;
+  },
   // 已掛載 DOM
   mounted() {
     // 建立 myModal 實體
@@ -24,6 +35,35 @@ export default {
     const modal = document.querySelector('#modal');
     // 2. myModal 實體化
     this.myModal = new bootstrap.Modal(modal);
+    // POST 驗證登入
+    const urlCheck = `${this.apiUrl}/api/user/check`;
+    this.axios
+    .post(urlCheck)
+    .then((res)=> {
+      console.log(res);
+      // GET 商品列表
+      const urlProducts = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
+      return this.axios.get(urlProducts);
+    })
+    .then((res)=> {
+      this.products = res.data.products;
+    })
+    .catch((err)=> {
+      console.log(err);
+      Swal.fire({
+        title: `驗證錯誤，請重新登入`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
+      .then(()=> {
+        this.$router.push({ name: 'login' });
+      })
+    });
+  },
+  computed: {
+    productsLength() {
+      return this.products.length;
+    }
   },
   methods: {
     // POST 登出
@@ -79,7 +119,7 @@ export default {
     },    
     // POST 新增商品
     addData() {
-      if(this.tempData.imageUrl) {
+      if(Array.isArray(this.tempData.imagesUrl)) {
         this.newData = {
           data: this.tempData,
           id: new Date().getTime()
@@ -90,7 +130,6 @@ export default {
       .post(url, this.newData)
       .then((res)=>{
         console.log(this.newData);
-        this.products.push(this.newData);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
@@ -101,9 +140,9 @@ export default {
         })
       })
       .catch((err)=>{
-        console.log(err)
+        console.log(err);
         Swal.fire({
-          title: err.response.data.message,
+          title: err.response,
           icon: 'error',
           confirmButtonText: 'OK'
         })
@@ -143,7 +182,7 @@ export default {
     <div class="container py-2">
       <h2>{{ title }}</h2>
       <div class="d-flex justify-content-between gap-2 py-2">
-        <p class="p-2 mb-0">{{ `目前有 ${this.products.length} 項商品` }}</p>
+        <p class="p-2 mb-0">{{ `目前有 ${productsLength} 項商品` }}</p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
           <button @click="openModal" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
