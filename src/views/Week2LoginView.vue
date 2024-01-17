@@ -1,5 +1,6 @@
 <script>
 import Swal from 'sweetalert2';
+import { isUserLoggedIn } from '../../src/components/utils/utils';
 
 export default {
   data() {
@@ -19,20 +20,23 @@ export default {
       /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",
     );
     // axios headers 預設寫法
-    this.axios.defaults.headers.common['Authorization'] = token;
+    if (token) {
+      this.axios.defaults.headers.common['Authorization'] = token;
+    }
   },
   methods: {
     // POST 登入及驗證
     login(){
       // 驗證是否有 token
-      if (this.isUserLoggedIn()) {
+      if (isUserLoggedIn()) {
         Swal.fire({
           title: '已成功登入，不需重複登入',
           icon: 'success',
           confirmButtonText: 'OK'
         });
-        return;
-      }
+        this.goToWeek3Admin();
+        return
+      };
       const url = `${this.apiUrl}/admin/signin`;
       this.axios
       .post(url, this.user)
@@ -45,7 +49,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         }).then(()=>{
-          this.goToWeek2Admin();
+          this.goToWeek3Admin();
         });
         // 清空 user
         this.user = {};
@@ -67,50 +71,16 @@ export default {
         }
       })
     },
-    // POST 驗證是否登入
-    checkLogin(){
-      if (!this.isUserLoggedIn()) {
+    // 如有 token 導向後台
+    goToWeek3Admin(){
+      if (isUserLoggedIn()) {
+        // 已登入，可進入後台
         Swal.fire({
-          title: '請輸入登入信箱和密碼',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-        return;
-      }
-      const url = `${this.apiUrl}/api/user/check`;
-      this.axios
-      .post(url)
-      .then((res)=> {
-        console.log(res.data);
-        Swal.fire({
-          title: '已成功登入',
+          title: '這是後台商品頁面',
           icon: 'success',
           confirmButtonText: 'OK'
-        }).then(()=>{
-          this.goToWeek2Admin();
         });
-        // 清空 user
-        this.user = {};
-      })
-      .catch((err)=> {
-        console.log(err.response);
-        Swal.fire({
-          title: `驗證錯誤，請重新登入`,
-          icon: 'error',
-          confirmButtonText: 'OK'
-          })
-      })
-    },
-    // 驗證是否有 token
-    isUserLoggedIn(){
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-      return !!token;
-    },
-    // 如有 token 導向後台
-    goToWeek2Admin(){
-      if (this.isUserLoggedIn()) {
-        // 已登入，可進入後台
-        this.$router.push({ name: 'week2-admin' });
+        this.$router.push({ name: 'week3-admin' });
       } else {
         // 未登入，導向登入頁面
         Swal.fire({
@@ -119,20 +89,6 @@ export default {
             confirmButtonText: 'OK'
           });
         this.$router.push({ name: 'login' });
-      }
-    },
-    goToWeek3Admin(){
-      if (this.isUserLoggedIn()) {
-        // 已登入，可進入後台
-        this.$router.push({ name: 'week3-admin' });
-      } else {
-        // 未登入，導向登入頁面
-        Swal.fire({
-            title: '請先登入',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        this.$router.push({ name: 'week3-admin' });
       }
     },
   }
@@ -155,10 +111,8 @@ export default {
             <input v-model="user.password" type="password" class="form-control" id="floatingPassword" placeholder="Password" autocomplete="current-password">
             <label for="floatingPassword">Password</label>
           </div>
-          <div class="d-flex gap-2">
-            <button @click="login"  type="button" class="btn btn-primary">登入</button>
-            <button @click="checkLogin" type="button" class="btn btn-primary">驗證登入 -> 前往後台</button>
-            <button @click="goToWeek3Admin" type="button" class="btn btn-primary">前往第三週主線任務</button>
+          <div>
+            <button @click="login"  type="button" class="btn btn-primary w-100">登入</button>
           </div>
         </form>
         <p class="text-secondary text-center pt-5">&copy; create-vue-project</p>

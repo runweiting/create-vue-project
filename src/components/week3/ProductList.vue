@@ -4,43 +4,26 @@ import Swal from 'sweetalert2';
 export default {
   data() {
     return {
-      // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_URL,
-      apiPath: import.meta.env.VITE_PATH,
-      user: {
-        "username": "",
-        "password": ""
-      },
-      // GET 後台商品列表
-      products: [],
-      // POST 編輯指定商品
+      title: '可編輯的商品列表',
+      // POST 新增商品
       showAddImgSection: false,
       newData: {},
       tempData: {
-        category: '',
-        title: '',
-        origin_price: '',
-        price: '',
-        is_enabled: '',
-        content: '',
-        description: '',
-        id: '',
-        imageUrl: '',
         imagesUrl: [],
-        num: '',
-        unit: ''
       },
-      title: '可編輯的商品列表',
       myModal: null,
       myModalTitle: '新增商品',
+      // PUT 編輯商品
+
     }
   },
-  // created() 在初始化後立即調用，在讀取和掛載 DOM 之前，如設置初始數據、監聽事件等
-  created() {
-    // 從 cookies 讀取 token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
-    // axios headers 預設寫法
-    this.axios.defaults.headers.common['Authorization'] = token;
+  // 已掛載 DOM
+  mounted() {
+    // 建立 myModal 實體
+    // 1. 先選取 DOM 元件
+    const modal = document.querySelector('#modal');
+    // 2. myModal 實體化
+    this.myModal = new bootstrap.Modal(modal);
   },
   methods: {
     // POST 登出
@@ -94,7 +77,7 @@ export default {
         this.tempData.imagesUrl = [''];
       }
     },    
-    // POST 新增資料
+    // POST 新增商品
     addData() {
       if(this.tempData.imageUrl) {
         this.newData = {
@@ -112,6 +95,9 @@ export default {
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
+        }).then(()=> {
+          // 重新整理頁面
+          location.reload();
         })
       })
       .catch((err)=>{
@@ -123,7 +109,7 @@ export default {
         })
       })
     },
-    // DELETE 刪除資料
+    // DELETE 刪除商品
     removeData(id) {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${id}`;
       this.axios
@@ -147,25 +133,7 @@ export default {
         })
       })
     },
-  },
-  // 初始化後，執行的第一個方法
-  mounted() {
-    // GET 取得後台商品列表
-    const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
-    this.axios
-    .get(url)
-    .then((res)=> {
-      this.products = res.data.products;
-      console.log(this.products)
-      })
-    .catch((err)=> {
-      console.log(err)
-      });
-    // 建立 myModal 實體
-    // 1. 先選取 DOM 元件
-    const modal = document.querySelector('#modal');
-    // 2. myModal 實體化
-    this.myModal = new bootstrap.Modal(modal);
+    // PUT 編輯資料
   },
 }
 </script>
@@ -264,7 +232,7 @@ export default {
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
               <button 
-              @mousedown="closeModal" @mouseup="addData" type="button" class="btn btn-primary">確認</button>
+              @mousedown="addData" @mouseup="closeModal" type="button" class="btn btn-primary">確認</button>
             </div>
           </div>
         </div>
@@ -291,7 +259,7 @@ export default {
             <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
             <td>
               <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <button type="button" class="btn btn-outline-primary btn-sm">編輯</button>
+                <button @click="openModal" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
                 <button @click="removeData(item.id)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
               </div>
             </td>

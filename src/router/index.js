@@ -62,26 +62,26 @@ const router = createRouter({
       path: '/week3-admin',
       name: 'week3-admin',
       component: Week3AdminView,
-      beforeEnter: (to, from, next) => {
-        // 驗證是否有 token
-        if (isUserLoggedIn()) {
-          // 已登入，可進入後台
-          Swal.fire({
-            title: '這是後台商品頁面',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-          next();
-        } else {
-          // 未登入，導向登入頁面
-          Swal.fire({
-            title: '請先登入',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-          next({ name: 'login' });
-        }
-      }
+      // beforeEnter: (to, from, next) => {
+      //   // 驗證是否有 token
+      //   if (isUserLoggedIn()) {
+      //     // 已登入，可進入後台
+      //     Swal.fire({
+      //       title: '這是後台商品頁面',
+      //       icon: 'success',
+      //       confirmButtonText: 'OK'
+      //     });
+      //     next();
+      //   } else {
+      //     // 未登入，導向登入頁面
+      //     Swal.fire({
+      //       title: '請先登入',
+      //       icon: 'error',
+      //       confirmButtonText: 'OK'
+      //     });
+      //     next({ name: 'login' });
+      //   }
+      // }
     }
   ]
 })
