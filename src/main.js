@@ -1,7 +1,6 @@
 import './assets/main.css';
 import 'bootstrap';
-import '../node_modules/bootstrap/dist/css/bootstrap.css';
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/sweetalert2/dist/sweetalert2.css';
 
 // 具名匯入、sideEffects
@@ -24,3 +23,5 @@ app.use(router)
 app.use(VueAxios, axios)
 // 掛載 Vue 實體至 DOM
 app.mount('#app')
+
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';
