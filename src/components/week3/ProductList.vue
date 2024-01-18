@@ -313,7 +313,7 @@ export default {
                       <span class="badge bg-dark ms-2">{{ tempData.category }}</span>
                     </h5>
                     <p>{{ tempData.description }}</p>
-                    <p><small class="text-muted">原價：{{ tempData.origin_price }} / 售價：{{ tempData.price }}</small></p>
+                    <p><small class="text-muted">原價: {{ tempData.origin_price }} / 售價: {{ tempData.price }}</small></p>
                   </div>
                   <div class="col-sm-4">
                     <img :src="tempData.imageUrl" class="img-fluid">
