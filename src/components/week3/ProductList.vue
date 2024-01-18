@@ -1,5 +1,6 @@
 <script>
 import Swal from 'sweetalert2';
+import Modal from 'bootstrap/js/dist/modal';
 
 let editModal = null;
 let delModal = null;
@@ -30,9 +31,9 @@ export default {
   mounted() {
     // 建立 editModal delModal 實體
     // Bootstrap Modal 中，keyboard 用於控制鍵盤，可接受 true (預設值)：允許操作，Esc 關閉 modal、false：禁用鍵盤， Esc 無法關閉 modal，keyboard: false 限制用戶只能按下 modal 內的按鈕，才能關閉 modal
-    editModal = new bootstrap.Modal(document.querySelector('#editModal'), { keyboard: false
+    editModal = new Modal(document.querySelector('#editModal'), { keyboard: false
     });
-    delModal = new bootstrap.Modal(document.querySelector('#delModal'), { keyboard: false
+    delModal = new Modal(document.querySelector('#delModal'), { keyboard: false
     });
     this.checkAdmin();
   },
