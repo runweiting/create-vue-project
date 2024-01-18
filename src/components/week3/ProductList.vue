@@ -11,10 +11,9 @@ export default {
       apiUrl: import.meta.env.VITE_URL,
       apiPath: import.meta.env.VITE_PATH,
       title: '可編輯的商品列表',
-      // GET 商品列表
+      // 商品列表
       products: [],
-      // POST 新增商品 / PUT 編輯商品
-      // 是否為新增商品的情況，true 表示正在新增商品，false 表示正在編輯現有商品
+      // true 表示正在新增商品，false 表示正在編輯現有商品
       isNew: false,
       showAddImgSection: false,
       tempData: {
@@ -28,7 +27,6 @@ export default {
     // axios headers 預設寫法
     this.axios.defaults.headers.common['Authorization'] = token;
   },
-  // 已掛載 DOM
   mounted() {
     // 建立 editModal delModal 實體
     // Bootstrap Modal 中，keyboard 用於控制鍵盤，可接受 true (預設值)：允許操作，Esc 關閉 modal、false：禁用鍵盤， Esc 無法關閉 modal，keyboard: false 限制用戶只能按下 modal 內的按鈕，才能關閉 modal
@@ -36,16 +34,11 @@ export default {
     });
     delModal = new bootstrap.Modal(document.querySelector('#delModal'), { keyboard: false
     });
-    this.checkLogin();
-  },
-  computed: {
-    productsLength() {
-      return this.products.length;
-    }
+    this.checkAdmin();
   },
   methods: {
     // POST 驗證登入
-    checkLogin() {
+    checkAdmin() {
       const url = `${this.apiUrl}/api/user/check`;
       this.axios
       .post(url)
@@ -54,7 +47,7 @@ export default {
         this.getData();
       })
       .catch((err)=> {
-        console.log(err);
+        console.log(err.response);
         Swal.fire({
           title: `驗證錯誤，請重新登入`,
           icon: 'error',
@@ -74,7 +67,7 @@ export default {
       this.products = res.data.products;
       })
       .catch((err)=> {
-        console.log(err)
+        console.log(err.response)
       })
     },
     // POST 登出
@@ -106,7 +99,7 @@ export default {
     },
     // 多圖新增 - 顯示圖片
     showAddImg() {
-      // 在 imagesUrl 陣列寫入一個空字串，以觸發 v-if + v-for 渲染輸入框及刪除按鈕
+      // 在 imagesUrl 陣列寫入空字串，以觸發 v-if + v-for 渲染輸入框及按鈕
       this.tempData.imagesUrl.push('');
       this.showAddImgSection = true;
     },
@@ -122,34 +115,32 @@ export default {
         this.tempData.imagesUrl = [''];
       }
     },    
-    // POST 新增商品 / PUT 編輯商品
+    // POST 新增商品 or PUT 編輯商品
     updateData() {
-      // 如果是新增商品
+      // -> 新增商品
       let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
       let method = 'post';
-      // 如果是既有商品
+      // -> 編輯現有商品
       if (!this.isNew) {
         url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempData.id}`;
         method = 'put'
       }
       this.axios[method](url, {
-        data: this.tempData
+        data: this.tempData,
       })
       .then((res)=>{
-        console.log(this.newData);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
         });
         editModal.hide()
-        .then(()=> {
+      }).then(()=> {
           // 重新整理頁面
           location.reload();
         })
-      })
       .catch((err)=>{
-        console.log(err);
+        console.log(err.response);
         Swal.fire({
           title: err.response,
           icon: 'error',
@@ -157,8 +148,28 @@ export default {
         })
       })
     },
+    // 切換 modal 狀態：新增、編輯、刪除
+    openModal(isNew, item) {
+      // 新增 -> 清空資料、POST、開啟 editModal
+      if(isNew === 'new') {
+        this.tempData = {
+          imagesUrl: [],
+        };
+        this.isNew = true;
+        editModal.show();
+        // 編輯 -> 淺拷貝、PUT、開啟 editModal
+      } else if(isNew === 'edit') {
+        this.tempData = { ...item };
+        this.isNew = false;
+        editModal.show();
+        // 刪除 -> 淺拷貝、開啟 delModal
+      } else if(isNew === 'delete') {
+        this.tempData = { ...item };
+        delModal.show();
+      }
+    },
     // DELETE 刪除商品
-    removeData() {
+    deleteData() {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempData.id}`;
       this.axios
       .delete(url)
@@ -167,13 +178,11 @@ export default {
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
-        }).then(()=> {
-          // 重新整理頁面
-          location.reload();
-        })
+        });
+        editModal.hide();
+        location.reload();
       })
       .catch((err)=> {
-        console.log(err)
         Swal.fire({
           title: err.response.data.message,
           icon: 'error',
@@ -190,7 +199,7 @@ export default {
     <div class="container py-2">
       <h2>{{ title }}</h2>
       <div class="d-flex justify-content-between gap-2 py-2">
-        <p class="p-2 mb-0">{{ `目前有 ${productsLength} 項商品` }}</p>
+        <p class="p-2 mb-0">{{ `目前有 ${this.products.length} 項商品` }}</p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
           <button @click="openModal('new')" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
@@ -215,10 +224,10 @@ export default {
                     <div class="mb-4">
                       <label for="imgUrl" class="form-label">主要圖片</label>
                       <input v-model="tempData.imageUrl" type="url" class="form-control mb-2" id="imgUrl" placeholder="請輸入網址">
-                      <img :src="tempData.imageUrl">
+                      <img :src="tempData.imageUrl" class="img-fluid">
                     </div>
-                    <h4 class="fw-bold">多圖新增</h4>
                     <!-- 多圖新增 -->
+                    <h4 class="fw-bold">多圖新增</h4>
                     <div v-if="showAddImgSection" class="mb-4">
                       <!-- // ? v-if 隱藏圖片網址區塊 
                       -->
@@ -288,7 +297,7 @@ export default {
         </div>
       </div>
       <!-- delModal -->
-      <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
+      <div class="modal fade modal-lg" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -297,12 +306,24 @@ export default {
             </div>
             <div class="modal-body">
               <!-- 刪除商品 -->
-              <h4 class="fw-bold">刪除商品</h4>
-              <p class="fw-bold text-danger">{{ tempData.title }}</p>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h5 class="fw-bold text-danger">{{ tempData.title }}
+                      <span class="badge bg-dark ms-2">{{ tempData.category }}</span>
+                    </h5>
+                    <p>{{ tempData.description }}</p>
+                    <p><small class="text-muted">原價：{{ tempData.origin_price }} / 售價：{{ tempData.price }}</small></p>
+                  </div>
+                  <div class="col-sm-4">
+                    <img :src="tempData.imageUrl" class="img-fluid">
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-              <button @click="removeData" type="button" class="btn btn-danger">確認刪除</button>
+              <button @click="deleteData" type="button" class="btn btn-danger">確認刪除</button>
             </div>
           </div>
         </div>
@@ -329,8 +350,8 @@ export default {
             <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
             <td>
               <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <button @click="openModal('edit')" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
-                <button @click="openModal('delete')" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+                <button @click="openModal('edit', item)" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
+                <button @click="openModal('delete', item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
               </div>
             </td>
           </tr>

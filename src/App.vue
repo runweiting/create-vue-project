@@ -70,9 +70,9 @@ export default {
   }-->
 
 <style scoped>
-* {
+/* {
   outline: 1px solid yellowgreen
-}
+}*/
 .nav-link.active {
   background-color: #0d6efd;
   color: white;
