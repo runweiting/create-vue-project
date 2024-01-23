@@ -43,12 +43,10 @@ export default {
       const url = `${this.apiUrl}/api/user/check`;
       this.axios
       .post(url)
-      .then((res)=> {
-        console.log(res);
+      .then(()=> {
         this.getData();
       })
-      .catch((err)=> {
-        console.log(err.response);
+      .catch(()=> {
         Swal.fire({
           title: `驗證錯誤，請重新登入`,
           icon: 'error',
@@ -61,14 +59,11 @@ export default {
     },
     // GET 商品列表
     getData() {
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
+      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products/all`;
       this.axios
       .get(url)
       .then((res)=> {
-      this.products = res.data.products;
-      })
-      .catch((err)=> {
-        console.log(err.response)
+        this.products = res.data.products;
       })
     },
     // POST 登出
@@ -77,15 +72,12 @@ export default {
       this.axios
       .post(url)
       .then((res)=> {
-        console.log(res.data);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
         })
         .then(()=>{
-          // 清空 user
-          this.user = {};
           // 清除 token
           document.cookie = "myToken=; expires=;";
           // 清除 headers
@@ -93,27 +85,33 @@ export default {
           // 導向登入頁面
           this.$router.push({ name: 'login' });
         });
-        })
-      .catch((err)=> {
-        console.log(err.response)
-        })
+      })
     },
-    // 多圖新增 - 顯示圖片
-    showAddImg() {
-      // 在 imagesUrl 陣列寫入空字串，以觸發 v-if + v-for 渲染輸入框及按鈕
-      this.tempData.imagesUrl.push('');
-      this.showAddImgSection = true;
+    // 多圖新增 - 顯示/隱藏 新增圖片區塊
+    toggleAddImg() {
+      // 初始化 imagesUrl 為包含一個空字串的陣列，以觸發 v-if + v-for 渲染
+      // 顯示新增圖片區塊
+      this.tempData.imagesUrl = [''];
+      this.showAddImgSection = !this.showAddImgSection;
     },
-    // 多圖新增 - 新增圖片
-    addImg() {
-      this.tempData.imagesUrl.push('')
-    },
-    // 多圖新增 - 刪除圖片
-    deleteImg() {
-      if(this.tempData.imagesUrl.length > 1) {
-        this.tempData.imagesUrl.pop();
-      } else {
-        this.tempData.imagesUrl = [''];
+    // 多圖新增 - 新增/刪除圖片
+    modifyImg(action) {
+      if (action === 'add') {
+        // 如果 imagesUrl 不存在或 null，則初始化 imagesUrl 為包含一個空字串的陣列
+        if(!this.tempData.imagesUrl) {
+          this.tempData.imagesUrl = [''];
+        };
+        // 新增一個空字串到 imagesUrl 中，以觸發 v-if + v-for 渲染
+        this.tempData.imagesUrl.push('')
+      } else if (action === 'delete') {
+        // 如果 imagesUrl 中有多於一個元素，則刪除最後一個元素
+        if(this.tempData.imagesUrl.length > 1) {
+          this.tempData.imagesUrl.pop();
+          // 如果 imagesUrl 中只有一個元素，則將其重設為包含一個空字串的陣列，同時隱藏新增圖片區塊
+        } else {
+          this.tempData.imagesUrl = [''];
+          this.showAddImgSection = false;
+        }
       }
     },    
     // POST 新增商品 or PUT 編輯商品
@@ -129,21 +127,20 @@ export default {
       this.axios[method](url, {
         data: this.tempData,
       })
-      .then((res)=>{
+      .then((res)=> {
         Swal.fire({
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
-        });
-        editModal.hide()
-      }).then(()=> {
-          // 重新整理頁面
-          location.reload();
         })
-      .catch((err)=>{
-        console.log(err.response);
+      })
+      .then(()=> {
+        editModal.hide();
+        this.getData();
+      })
+      .catch((err)=> {
         Swal.fire({
-          title: err.response,
+          title: err.response.data.message,
           icon: 'error',
           confirmButtonText: 'OK'
         })
@@ -156,11 +153,13 @@ export default {
         this.tempData = {
           imagesUrl: [],
         };
+        this.showAddImgSection = false;
         this.isNew = true;
         editModal.show();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
       } else if(isNew === 'edit') {
         this.tempData = { ...item };
+        this.showAddImgSection = false;
         this.isNew = false;
         editModal.show();
         // 刪除 -> 淺拷貝、開啟 delModal
@@ -179,9 +178,11 @@ export default {
           title: res.data.message,
           icon: 'success',
           confirmButtonText: 'OK'
-        });
-        editModal.hide();
-        location.reload();
+        })
+      })
+      .then(()=> {
+        delModal.hide();
+        this.getData();
       })
       .catch((err)=> {
         Swal.fire({
@@ -200,7 +201,9 @@ export default {
     <div class="container py-2">
       <h2>{{ title }}</h2>
       <div class="d-flex justify-content-between gap-2 py-2">
-        <p class="p-2 mb-0">{{ `目前有 ${this.products.length} 項商品` }}</p>
+        <p class="p-2 mb-0">
+          {{ `目前有 ${(Object.keys(this.products)).length} 項商品` }}
+        </p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
           <button @click="openModal('new')" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
@@ -238,13 +241,13 @@ export default {
                         <img :src="tempData.imagesUrl[key]" class="img-fluid mb-2">
                       </div>
                       <div class="d-flex gap-2">
-                        <button @click="addImg" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
-                        <button @click="deleteImg" type="button" class="btn btn-outline-danger w-100">刪除圖片</button>
+                        <button @click="modifyImg('add')" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
+                        <button @click="modifyImg('delete')" type="button" class="btn btn-outline-danger w-100">刪除圖片</button>
                       </div>
                     </div>
                     <div v-else>
                       <!-- // ? v-else 顯示新增圖片按鈕 -->
-                      <button @click="showAddImg" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
+                      <button @click="toggleAddImg" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
                     </div>
                   </div>
                   <div class="col-md-8">
@@ -263,11 +266,11 @@ export default {
                     <div class="row">
                       <div class="col-md-6">
                         <label for="original_price" class="form-label">原價</label>
-                        <input v-model="tempData.origin_price" type="number" min="0" class="form-control mb-4" id="original_price" placeholder="請輸入原價">
+                        <input v-model.number="tempData.origin_price" type="number" min="0" class="form-control mb-4" id="original_price" placeholder="請輸入原價">
                       </div>
                       <div class="col-md-6">
                         <label for="price" class="form-label">售價</label>
-                        <input v-model="tempData.price" type="number" min="0" class="form-control mb-4" id="price" placeholder="請輸入售價">
+                        <input v-model.number="tempData.price" type="number" min="0" class="form-control mb-4" id="price" placeholder="請輸入售價">
                       </div>
                     </div>
                     <hr>
