@@ -43,6 +43,7 @@ export default {
       <RouterLink :to="{ name: 'week1' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week1' }">第一週主線作業</RouterLink>
       <RouterLink :to="{ name: 'week2-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2-admin' }">第二週主線作業</RouterLink>
       <RouterLink :to="{ name: 'week3-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week3-admin'}">第三週主線作業</RouterLink>
+      <RouterLink :to="{ name: 'week4-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week4-admin'}">第四週主線作業</RouterLink>
     </nav>
   </header>
 

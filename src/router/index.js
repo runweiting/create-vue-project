@@ -3,6 +3,7 @@ import Week1View from '../views/Week1View.vue'
 import Week2LoginView from '../views/Week2LoginView.vue'
 import Week2AdminView from '../views/Week2AdminView.vue'
 import Week3AdminView from '../views/Week3AdminView.vue'
+import Week4AdminView from '../views/Week4AdminView.vue'
 import Swal from 'sweetalert2';
 import { isUserLoggedIn } from '../../src/components/utils/utils'
 
@@ -44,6 +45,15 @@ const adminRoutes = [
     path: '/week3-admin',
     name: 'week3-admin',
     component: Week3AdminView,
+    meta: {
+      requiresAuth: true,
+      message: '這是後台商品頁面',
+    },
+  },
+  {
+    path: '/week4-admin',
+    name: 'week4-admin',
+    component: Week4AdminView,
     meta: {
       requiresAuth: true,
       message: '這是後台商品頁面',
