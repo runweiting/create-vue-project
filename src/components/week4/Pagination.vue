@@ -4,10 +4,6 @@ export default {
     props: {
         pages: Object,
     },
-    data() {
-        return {
-        }
-    },
     methods: {
         // 向外層發射 showPage 並帶入 item -> 在內層這個位置，觸發外層 getData
         emitSinglePage(page) {

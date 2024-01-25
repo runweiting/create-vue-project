@@ -49,7 +49,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         }).then(()=>{
-          this.goToWeek3Admin();
+          this.goToWeek4Admin();
         });
         // 清空 user
         this.user = {};
