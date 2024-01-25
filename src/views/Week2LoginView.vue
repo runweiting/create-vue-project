@@ -34,7 +34,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         });
-        this.goToWeek3Admin();
+        this.goToWeek4Admin();
         return
       };
       const url = `${this.apiUrl}/admin/signin`;
@@ -72,7 +72,7 @@ export default {
       })
     },
     // 如有 token 導向後台
-    goToWeek3Admin(){
+    goToWeek4Admin(){
       if (isUserLoggedIn()) {
         // 已登入，可進入後台
         Swal.fire({
@@ -80,7 +80,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         });
-        this.$router.push({ name: 'week3-admin' });
+        this.$router.push({ name: 'week4-admin' });
       } else {
         // 未登入，導向登入頁面
         Swal.fire({
