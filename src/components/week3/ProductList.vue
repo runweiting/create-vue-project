@@ -122,7 +122,7 @@ export default {
       // 新增 -> 清空資料、POST、開啟 editModal
       if(isNew === 'new') {
         this.tempData = {
-          imagesUrl: [],
+          imagesUrl: []
         };
         this.isNew = true;
         this.editModal.show();
