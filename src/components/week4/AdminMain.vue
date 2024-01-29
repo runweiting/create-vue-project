@@ -78,6 +78,7 @@ export default {
         };
         this.showAddImgSection = false;
         this.isNew = true;
+        // $refs.editModal 是對子組件的引用，而 .editModal 則是子組件中 Bootstrap Modal 實例的屬性或方法
         this.$refs.editModal.editModal.show();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
       } else if(isNew === 'edit') {

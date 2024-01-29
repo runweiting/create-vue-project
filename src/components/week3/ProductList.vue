@@ -2,9 +2,6 @@
 import Swal from 'sweetalert2';
 import Modal from 'bootstrap/js/dist/modal';
 
-let editModal = null;
-let delModal = null;
-
 export default {
   data() {
     return {
@@ -16,10 +13,11 @@ export default {
       products: [],
       // true 表示正在新增商品，false 表示正在編輯現有商品
       isNew: false,
-      showAddImgSection: false,
       tempData: {
         imagesUrl: [],
       },
+      editModal: null,
+      delModal: null,
     }
   },
   created() {
@@ -31,9 +29,9 @@ export default {
   mounted() {
     // 建立 editModal delModal 實體
     // Bootstrap Modal 中，keyboard 用於控制鍵盤，可接受 true (預設值)：允許操作，Esc 關閉 modal、false：禁用鍵盤， Esc 無法關閉 modal，keyboard: false 限制用戶只能按下 modal 內的按鈕，才能關閉 modal
-    editModal = new Modal(document.querySelector('#editModal'), { keyboard: false
+    this.editModal = new Modal(document.querySelector('#editModal'), { keyboard: false
     });
-    delModal = new Modal(document.querySelector('#delModal'), { keyboard: false
+    this.delModal = new Modal(document.querySelector('#delModal'), { keyboard: false
     });
     this.checkAdmin();
   },
@@ -86,34 +84,7 @@ export default {
           this.$router.push({ name: 'login' });
         });
       })
-    },
-    // 多圖新增 - 顯示/隱藏 新增圖片區塊
-    toggleAddImg() {
-      // 初始化 imagesUrl 為包含一個空字串的陣列，以觸發 v-if + v-for 渲染
-      // 顯示新增圖片區塊
-      this.tempData.imagesUrl = [''];
-      this.showAddImgSection = !this.showAddImgSection;
-    },
-    // 多圖新增 - 新增/刪除圖片
-    modifyImg(action) {
-      if (action === 'add') {
-        // 如果 imagesUrl 不存在或 null，則初始化 imagesUrl 為包含一個空字串的陣列
-        if(!this.tempData.imagesUrl) {
-          this.tempData.imagesUrl = [''];
-        };
-        // 新增一個空字串到 imagesUrl 中，以觸發 v-if + v-for 渲染
-        this.tempData.imagesUrl.push('')
-      } else if (action === 'delete') {
-        // 如果 imagesUrl 中有多於一個元素，則刪除最後一個元素
-        if(this.tempData.imagesUrl.length > 1) {
-          this.tempData.imagesUrl.pop();
-          // 如果 imagesUrl 中只有一個元素，則將其重設為包含一個空字串的陣列，同時隱藏新增圖片區塊
-        } else {
-          this.tempData.imagesUrl = [''];
-          this.showAddImgSection = false;
-        }
-      }
-    },    
+    }, 
     // POST 新增商品 or PUT 編輯商品
     updateData() {
       // -> 新增商品
@@ -135,7 +106,7 @@ export default {
         })
       })
       .then(()=> {
-        editModal.hide();
+        this.editModal.hide();
         this.getData();
       })
       .catch((err)=> {
@@ -153,19 +124,22 @@ export default {
         this.tempData = {
           imagesUrl: [],
         };
-        this.showAddImgSection = false;
         this.isNew = true;
-        editModal.show();
+        this.editModal.show();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
       } else if(isNew === 'edit') {
         this.tempData = { ...item };
-        this.showAddImgSection = false;
+        // 如果沒有多圖的 item，要新增多圖
+        if (!Array.isArray(this.
+        tempData.imagesUrl)){
+          this.tempData.imagesUrl = [];
+        };
         this.isNew = false;
-        editModal.show();
+        this.editModal.show();
         // 刪除 -> 淺拷貝、開啟 delModal
       } else if(isNew === 'delete') {
         this.tempData = { ...item };
-        delModal.show();
+        this.delModal.show();
       }
     },
     // DELETE 刪除商品
@@ -181,7 +155,7 @@ export default {
         })
       })
       .then(()=> {
-        delModal.hide();
+        this.delModal.hide();
         this.getData();
       })
       .catch((err)=> {
@@ -232,22 +206,22 @@ export default {
                     </div>
                     <!-- 多圖新增 -->
                     <h4 class="fw-bold">多圖新增</h4>
-                    <div v-if="showAddImgSection" class="mb-4">
-                      <!-- // ? v-if 隱藏圖片網址區塊 
-                      -->
+                    <!-- // ? 判斷 v-if 是否已有多圖 -->
+                    <div v-if="Array.isArray(tempData.imagesUrl)" class="mb-4">
                       <div v-for="(url, key) in tempData.imagesUrl" :key="key">
                         <label :for="`url${key}`" class="form-label">圖片網址</label>
                         <input :id="`url${key}`" v-model="tempData.imagesUrl[key]" type="url" class="form-control mb-2"  placeholder="請輸入網址">
                         <img :src="tempData.imagesUrl[key]" class="img-fluid mb-2">
                       </div>
                       <div class="d-flex gap-2">
-                        <button @click="modifyImg('add')" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
-                        <button @click="modifyImg('delete')" type="button" class="btn btn-outline-danger w-100">刪除圖片</button>
+                        <!-- // ? 如果沒有資料則可新增 or 最後一個有值，顯示新增按鈕，並新增空字串到 imagesUrl，以觸發 v-if + v-for 渲染 -->
+                        <button v-if="tempData.imagesUrl.length === 0 || tempData.imagesUrl[tempData.imagesUrl.length - 1]" @click="tempData.imagesUrl.push('')" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
+                        <button v-else @click="tempData.imagesUrl.pop()" type="button" class="btn btn-outline-danger w-100">刪除圖片</button>
                       </div>
                     </div>
                     <div v-else>
                       <!-- // ? v-else 顯示新增圖片按鈕 -->
-                      <button @click="toggleAddImg" type="button" class="btn btn-outline-primary w-100">新增圖片</button>
+                      <button type="button" class="btn btn-outline-primary w-100">新增圖片</button>
                     </div>
                   </div>
                   <div class="col-md-8">
