@@ -15,8 +15,6 @@ export default {
             apiPath: import.meta.env.VITE_PATH,
             editModal: null,
             tempProduct: {
-                id: '',
-                imageUrl: '',
                 imagesUrl: [],
             },
             selectedRating: 0,
@@ -35,7 +33,7 @@ export default {
         });
     },
     watch: {
-        // ? 解決 imageUrl undefined 問題
+        // ? 解決 imageUrl 和 id，顯示 undefined 問題
         // * 當元件被創建時，tempData 可能還未被傳入。為了確保 tempProduct 在 tempData 更新時同步更新，使用 watch 監聽 tempData 的變化，然後更新 tempProduct。
         tempData: {
             handler(updateData) {
