@@ -18,14 +18,12 @@ export default {
       title: '可編輯的商品列表',
       // 商品列表
       products: [],
-      // 分頁
-      pagination: {},
+      isNew: false,
       tempData: {
         imagesUrl: [],
       },
-      // true 新增商品，false 編輯現有商品
-      isNew: false,
-      showAddImgSection: false,
+      // 分頁
+      pagination: {},
     }
   },
   created() {
@@ -67,6 +65,7 @@ export default {
         const { products, pagination } = res.data;
         this.products = products;
         this.pagination = pagination;
+        console.log(res.data)
       })
     },
     // 切換 modal 狀態：新增、編輯、刪除
@@ -76,14 +75,16 @@ export default {
         this.tempData = {
           imagesUrl: [],
         };
-        this.showAddImgSection = false;
         this.isNew = true;
         // $refs.editModal 是對子組件的引用，而 .editModal 則是子組件中 Bootstrap Modal 實例的屬性或方法
         this.$refs.editModal.editModal.show();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
       } else if(isNew === 'edit') {
         this.tempData = { ...item };
-        this.showAddImgSection = false;
+        // * 如果沒有多圖的 item，要新增多圖
+        if (!Array.isArray(this.tempData.imagesUrl)){
+          this.tempData.imagesUrl = []
+        };
         this.isNew = false;
         this.$refs.editModal.editModal.show();
         // 刪除 -> 淺拷貝、開啟 delModal
@@ -113,13 +114,6 @@ export default {
         });
       })
     },
-    // 多圖新增 - 顯示/隱藏 新增圖片區塊
-    toggleAddImg() {
-      // 初始化 imagesUrl 為包含一個空字串的陣列，以觸發 v-if + v-for 渲染
-      // 顯示新增圖片區塊
-      this.tempData.imagesUrl = [''];
-      this.showAddImgSection = !this.showAddImgSection;
-    },
   },
 }
 </script>
@@ -138,10 +132,10 @@ export default {
           <button @click="logout" type="button" class="btn btn-warning">登出</button>
         </div>
         <!-- editModal -->
-        <edit-modal ref="editModal" :temp-data="tempData" :is-new="isNew" :show-add-img-section="showAddImgSection" @update="getData" @toggleAddImg="toggleAddImg">
+        <edit-modal ref="editModal" :tempData="tempData" :is-new="isNew" @getData="getData">
         </edit-modal>
         <!-- delModal -->
-        <del-modal ref="delModal" :temp-data="tempData" @update="getData">
+        <del-modal ref="delModal" :tempData="tempData" @getData="getData">
         </del-modal>
       </div>
     </div>

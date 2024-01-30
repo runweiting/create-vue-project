@@ -6,6 +6,7 @@ export default {
     props: {
         tempData: Object,
     },
+    emit: ['getData'],
     data() {
         return {
             // 新增 apiUrl、apiPath
@@ -35,7 +36,7 @@ export default {
             })
             .then(()=> {
                 this.delModal.hide();
-                this.$emit('update');
+                this.$emit('getData');
             })
             .catch((err)=> {
                 Swal.fire({
