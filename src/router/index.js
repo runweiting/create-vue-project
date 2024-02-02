@@ -4,6 +4,7 @@ import Week2LoginView from '../views/Week2LoginView.vue'
 import Week2AdminView from '../views/Week2AdminView.vue'
 import Week3AdminView from '../views/Week3AdminView.vue'
 import Week4AdminView from '../views/Week4AdminView.vue'
+import Week5View from '@/views/Week5View.vue'
 import Swal from 'sweetalert2';
 import { isUserLoggedIn } from '../../src/components/utils/utils'
 
@@ -17,6 +18,11 @@ const baseRoutes = [
     path: '/week1',
     name: 'week1',
     component: Week1View
+  },
+  {
+    path: '/week5',
+    name: 'week5',
+    component: Week5View,
   },
 ];
 // 2. 定義後台相關路由 adminRoutes

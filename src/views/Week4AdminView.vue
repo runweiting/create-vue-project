@@ -11,9 +11,6 @@ export default {
 <template>
   <main class="container">
     <div class="row py-2">
-      <!-- 
-        向 admin-main 傳遞 products 並帶入 products
-       -->
       <admin-main />
     </div>
   </main>
