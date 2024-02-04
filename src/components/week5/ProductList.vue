@@ -1,12 +1,12 @@
 <script>
 import Swal from 'sweetalert2';
 import ShowModal from '../week5/ShowModal.vue';
-import CartList from '../week5/CartList.vue'
+import CartList from '../week5/CartList.vue';
 
 export default {
   components: {
     ShowModal,
-    CartList
+    CartList,
   },
   data() {
     return {
@@ -22,23 +22,37 @@ export default {
       cartsList: {},
       // 購物車總計
       cartsTotal: 0,
+      // vue-loading-overlay
+      fullPage: false,
+      // 結帳資料
+      userData: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address:''
+        },
+        message: ''
+      },
     }
   },
-  created() {
-  },
-  mounted() {
+  mounted() {  
     this.getProducts();
     this.getCart();
   },
   methods: {
     // GET 商品列表
-    getProducts() {
+    async getProducts() {
       const url = `${this.apiUrl}/api/${this.apiPath}/products`;
-      this.axios
-      .get(url)
-      .then((res)=> {
+      let loader = this.$loading.show();
+      try {
+        const res = await this.axios.get(url);
         this.products = res.data.products;
-      })
+      } catch(err) {
+        console.error('資料取得失敗', err)
+      } finally {
+        loader.hide();
+      }
     },
     // GET 指定商品
     getProduct(targetId) {
@@ -126,12 +140,14 @@ export default {
         this.getCart();
       })
     },
+    // POST 結帳
+    // /v2/api/{api_path}/order
   },
 }
 </script>
 
 <template>
-  <div class="col-8 mt-4 mb-4">
+  <div class="col-8 mt-4 mb-4" ref="productList">
     <div class="container py-2 d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <p class="p-2 mb-0">
@@ -158,7 +174,8 @@ export default {
             </td>
             <td style="width: 100px">
               <div class="d-flex flex-column gap-2">
-                <button @click="getProduct(item.id)" type="button" class="btn btn-outline-secondary" id="modalBtn">查看更多</button>
+                <button @click="getProduct(item.id)" type="button" class="btn btn-outline-secondary" id="modalBtn">查看更多
+                </button>
                 <button @click="addToCart(item.id)" type="button" class="btn btn-outline-danger">加入購物車</button>
               </div>
             </td>
