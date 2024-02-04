@@ -24,16 +24,6 @@ export default {
       cartsTotal: 0,
       // vue-loading-overlay
       fullPage: false,
-      // 結帳資料
-      userData: {
-        user: {
-          name: '',
-          email: '',
-          tel: '',
-          address:''
-        },
-        message: ''
-      },
     }
   },
   mounted() {  

@@ -2,10 +2,17 @@
 export default {
     data() {
         return {
-            // 新增 apiUrl、apiPath
-            apiUrl: import.meta.env.VITE_URL,
-            apiPath: import.meta.env.VITE_PATH,
             title: '訂購訊息',
+            // 結帳資料
+            userData: {
+                user: {
+                    name: '',
+                    email: '',
+                    tel: '',
+                    address:''
+                },
+                message: ''
+            },
         }
     }
 }
