@@ -61,11 +61,10 @@ export default {
                                     <del class="fs-6 fw-bold text-secondary me-2">原價{{ product.origin_price }}元</del>
                                     <span class="fs-5 fw-bold text-danger">現在只要{{ product.price }}元</span>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="input-group w-50">
-                                        <input v-model.number="qty" type="number" min="1" class="form-control">
-                                        <span class="input-group-text">個</span>
-                                    </div>
+                                <div class="input-group">
+                                    <select class="form-select" v-model="this.qty">
+                                        <option v-for="i in 10" :key="i" :value="i">{{ i }}</option>
+                                    </select>
                                     <button @click="addToCart(product.id, this.qty)" type="button" class="btn btn-primary">加入購物車</button>
                                 </div>
                             </div>
