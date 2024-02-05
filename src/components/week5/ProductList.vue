@@ -21,13 +21,17 @@ export default {
       // 指定商品
       product: {},
       // 購物車列表
-      cartsList: {},
+      cartsList: [],
       // 購物車總計
       cartsTotal: 0,
       // vue-loading-overlay
       fullPage: false,
       // 重置表單
       resetForm: false,
+      // font-awesome loading
+      loadingState: {
+        getProduct: false,
+      }
     }
   },
   mounted() {  
@@ -43,19 +47,25 @@ export default {
         const res = await this.axios.get(url);
         this.products = res.data.products;
       } catch(err) {
-        console.error('資料取得失敗', err)
+        console.log('資料取得失敗', err)
       } finally {
         loader.hide();
       }
     },
     // GET 指定商品
-    getProduct(targetId) {
+    async getProduct(targetId) {
+      this.loadingState.getProduct = true;
       const url = `${this.apiUrl}/api/${this.apiPath}/product/${targetId}`;
       this.axios
       .get(url)
       .then((res)=> {
         this.product = res.data.product;
         this.$refs.showModal.openModal();
+      })
+      .finally(()=> {
+        this.$nextTick(() => {
+          this.loadingState.getProduct = false;
+        });
       })
     },
     // POST 加入購物車 (因為 ProductList 也有加入購物車按鈕)
@@ -192,8 +202,11 @@ export default {
             <td style="width: 100px">
               <div class="d-flex flex-column gap-2">
                 <button @click="getProduct(item.id)" type="button" class="btn btn-outline-secondary" id="modalBtn">查看更多
+                  <i class="fa-solid fa-spinner fa-spin-pulse" v-if="loadingState.getProduct"></i>
                 </button>
-                <button @click="addToCart(item.id)" type="button" class="btn btn-outline-danger">加入購物車</button>
+                <button @click="addToCart(item.id)" type="button" class="btn btn-outline-danger">加入購物車
+                  <i class="fa-solid fa-circle-plus fa-beat ms-2"></i>
+                </button>
               </div>
             </td>
           </tr>
