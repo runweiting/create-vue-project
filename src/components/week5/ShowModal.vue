@@ -1,5 +1,4 @@
 <script>
-import Swal from 'sweetalert2';
 import Modal from 'bootstrap/js/dist/modal';
 
 export default {
@@ -28,9 +27,14 @@ export default {
         },
         addToCart(id) {
             this.$emit('addToCart', id, this.qty);
-            this.qty = 1;
         }
     },
+    watch: {
+        // 當傳入的 product 值有變化時，重置 qty
+        product() {
+            this.qty = 1;
+        }
+    }
 };
 </script>
 
