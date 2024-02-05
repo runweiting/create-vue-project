@@ -2,7 +2,7 @@
 
 export default {
   props: ['carts', 'total'],
-  emits: ['updateData', 'deleteData'],
+  emits: ['updateData', 'deleteData', 'deleteAllData'],
   data() {
     return {
       title: '購物車列表',

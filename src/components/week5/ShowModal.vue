@@ -9,9 +9,6 @@ export default {
     emits: ['addToCart'],
     data() {
         return {
-            // 新增 apiUrl、apiPath
-            apiUrl: import.meta.env.VITE_URL,
-            apiPath: import.meta.env.VITE_PATH,
             showModal: null,
             qty: 1,
         }
@@ -30,9 +27,10 @@ export default {
             this.showModal.hide();
         },
         addToCart(id) {
-            this.$emit('addToCart', id)
+            this.$emit('addToCart', id, this.qty);
+            this.qty = 1;
         }
-    }
+    },
 };
 </script>
 
@@ -68,7 +66,7 @@ export default {
                                         <input v-model.number="qty" type="number" min="1" class="form-control">
                                         <span class="input-group-text">個</span>
                                     </div>
-                                    <button @click="addToCart(product.id)" type="button" class="btn btn-primary">加入購物車</button>
+                                    <button @click="addToCart(product.id, this.qty)" type="button" class="btn btn-primary">加入購物車</button>
                                 </div>
                             </div>
                         </div>

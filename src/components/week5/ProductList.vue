@@ -29,9 +29,9 @@ export default {
       // 重置表單
       resetForm: false,
       // font-awesome loading
-      loadingState: {
-        getProduct: false,
-      }
+      loadingStatus: {
+        getProduct: '',
+      },
     }
   },
   mounted() {  
@@ -53,19 +53,15 @@ export default {
       }
     },
     // GET 指定商品
-    async getProduct(targetId) {
-      this.loadingState.getProduct = true;
+    getProduct(targetId) {
+      this.loadingStatus.getProduct = targetId;
       const url = `${this.apiUrl}/api/${this.apiPath}/product/${targetId}`;
       this.axios
       .get(url)
       .then((res)=> {
+        this.loadingStatus.getProduct = '';
         this.product = res.data.product;
         this.$refs.showModal.openModal();
-      })
-      .finally(()=> {
-        this.$nextTick(() => {
-          this.loadingState.getProduct = false;
-        });
       })
     },
     // POST 加入購物車 (因為 ProductList 也有加入購物車按鈕)
@@ -73,7 +69,7 @@ export default {
       const url = `${this.apiUrl}/api/${this.apiPath}/cart`;
       const cart = {
         product_id: targetId,
-        qty,
+        qty: qty,
       };
       this.$refs.showModal.hideModal();
       this.axios
@@ -201,11 +197,10 @@ export default {
             </td>
             <td style="width: 100px">
               <div class="d-flex flex-column gap-2">
-                <button @click="getProduct(item.id)" type="button" class="btn btn-outline-secondary" id="modalBtn">查看更多
-                  <i class="fa-solid fa-spinner fa-spin-pulse" v-if="loadingState.getProduct"></i>
+                <button :disabled="item.id === this.loadingStatus.getProduct" @click="getProduct(item.id)" type="button" class="btn btn-outline-secondary" id="modalBtn">查看更多
+                  <span v-if="item.id === this.loadingStatus.getProduct" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 </button>
                 <button @click="addToCart(item.id)" type="button" class="btn btn-outline-danger">加入購物車
-                  <i class="fa-solid fa-circle-plus fa-beat ms-2"></i>
                 </button>
               </div>
             </td>
