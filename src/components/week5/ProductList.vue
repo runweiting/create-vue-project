@@ -2,11 +2,13 @@
 import Swal from 'sweetalert2';
 import ShowModal from '../week5/ShowModal.vue';
 import CartList from '../week5/CartList.vue';
+import OrderDetail from '../week5/OrderDetail.vue'
 
 export default {
   components: {
     ShowModal,
     CartList,
+    OrderDetail
   },
   data() {
     return {
@@ -24,6 +26,8 @@ export default {
       cartsTotal: 0,
       // vue-loading-overlay
       fullPage: false,
+      // 重置表單
+      resetForm: false,
     }
   },
   mounted() {  
@@ -81,7 +85,6 @@ export default {
       .then((res)=> {
         this.cartsList = res.data.data.carts;
         this.cartsTotal = res.data.data.total;
-        console.log(this.cartsList)
       })
     },
     // PUT 修改購物車
@@ -131,7 +134,31 @@ export default {
       })
     },
     // POST 結帳
-    // /v2/api/{api_path}/order
+    createOrder(data) {
+      const order = {
+        data: data
+      };
+      const url = `${this.apiUrl}/api/${this.apiPath}/order`;
+      this.axios
+      .post(url, order)
+      .then((res)=> {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+        // OrderDetail重置表單
+        this.resetForm = true;
+        this.getCart();
+      })
+      .catch((err)=> {
+        Swal.fire({
+          title: err.data.message,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      })
+    },
   },
 }
 </script>
@@ -177,14 +204,16 @@ export default {
     <show-modal ref="showModal" :product="product" @addToCart="addToCart"></show-modal>
   </div>
   <cart-list :carts="cartsList" :total="cartsTotal" @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky"></cart-list>
+  <!-- 向 OrderDetail 傳入 resetState -->
+  <order-detail @sendOrder="createOrder" :resetState="resetForm" />
 </template>
 
 <style scoped>
 .sticky {
-  /* 適當的高度值，視你的設計需求而定 */
-  max-height: 900px;
-  overflow-y: auto; /* 使得內容超過高度時可以滾動 */
-  position: sticky;
+  /* 填滿整個視窗高度 */
+  height: 100vh; 
   top: 0;
+   /* 內容過多時可以滾動 */
+  overflow-y: auto;
 }
 </style>
