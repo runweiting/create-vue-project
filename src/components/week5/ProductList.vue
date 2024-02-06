@@ -31,6 +31,7 @@ export default {
       // font-awesome loading
       loadingStatus: {
         getProduct: '',
+        updateQty: '',
       },
     }
   },
@@ -66,6 +67,7 @@ export default {
     },
     // POST 加入購物車 (因為 ProductList 也有加入購物車按鈕)
     addToCart(targetId, qty = 1) {
+      this.loadingStatus.updateQty = targetId;
       const url = `${this.apiUrl}/api/${this.apiPath}/cart`;
       const cart = {
         product_id: targetId,
@@ -80,6 +82,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         });
+        this.loadingStatus.updateQty = '';
         this.getCart();
       })
     },
@@ -95,6 +98,7 @@ export default {
     },
     // PUT 修改購物車
     putCart(item) {
+      this.loadingStatus.updateQty = item.id;
       const url = `${this.apiUrl}/api/${this.apiPath}/cart/${item.id}`;
       const cart = {
         product_id: item.product_id,
@@ -108,6 +112,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK'
         });
+        this.loadingStatus.updateQty = '';
         this.getCart();
       })
     },
@@ -206,6 +211,7 @@ export default {
                   <span v-if="item.id === this.loadingStatus.getProduct" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 </button>
                 <button @click="addToCart(item.id)" type="button" class="btn btn-outline-danger">加入購物車
+                  <span v-if="item.id === this.loadingStatus.updateQty" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 </button>
               </div>
             </td>
@@ -216,7 +222,7 @@ export default {
     <!-- ShowModal -->
     <show-modal ref="showModal" :product="product" @addToCart="addToCart"></show-modal>
   </div>
-  <cart-list :carts="cartsList" :total="cartsTotal" @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky"></cart-list>
+  <cart-list :updateQty="loadingStatus.updateQty" :carts="cartsList" :total="cartsTotal" @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky"></cart-list>
   <!-- 向 OrderDetail 傳入 resetState -->
   <order-detail @sendOrder="createOrder" :resetState="resetForm" />
 </template>
