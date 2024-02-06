@@ -191,9 +191,14 @@ export default {
           <tr v-for="item in products" :key="item.title">
             <td style="width: 100px"><img :src="item.imageUrl" class="rounded img-fluid " style="height: 100px"></td>
             <td style="width: 100px">{{ item.title }}</td>
+            <!-- 如果原價和價格一樣，就顯示價格 -->
             <td style="width: 100px">
-              <del class="fs-6 fw-bold text-secondary">原價{{ item.origin_price }}元</del>
-              <p class="fs-5 fw-bold mb-0">現在只要{{ item.price }}元</p>
+              <p v-if="item.origin_price === item.price" class="fs-5 fw-bold mb-0">{{ item.price }}元</p>
+              <!-- 如果不一樣，就顯示原價刪除線、價格 -->
+              <div v-else>
+                <del class="fs-6 fw-bold text-secondary">原價{{ item.origin_price }}元</del>
+                <p class="fs-5 fw-bold mb-0">現在只要{{ item.price }}元</p>
+              </div>
             </td>
             <td style="width: 100px">
               <div class="d-flex flex-column gap-2">
