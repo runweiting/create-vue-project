@@ -34,7 +34,7 @@ export default {
           <tr>
             <th scope="col" class="fw-bold">品名</th>
             <th scope="col" class="fw-bold">數量/單位</th>
-            <th scope="col" class="fw-bold">單價</th>
+            <th scope="col" class="fw-bold text-end">單價</th>
             <th></th>
           </tr>
         </thead>
@@ -49,11 +49,11 @@ export default {
                 <span class="input-group-text">{{ item.product.unit }}</span>
               </div>
             </td>
-            <td style="width: 100px">
+            <td style="width: 110px" class="text-end">
               <p class="fs-6 mb-0">{{ item.product.price }}元</p>
             </td>
-            <td style="width: 50px">
-              <button @click="deleteItem(item.id)" type="button" class="btn btn-outline-danger btn-sm py-0">x</button>
+            <td style="width: 40px" class="text-end">
+              <button @click="deleteItem(item.id)" type="button" class="btn btn-outline-danger btn-sm py-0" style="scale: 80%;">x</button>
             </td>
           </tr>
         </tbody>
@@ -65,7 +65,7 @@ export default {
               </small>
             </td>
             <td>總計</td>
-            <td>{{ total }}元</td>
+            <td class="text-end">{{ total }}元</td>
             <td></td>
           </tr>
         </tfoot>
