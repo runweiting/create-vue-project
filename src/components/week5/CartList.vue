@@ -39,9 +39,16 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in carts" :key="item.id">
-            <td style="width: 120px">
-              <img :src="item.product.imageUrl" class="rounded img-fluid " style="height: 50px">
+          <tr v-if="carts.length === 0">
+            <td colspan="4">
+              <small class="text-muted">
+                購物車目前沒有任何品項
+              </small>
+            </td>
+          </tr>
+          <tr v-else v-for="item in carts" :key="item.id">
+            <td style="width: 120px;">
+              <img :src="item.product.imageUrl" class="rounded cart-img">
             </td>
             <td style="width: 120px" class="pe-0">
               <div class="d-flex justify-content-between align-items-center">
@@ -84,3 +91,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.cart-img {
+  object-fit: cover;
+  height: 50px; 
+}
+</style>

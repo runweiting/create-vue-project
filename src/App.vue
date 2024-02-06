@@ -36,15 +36,32 @@ export default {
 <template>
   <!-- 放置每頁重複出現的 HTML：如導航欄 -->
   <header>
-    <nav class="nav nav-pills justify-content-end gap-2">
-      <!-- RouterLink 生成路由鏈接，編譯後轉為 a 標籤，to 代表即將進入的路由 -->
-      <!-- :class 綁定 active 判斷 activeNavLink 的值 -->
-      <RouterLink :to="{ name: 'week2' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2' }">登入</RouterLink>
-      <RouterLink :to="{ name: 'week1' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week1' }">第一週主線作業</RouterLink>
-      <RouterLink :to="{ name: 'week2-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2-admin' }">第二週主線作業</RouterLink>
-      <RouterLink :to="{ name: 'week3-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week3-admin'}">第三週主線作業</RouterLink>
-      <RouterLink :to="{ name: 'week4-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week4-admin'}">第四週主線作業</RouterLink>
-      <RouterLink :to="{ name: 'week5' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week5'}">第五週主線作業</RouterLink>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Vue直播班</span>
+        <nav class="nav nav-pills gap-2">
+          <!-- RouterLink 生成路由鏈接，編譯後轉為 a 標籤，to 代表即將進入的路由 -->
+          <!-- :class 綁定 active 判斷 activeNavLink 的值 -->
+          <RouterLink :to="{ name: 'week2' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2' }">登入</RouterLink>
+
+          <RouterLink :to="{ name: 'week1' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week1' }">第一週主線</RouterLink>
+
+          <RouterLink :to="{ name: 'week2-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week2-admin' }">第二週主線</RouterLink>
+
+          <RouterLink :to="{ name: 'week3-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week3-admin'}">第三週主線</RouterLink>
+
+          <RouterLink :to="{ name: 'week4-admin' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week4-admin'}">第四週主線</RouterLink>
+
+          <RouterLink :to="{ name: 'week5' }" class="nav-link text-decoration-none" :class="{ active: activeNavLink === 'week5'}">第五週主線</RouterLink>
+
+          <button type="button" class="btn">
+            購物車
+            <span class="badge rounded-pill bg-danger">
+              0
+            </span>
+          </button>
+        </nav>
+      </div>
     </nav>
   </header>
 

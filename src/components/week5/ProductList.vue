@@ -194,7 +194,9 @@ export default {
         </thead>
         <tbody>
           <tr v-for="item in products" :key="item.title">
-            <td style="width: 100px"><img :src="item.imageUrl" class="rounded img-fluid " style="height: 100px"></td>
+            <td style="width: 100px">
+              <img :src="item.imageUrl" class="rounded product-img">
+            </td>
             <td style="width: 100px">{{ item.title }}</td>
             <!-- 如果原價和價格一樣，就顯示價格 -->
             <td style="width: 100px">
@@ -232,7 +234,10 @@ export default {
   /* 填滿整個視窗高度 */
   height: 100vh; 
   top: 0;
-   /* 內容過多時可以滾動 */
   overflow-y: auto;
+}
+.product-img {
+  object-fit: cover;
+  height: 100px; 
 }
 </style>
