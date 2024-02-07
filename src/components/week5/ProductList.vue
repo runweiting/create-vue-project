@@ -7,6 +7,7 @@ import ShowModal from '../week5/ShowModal.vue';
 import CartList from '../week5/CartList.vue';
 import OrderDetail from '../week5/OrderDetail.vue';
 import CategoryList from '../week5/CategoryList.vue';
+import Pagination from '../week5/Pagination.vue';
 
 // 匯入 Stores
 import productsStore from '@/stores/productsStore';
@@ -18,7 +19,8 @@ export default {
     ShowModal,
     CartList,
     OrderDetail,
-    CategoryList
+    CategoryList,
+    Pagination
   },
   data() {
     return {
@@ -40,7 +42,7 @@ export default {
     }
   },
   mounted() {
-    this.getProducts(this.$loading)
+    this.getProducts()
     this.getCart();
     this.getCategory();
   }, 
@@ -213,11 +215,12 @@ export default {
           </tr>
         </tbody>
       </table>
+      <pagination></pagination>
     </div>
     <!-- ShowModal -->
-    <show-modal ref="showModal" :product="product" @addToCart="addToCart"></show-modal>
+    <show-modal ref="showModal" :product="product" @addToCart="addToCart" />
   </div>
-  <cart-list :updateQty="loadingStatus.updateQty" @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky"></cart-list>
+  <cart-list :updateQty="loadingStatus.updateQty" @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky" />
   <!-- 向 OrderDetail 傳入 resetState -->
   <order-detail @sendOrder="createOrder" :resetState="resetForm" />
 </template>

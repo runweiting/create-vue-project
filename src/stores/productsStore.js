@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import {useLoading} from 'vue-loading-overlay';
+import { useLoading } from 'vue-loading-overlay';
 
 const $loading = useLoading({});
 
