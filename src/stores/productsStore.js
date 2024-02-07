@@ -1,5 +1,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import {useLoading} from 'vue-loading-overlay';
+
+const $loading = useLoading({});
 
 const apiUrl = import.meta.env.VITE_URL;
 const apiPath = import.meta.env.VITE_PATH;
@@ -9,12 +12,12 @@ export default defineStore('productsStore', {
         // 商品列表
         productList: [],
         pagination: {},
+        fullPage: false,
     }),
     actions: {
         // GET 商品列表
         getProducts(page = 1, category) {
-            console.log(category);
-            //let loader = loading.show();
+            const loader = $loading.show();
             let url = `${apiUrl}/api/${apiPath}/products?page=${page}`;
             if (category) { url += `&category=${category}` }
             axios.get(url)
@@ -27,7 +30,7 @@ export default defineStore('productsStore', {
                 console.log('資料取得失敗', err)
             })
             .finally(()=> {
-                //loader.hide();
+                loader.hide();
             })
         },
     },
