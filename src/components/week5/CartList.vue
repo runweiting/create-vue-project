@@ -1,12 +1,17 @@
 <script>
+import { mapState, mapActions } from 'pinia';
+import cartStore from '@/stores/cartStore.js';
 
 export default {
-  props: ['carts', 'total', 'updateQty'],
+  props: ['updateQty'],
   emits: ['updateData', 'deleteData', 'deleteAllData'],
   data() {
     return {
       title: '購物車列表',
     }
+  },
+  computed: {
+    ...mapState(cartStore, ['cartList', 'cartTotal']),
   },
   methods: {
     putQty(item) {
@@ -31,7 +36,7 @@ export default {
     <div class="container table-responsive">
       <table class="table table-hover align-middle">
         <thead class="table-warning">
-          <tr>
+          <tr class="align-middle" style="height: 48px">
             <th scope="col" class="fw-bold">品名</th>
             <th scope="col" class="fw-bold">數量/單位</th>
             <th scope="col" class="fw-bold text-end">單價</th>
@@ -39,14 +44,14 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-if="carts.length === 0">
+          <tr v-if="cartList.length === 0">
             <td colspan="4">
               <small class="text-muted">
                 購物車目前沒有任何品項
               </small>
             </td>
           </tr>
-          <tr v-else v-for="item in carts" :key="item.id">
+          <tr v-else v-for="item in cartList" :key="item.id">
             <td style="width: 120px;">
               <img :src="item.product.imageUrl" class="rounded cart-img">
             </td>
@@ -79,11 +84,11 @@ export default {
           <tr>
             <td>
               <small class="text-muted">
-                {{ `總共 ${ carts.length } 項` }}
+                {{ `總共 ${ cartList.length } 項` }}
               </small>
             </td>
             <td>總計</td>
-            <td class="text-end">{{ total }}元</td>
+            <td class="text-end">{{ cartTotal }}元</td>
             <td></td>
           </tr>
         </tfoot>

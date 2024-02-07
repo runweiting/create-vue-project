@@ -9,10 +9,11 @@ import { createPinia } from 'pinia';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
-// 引入 VueLoading
+// 匯入 VueLoading
 import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-// 引入 VeeValidate
+
+// 匯入 VeeValidate
 import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
 import * as AllRules from '@vee-validate/rules'
 import { localize, setLocale } from '@vee-validate/i18n';
@@ -33,19 +34,24 @@ configure({
 setLocale('zh_TW');
 
 
-// 建立 Vue 實體元件
+// 建立 Vue 實體
 const app = createApp(App);
 
-// 啟用套件的寫法
-app.use(createPinia());
+// 建立 Pinia 實體
+const pinia = createPinia();
+
+// 啟用套件
+app.use(pinia);
+app.use(VueAxios, axios);
+app.use(LoadingPlugin);
+
 // 使 app 所有子元件都能存取全局屬性 this.$router 與 this.$route
 // this.$router：存取路由 Router，用來進行導航、切換路由，提供方法如 push、replace、go，用於改變 URL 並觸發相應的路由
 // this.$route：當前路由資訊物件 Route，如路由的 path、params、query
 app.use(router);
-app.use(VueAxios, axios);
-app.use(LoadingPlugin);
 
-// 掛載 Global 的 VeeValidate 元件
+// 全域註冊
+// VeeValidate 元件
 app.component('VField', Field);
 app.component('VForm', Form);
 app.component('ErrorMessage', ErrorMessage);
