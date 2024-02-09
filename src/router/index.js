@@ -20,14 +20,6 @@ const baseRoutes = [
     component: Week1View
   },
   {
-    path: '/week5',
-    name: 'week5',
-    component: Week5View,
-  },
-];
-// 2. 定義後台相關路由 adminRoutes
-const adminRoutes = [
-  {
     path: '/week2',
     name: 'week2',
     component: Week2LoginView,
@@ -37,6 +29,14 @@ const adminRoutes = [
     name: 'login',
     component: Week2LoginView,
   },
+  {
+    path: '/week5',
+    name: 'week5',
+    component: Week5View,
+  },
+];
+// 2. 定義後台相關路由 adminRoutes
+const adminRoutes = [
   {
     path: '/week2-admin',
     name: 'week2-admin',
