@@ -6,7 +6,9 @@
   # src/views 放 xxxView.vue 等頁面組件，包含了該頁面的模板、資料、樣式等，用於渲染和呈現特定的內容 -->
 
 <script>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
+import { mapState } from 'pinia';
+import cartStore from './stores/cartStore';
 
 export default {
   data() {
@@ -20,6 +22,9 @@ export default {
     '$route'(to, from){
       this.updateNavClass(to, from);
     }
+  },
+  computed: {
+    ...mapState(cartStore, ['cartList'])
   },
   methods: {
     // updateNavClass 接受兩個參數 to 和 from，分別代表即將進入的路由和即將離開的路由，藉此更新 activeNavLink 設為當前路由名稱
@@ -57,7 +62,7 @@ export default {
           <button type="button" class="btn">
             購物車
             <span class="badge rounded-pill bg-danger">
-              0
+              {{ cartList.length }}
             </span>
           </button>
         </nav>
