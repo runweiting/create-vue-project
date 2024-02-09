@@ -16,24 +16,29 @@ export default defineStore('productsStore', {
     }),
     actions: {
         // GET 商品列表
-        getProducts(page = 1, category) {
+        async getProducts(page = 1, category) {
             const loader = $loading.show();
             let url = `${apiUrl}/api/${apiPath}/products?page=${page}`;
-            if (category) { url += `&category=${category}` }
-            axios.get(url)
-            .then((res)=> {
+            if (category) { url += `&category=${category}` };
+            try {
+                const res = await axios.get(url);
                 const { products, pagination } = res.data;
                 this.productList = products;
                 this.pagination = pagination;
-            })
-            .catch((err)=> {
+                // 異步操作完成後，調用排序邏輯
+                this.sortProducts();
+            } catch(err) {
                 console.log('資料取得失敗', err)
-            })
-            .finally(()=> {
+            } finally {
                 loader.hide();
-            })
+            }
         },
+        // sort 商品列表
+        sortProducts() {
+            this.productList = this.productList.sort((a, b) => a.price - b.price);
+        }
     },
     getters: {
+        
     },
 })

@@ -72,6 +72,20 @@ const router = createRouter({
   // URL Hash(#錨點) 可藉由 #/切換至不同 # 位置，避免引發網頁重新讀取
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [...baseRoutes, ...adminRoutes],
+  // scrollBehavior 可自定義路由的滾動行為
+  // 接收三個參數：to 表示目標路由，from 表示當前路由，savedPosition 表示從緩存中獲取的滾動位置
+  scrollBehavior(to, from, savedPosition) {
+    // 如果存在 savedPosition，將頁面滾動到 savedPosition 的位置
+    if (savedPosition) {
+      return savedPosition;
+      // 如果目標路由有 hash，將頁面滾動到 hash 所在的位置
+    } else if (to.hash) {
+      return { selector: to.hash };
+      // 其他情況將頁面滾動到頂部
+    } else {
+      return { top: 0 };
+    }
+  },
 });
 
 // 4. 全域前置守衛 router.beforeEach
