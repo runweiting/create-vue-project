@@ -1,7 +1,7 @@
 import './assets/main.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
-import '../node_modules/sweetalert2/dist/sweetalert2.css';
+import 'sweetalert2/dist/sweetalert2.css';
 
 // 具名匯入、sideEffects
 import { createApp } from 'vue';
@@ -14,8 +14,10 @@ import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
 // 匯入 VeeValidate
-import { Field, Form, ErrorMessage, defineRule, configure } from 'vee-validate';
-import * as AllRules from '@vee-validate/rules'
+import {
+  Field, Form, ErrorMessage, defineRule, configure,
+} from 'vee-validate';
+import * as AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 
@@ -23,16 +25,15 @@ import App from './App.vue';
 import router from './router';
 
 // Object.keys 將 AllRules 轉為陣列 forEach 將驗證規則加入 VeeValidate
-Object.keys(AllRules).forEach((rule)=> {
-    defineRule(rule, AllRules[rule])
+Object.keys(AllRules).forEach((rule) => {
+  defineRule(rule, AllRules[rule]);
 });
 // 將當前 VeeValidate 的語系設定為繁體中文
 configure({
-    generateMessage: localize({ zh_TW: zhTW }),
-    validateOnInput: true,
+  generateMessage: localize({ zh_TW: zhTW }),
+  validateOnInput: true,
 });
 setLocale('zh_TW');
-
 
 // 建立 Vue 實體
 const app = createApp(App);
@@ -58,5 +59,3 @@ app.component('ErrorMessage', ErrorMessage);
 
 // 掛載 Vue 實體至 DOM
 app.mount('#app');
-
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';

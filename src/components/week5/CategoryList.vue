@@ -4,25 +4,24 @@ import productsStore from '@/stores/productsStore';
 import categoryStore from '@/stores/categoryStore';
 
 export default {
-    data() {
-        return {
-            currentCategory: '',
-        }
+  data() {
+    return {
+      currentCategory: '',
+    };
+  },
+  watch: {
+    // 帶入類別參數
+    currentCategory() {
+      this.getProducts(1, this.currentCategory);
     },
-    watch: {
-        // 帶入類別參數
-        currentCategory() {
-            this.getProducts(1, this.currentCategory);
-            console.log(this.currentCategory)
-        }
-    },
-    computed: {
-        ...mapState(categoryStore, ['categoryList']),
-    },
-    methods: {
-        ...mapActions(productsStore, ['getProducts'])
-    }
-}
+  },
+  computed: {
+    ...mapState(categoryStore, ['categoryList']),
+  },
+  methods: {
+    ...mapActions(productsStore, ['getProducts']),
+  },
+};
 </script>
 
 <template>

@@ -2,22 +2,22 @@
 export default {
   // 6. props 接收 Week2AdminView <ProductItem> 傳來的 :product="selectedProduct" 渲染資料
   props: {
-    product: Object
+    product: Object,
   },
   // emits 用來聲明 ProductItem 可以發送的 'closeProductDetail' 事件
   emits: ['closeProductDetail'],
   data() {
     return {
-      title: '單一產品細節'
-    }
-  }
-}
+      title: '單一產品細節',
+    };
+  },
+};
 </script>
 
 <template>
   <div class="col-md-4 mt-4">
     <h2>{{ title }}</h2>
-    <div class="card w-100" style="width: 18rem;"> 
+    <div class="card w-100" style="width: 18rem;">
       <img :src="product.imageUrl" class="card-img-top" alt="">
       <div class="card-body">
         <h5 class="card-title">{{ product.title}}

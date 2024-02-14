@@ -1,12 +1,12 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import Week1View from '../views/Week1View.vue'
-import Week2LoginView from '../views/Week2LoginView.vue'
-import Week2AdminView from '../views/Week2AdminView.vue'
-import Week3AdminView from '../views/Week3AdminView.vue'
-import Week4AdminView from '../views/Week4AdminView.vue'
-import Week5View from '@/views/Week5View.vue'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import Week5View from '@/views/Week5View.vue';
 import Swal from 'sweetalert2';
-import { isUserLoggedIn } from '../../src/components/utils/utils'
+import Week1View from '../views/Week1View.vue';
+import Week2LoginView from '../views/Week2LoginView.vue';
+import Week2AdminView from '../views/Week2AdminView.vue';
+import Week3AdminView from '../views/Week3AdminView.vue';
+import Week4AdminView from '../views/Week4AdminView.vue';
+import isUserLoggedIn from '../components/utils/utils';
 
 // 1. 定義基本路由 baseRoutes
 const baseRoutes = [
@@ -17,7 +17,7 @@ const baseRoutes = [
   {
     path: '/week1',
     name: 'week1',
-    component: Week1View
+    component: Week1View,
   },
   {
     path: '/week2',
@@ -69,7 +69,8 @@ const adminRoutes = [
 
 // 3. 建立 VueRouter 實體物件
 const router = createRouter({
-  // URL Hash(#錨點) 可藉由 #/切換至不同 # 位置，避免引發網頁重新讀取
+  // 網址路徑模式：使用 URL Hash(#錨點)
+  // 可藉由 #/切換至不同 # 位置，避免引發網頁重新讀取
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [...baseRoutes, ...adminRoutes],
   // scrollBehavior 可自定義路由的滾動行為
@@ -79,12 +80,11 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition;
       // 如果目標路由有 hash，將頁面滾動到 hash 所在的位置
-    } else if (to.hash) {
+    } if (to.hash) {
       return { selector: to.hash };
       // 其他情況將頁面滾動到頂部
-    } else {
-      return { top: 0 };
     }
+    return { top: 0 };
   },
 });
 
@@ -104,4 +104,4 @@ router.beforeEach((to, from, next) => {
 });
 
 // 5. 導出 Vue Router 實例
-export default router
+export default router;

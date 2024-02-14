@@ -8,51 +8,48 @@ export default {
       apiUrl: import.meta.env.VITE_URL,
       apiPath: import.meta.env.VITE_PATH,
       user: {
-        "username": "",
-        "password": ""
+        username: '',
+        password: '',
       },
       products: [],
-      title: '產品列表'
-    }
+      title: '產品列表',
+    };
   },
   // created() 在初始化後立即調用，在讀取和掛載 DOM 之前，如設置初始數據、監聽事件等
   created() {
     // 從 cookies 讀取 token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
+    // eslint-disable-next-line no-useless-escape
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
     // axios headers 預設寫法
-    this.axios.defaults.headers.common['Authorization'] = token;
+    this.axios.defaults.headers.common.Authorization = token;
   },
   methods: {
     // POST 登出
-    logout(){
+    logout() {
       const url = `${this.apiUrl}/logout`;
       this.axios
-      .post(url)
-      .then((res)=> {
-        console.log(res.data);
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK'
-        })
-        .then(()=>{
-          // 清空 user
-          this.user = {};
-          // 清除 token
-          document.cookie = "myToken=; expires=;";
-          // 清除 headers
-          this.axios.defaults.headers.common['Authorization'] = null;
-          // 導向登入頁面
-          this.$router.push({ name: 'login' });
+        .post(url)
+        .then((res) => {
+          Swal.fire({
+            title: res.data.message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
+            .then(() => {
+              // 清空 user
+              this.user = {};
+              // 清除 token
+              document.cookie = 'myToken=; expires=;';
+              // 清除 headers
+              this.axios.defaults.headers.common.Authorization = null;
+              // 導向登入頁面
+              this.$router.push({ name: 'login' });
+            });
         });
-        })
-      .catch((err)=> {
-        console.log(err.response)
-        })
     },
     // 2. 執行 $emit 將'showProductDetail' 事件和 item 傳入 Week2AdminView <ProductList>
     ItemInfo(item) {
-      this.$emit('showProductDetail',item)
+      this.$emit('showProductDetail', item);
     },
   },
   // 初始化後，執行的第一個方法
@@ -60,16 +57,12 @@ export default {
     // GET 取得後台產品列表
     const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
     this.axios
-    .get(url)
-    .then((res)=> {
-      this.products = res.data.products;
-      console.log(this.products)
-      })
-    .catch((err)=> {
-      console.log(err)
-      })
+      .get(url)
+      .then((res) => {
+        this.products = res.data.products;
+      });
   },
-}
+};
 </script>
 
 <template>

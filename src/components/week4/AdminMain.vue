@@ -8,7 +8,7 @@ export default {
   components: {
     EditModal,
     DelModal,
-    Pagination
+    Pagination,
   },
   data() {
     return {
@@ -24,13 +24,14 @@ export default {
       },
       // 分頁
       pagination: {},
-    }
+    };
   },
   created() {
     // 從 cookies 讀取 token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, "$1",);
+    // eslint-disable-next-line no-useless-escape
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
     // axios headers 預設寫法
-    this.axios.defaults.headers.common['Authorization'] = token;
+    this.axios.defaults.headers.common.Authorization = token;
   },
   mounted() {
     this.checkAdmin();
@@ -40,38 +41,38 @@ export default {
     checkAdmin() {
       const url = `${this.apiUrl}/api/user/check`;
       this.axios
-      .post(url)
-      .then(()=> {
-        this.getData();
-      })
-      .catch(()=> {
-        Swal.fire({
-          title: `驗證錯誤，請重新登入`,
-          icon: 'error',
-          confirmButtonText: 'OK'
+        .post(url)
+        .then(() => {
+          this.getData();
         })
-        .then(()=> {
-          this.$router.push({ name: 'login' });
-        })
-      })
+        .catch(() => {
+          Swal.fire({
+            title: '驗證錯誤，請重新登入',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
+            .then(() => {
+              this.$router.push({ name: 'login' });
+            });
+        });
     },
     // GET 商品列表
     // 預設為第一頁，若 page 傳入值則取代 1
     getData(page = 1) {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`;
       this.axios
-      .get(url)
-      .then((res)=> {
-        const { products, pagination } = res.data;
-        this.products = products;
-        this.pagination = pagination;
-        console.log(res.data)
-      })
+        .get(url)
+        .then((res) => {
+          const { products, pagination } = res.data;
+          this.products = products;
+          this.pagination = pagination;
+          console.log(res.data);
+        });
     },
     // 切換 modal 狀態：新增、編輯、刪除
     openModal(isNew, item) {
       // 新增 -> 清空資料、POST、開啟 editModal
-      if(isNew === 'new') {
+      if (isNew === 'new') {
         this.tempData = {
           imagesUrl: [],
         };
@@ -79,43 +80,43 @@ export default {
         // $refs.editModal 是對子組件的引用，而 .editModal 則是子組件中 Bootstrap Modal 實例的屬性或方法
         this.$refs.editModal.editModal.show();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
-      } else if(isNew === 'edit') {
+      } else if (isNew === 'edit') {
         this.tempData = { ...item };
         // * 如果沒有多圖的 item，要新增多圖
-        if (!Array.isArray(this.tempData.imagesUrl)){
-          this.tempData.imagesUrl = []
-        };
+        if (!Array.isArray(this.tempData.imagesUrl)) {
+          this.tempData.imagesUrl = [];
+        }
         this.isNew = false;
         this.$refs.editModal.editModal.show();
         // 刪除 -> 淺拷貝、開啟 delModal
-      } else if(isNew === 'delete') {
+      } else if (isNew === 'delete') {
         this.tempData = { ...item };
         this.$refs.delModal.delModal.show();
       }
     },
     // POST 登出
-    logout(){
+    logout() {
       const url = `${this.apiUrl}/logout`;
       this.axios
-      .post(url)
-      .then((res)=> {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK'
-        })
-        .then(()=>{
-          // 清除 token
-          document.cookie = "myToken=; expires=;";
-          // 清除 headers
-          this.axios.defaults.headers.common['Authorization'] = null;
-          // 導向登入頁面
-          this.$router.push({ name: 'login' });
+        .post(url)
+        .then((res) => {
+          Swal.fire({
+            title: res.data.message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          })
+            .then(() => {
+              // 清除 token
+              document.cookie = 'myToken=; expires=;';
+              // 清除 headers
+              this.axios.defaults.headers.common.Authorization = null;
+              // 導向登入頁面
+              this.$router.push({ name: 'login' });
+            });
         });
-      })
     },
   },
-}
+};
 </script>
 
 <template>
@@ -128,7 +129,8 @@ export default {
         </p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
-          <button @click="openModal('new')" type="button" class="btn btn-primary" id="modalBtn">建立新的商品</button>
+          <button @click="openModal('new')" type="button"
+          class="btn btn-primary" id="modalBtn">建立新的商品</button>
           <button @click="logout" type="button" class="btn btn-warning">登出</button>
         </div>
         <!-- editModal -->
@@ -157,11 +159,14 @@ export default {
             <td>{{ item.title }}</td>
             <td>{{ item.origin_price }}</td>
             <td>{{ item.price }}</td>
-            <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
+            <td :class="{ 'text-success': item.is_enabled }">
+              {{ item.is_enabled ? '啟用' : '未啟用' }}</td>
             <td>
               <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <button @click="openModal('edit', item)" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
-                <button @click="openModal('delete', item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+                <button @click="openModal('edit', item)" type="button"
+                class="btn btn-outline-primary btn-sm">編輯</button>
+                <button @click="openModal('delete', item)" type="button"
+                class="btn btn-outline-danger btn-sm">刪除</button>
               </div>
             </td>
           </tr>

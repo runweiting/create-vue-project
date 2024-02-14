@@ -1,5 +1,4 @@
 <script>
-import Swal from 'sweetalert2';
 import ProductList from '../components/week3/ProductList.vue';
 
 export default {
@@ -8,7 +7,7 @@ export default {
   },
   data() {
     return {
-    }
+    };
   },
   // 資料建立完成
   created() {
@@ -27,7 +26,7 @@ export default {
   <main class="container">
     <div class="row py-3">
       <ProductList />
-      
+
     </div>
   </main>
 </template>
