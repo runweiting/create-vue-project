@@ -65,7 +65,7 @@ export default {
                     <div class="form-floating mb-3">
                         <VField v-model="data.user.tel" rules="required|min:8|max:10"
                         :class="{ 'is-invalid': errors['電話'] }"
-                        type="text" class="form-control"
+                        type="tel" class="form-control"
                         id="floatingTel" name="電話" placeholder="請輸入電話" />
                         <label for="floatingTel" class="form-label">收件人電話</label>
                         <ErrorMessage name="電話" class="invalid-feedback" />
