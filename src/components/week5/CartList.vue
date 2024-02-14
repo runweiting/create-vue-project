@@ -32,7 +32,8 @@ export default {
     <div class="container py-2 d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <button @click="deleteAll" type="button"
-      class="btn btn-outline-danger btn-sm" style="height: 38px">清空購物車</button>
+      class="btn btn-outline-danger btn-sm"
+      style="height: 38px" v-if="cartList.length !== 0">清空購物車</button>
     </div>
     <div class="container table-responsive">
       <table class="table table-hover align-middle">
