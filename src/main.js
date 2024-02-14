@@ -1,6 +1,7 @@
 import './assets/main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'sweetalert2/dist/sweetalert2.css';
 
 // 具名匯入、sideEffects

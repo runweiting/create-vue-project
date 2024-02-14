@@ -2,11 +2,6 @@
 import { ErrorMessage } from 'vee-validate';
 
 export default {
-  props: {
-    resetState: {
-      type: Boolean,
-    },
-  },
   emits: ['sendOrder'],
   data() {
     return {
@@ -28,12 +23,8 @@ export default {
     OnSubmit() {
       this.$emit('sendOrder', this.data);
     },
-  },
-  watch: {
-    resetState(value) {
-      if (value) {
-        this.$refs.form.resetForm();
-      }
+    resetForm() {
+      this.$refs.form.resetForm();
       this.data.message = '';
     },
   },

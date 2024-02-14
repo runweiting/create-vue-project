@@ -32,8 +32,6 @@ export default {
       product: {},
       // vue-loading-overlay
       fullPage: false,
-      // 重置表單
-      resetForm: false,
       // Bootstrap Spinners
       loadingStatus: {
         getProduct: '',
@@ -152,7 +150,7 @@ export default {
             confirmButtonText: 'OK',
           });
           // OrderDetail重置表單
-          this.resetForm = true;
+          this.$refs.orderDetail.resetForm();
           this.getCart();
         })
         .catch((err) => {
@@ -228,8 +226,7 @@ export default {
   </div>
   <cart-list :updateQty="loadingStatus.updateQty"
   @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky" />
-  <!-- 向 OrderDetail 傳入 resetState -->
-  <order-detail @sendOrder="createOrder" :resetState="resetForm" />
+  <order-detail @sendOrder="createOrder" ref="orderDetail" />
 </template>
 
 <style scoped>

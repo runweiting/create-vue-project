@@ -20,10 +20,8 @@ export default defineStore('cartStore', {
         .then((res) => {
           this.cartList = res.data.data.carts;
           this.cartTotal = res.data.data.total;
-          console.log(this.cartList);
         });
     },
-
   },
   getters: {
   },
