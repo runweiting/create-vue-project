@@ -1,36 +1,3 @@
-<script>
-import { ErrorMessage } from 'vee-validate';
-
-export default {
-  emits: ['sendOrder'],
-  data() {
-    return {
-      title: '訂購訊息',
-      // 結帳資料
-      data: {
-        user: {
-          name: '',
-          email: '',
-          tel: '',
-          address: '',
-        },
-        message: '',
-      },
-    };
-  },
-  components: { ErrorMessage },
-  methods: {
-    OnSubmit() {
-      this.$emit('sendOrder', this.data);
-    },
-    resetForm() {
-      this.$refs.form.resetForm();
-      this.data.message = '';
-    },
-  },
-};
-</script>
-
 <template>
     <div class="container">
         <div class="row">
@@ -83,3 +50,36 @@ export default {
         </div>
     </div>
 </template>
+
+<script>
+import { ErrorMessage } from 'vee-validate';
+
+export default {
+  emits: ['sendOrder'],
+  data() {
+    return {
+      title: '訂購訊息',
+      // 結帳資料
+      data: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+        },
+        message: '',
+      },
+    };
+  },
+  components: { ErrorMessage },
+  methods: {
+    OnSubmit() {
+      this.$emit('sendOrder', this.data);
+    },
+    resetForm() {
+      this.$refs.form.resetForm();
+      this.data.message = '';
+    },
+  },
+};
+</script>

@@ -86,6 +86,8 @@ const router = createRouter({
     }
     return { top: 0 };
   },
+  // linkActiveClass 用於開啟 <router-link>的默認樣式
+  // 當路由啟用時 <router-link> 會呈現 active 狀態(Bootstrap樣式)
   linkActiveClass: 'active',
 });
 

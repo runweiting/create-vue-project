@@ -1,43 +1,3 @@
-<script>
-import Modal from 'bootstrap/js/dist/modal';
-
-export default {
-  props: {
-    product: Object,
-  },
-  emits: ['addToCart'],
-  data() {
-    return {
-      showModal: null,
-      qty: 1,
-    };
-  },
-  mounted() {
-    this.showModal = new Modal(document.querySelector('#showModal'), {
-      keyboard: false,
-      backdrop: 'static',
-    });
-  },
-  methods: {
-    openModal() {
-      this.showModal.show();
-    },
-    hideModal() {
-      this.showModal.hide();
-    },
-    addToCart(id) {
-      this.$emit('addToCart', id, this.qty);
-    },
-  },
-  watch: {
-    // 當傳入的 product 值有變化時，重置 qty
-    product() {
-      this.qty = 1;
-    },
-  },
-};
-</script>
-
 <template>
     <!-- showModal -->
     <div class="modal fade modal-lg" id="showModal"
@@ -86,3 +46,43 @@ export default {
         </div>
     </div>
 </template>
+
+<script>
+import Modal from 'bootstrap/js/dist/modal';
+
+export default {
+  props: {
+    product: Object,
+  },
+  emits: ['addToCart'],
+  data() {
+    return {
+      showModal: null,
+      qty: 1,
+    };
+  },
+  mounted() {
+    this.showModal = new Modal(document.querySelector('#showModal'), {
+      keyboard: false,
+      backdrop: 'static',
+    });
+  },
+  methods: {
+    openModal() {
+      this.showModal.show();
+    },
+    hideModal() {
+      this.showModal.hide();
+    },
+    addToCart(id) {
+      this.$emit('addToCart', id, this.qty);
+    },
+  },
+  watch: {
+    // 當傳入的 product 值有變化時，重置 qty
+    product() {
+      this.qty = 1;
+    },
+  },
+};
+</script>

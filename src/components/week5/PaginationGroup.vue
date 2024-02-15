@@ -1,17 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
-<script>
-import { mapState, mapActions } from 'pinia';
-import productsStore from '@/stores/productsStore';
-
-export default {
-  computed: {
-    ...mapState(productsStore, ['pagination']),
-  },
-  methods: {
-    ...mapActions(productsStore, ['getProducts']),
-  },
-};
-</script>
 <template>
     <div class="px-2">
         <nav aria-label="Page navigation example">
@@ -47,3 +33,18 @@ export default {
         </nav>
     </div>
 </template>
+
+<!-- eslint-disable vue/multi-word-component-names -->
+<script>
+import { mapState, mapActions } from 'pinia';
+import productsStore from '@/stores/productsStore';
+
+export default {
+  computed: {
+    ...mapState(productsStore, ['pagination']),
+  },
+  methods: {
+    ...mapActions(productsStore, ['getProducts']),
+  },
+};
+</script>

@@ -1,3 +1,12 @@
+<template>
+    <div>
+        <select v-model="currentCategory" class="form-select form-select-sm">
+            <option value="">全部</option>
+            <option v-for="item in categoryList" :key="item" :value="item">{{ item }}</option>
+        </select>
+    </div>
+</template>
+
 <script>
 import { mapState, mapActions } from 'pinia';
 import productsStore from '@/stores/productsStore';
@@ -23,12 +32,3 @@ export default {
   },
 };
 </script>
-
-<template>
-    <div>
-        <select v-model="currentCategory" class="form-select form-select-sm">
-            <option value="">全部</option>
-            <option v-for="item in categoryList" :key="item" :value="item">{{ item }}</option>
-        </select>
-    </div>
-</template>

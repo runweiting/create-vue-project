@@ -1,32 +1,3 @@
-<script>
-import { mapState } from 'pinia';
-import cartStore from '@/stores/cartStore';
-
-export default {
-  props: ['updateQty'],
-  emits: ['updateData', 'deleteData', 'deleteAllData'],
-  data() {
-    return {
-      title: '購物車列表',
-    };
-  },
-  computed: {
-    ...mapState(cartStore, ['cartList', 'cartTotal']),
-  },
-  methods: {
-    putQty(item) {
-      this.$emit('updateData', item);
-    },
-    deleteItem(id) {
-      this.$emit('deleteData', id);
-    },
-    deleteAll() {
-      this.$emit('deleteAllData');
-    },
-  },
-};
-</script>
-
 <template>
   <div class="col-4 mt-4 mb-4" style="position: sticky;">
     <div class="container py-2 d-flex justify-content-between">
@@ -102,6 +73,35 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+import { mapState } from 'pinia';
+import cartStore from '@/stores/cartStore';
+
+export default {
+  props: ['updateQty'],
+  emits: ['updateData', 'deleteData', 'deleteAllData'],
+  data() {
+    return {
+      title: '購物車列表',
+    };
+  },
+  computed: {
+    ...mapState(cartStore, ['cartList', 'cartTotal']),
+  },
+  methods: {
+    putQty(item) {
+      this.$emit('updateData', item);
+    },
+    deleteItem(id) {
+      this.$emit('deleteData', id);
+    },
+    deleteAll() {
+      this.$emit('deleteAllData');
+    },
+  },
+};
+</script>
 
 <style scoped>
 .cart-img {

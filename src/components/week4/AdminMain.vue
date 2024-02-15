@@ -66,7 +66,6 @@ export default {
           const { products, pagination } = res.data;
           this.products = products;
           this.pagination = pagination;
-          console.log(res.data);
         });
     },
     // 切換 modal 狀態：新增、編輯、刪除

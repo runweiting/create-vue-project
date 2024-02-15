@@ -1,20 +1,11 @@
 <!-- App.vue 用途：
-  App.vue 主組件是整個應用程式的入口點，包含應用程式的整體佈局、路由配置、全域樣式，以及可能的全域行為 -->
+  App.vue 根元件是整個應用程式的入口點，包含整體佈局、路由配置、全域樣式及全域行為
+-->
 <!-- 資料夾 的用途：
   # src/components 放子元件、utils.js
-  # src/router 放 index.js 使用 createRouter 進行路由配置，根據不同 URL 顯示不同的頁面組件
-  # src/views 放 xxxView.vue 等頁面組件，包含了該頁面的模板、資料、樣式等，用於渲染和呈現特定的內容 -->
-
-<script>
-import { mapState } from 'pinia';
-import cartStore from './stores/cartStore';
-
-export default {
-  computed: {
-    ...mapState(cartStore, ['cartList']),
-  },
-};
-</script>
+  # src/router 使用 createRouter 進行路由配置，根據不同 URL 顯示不同頁面
+  # src/views 放 xxxView.vue 等頁面，包含該頁面的模板、資料、樣式等
+-->
 
 <template>
   <!-- 放置每頁重複出現的 HTML：如導航欄 -->
@@ -23,8 +14,7 @@ export default {
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Vue直播班</span>
         <nav class="nav nav-pills gap-2">
-          <!-- RouterLink 生成路由鏈接，編譯後轉為 a 標籤，to 代表即將進入的路由 -->
-          <!-- :class 綁定 active 判斷 activeNavLink 的值 -->
+          <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
           <RouterLink :to="{ name: 'week2' }"
           class="nav-link text-decoration-none">登入</RouterLink>
 
@@ -53,17 +43,28 @@ export default {
       </div>
     </nav>
   </header>
-
   <!-- 放置主要內容 -->
   <main>
-    <!-- <RouterView> 渲染路由內容 -->
+    <!-- RouterView 渲染路由內容 -->
     <RouterView />
   </main>
   <!-- 放置每頁重複出現的 HTML：如頁尾 <footer /> -->
 </template>
 
+<script>
+import { mapState } from 'pinia';
+import cartStore from './stores/cartStore';
+
+export default {
+  computed: {
+    ...mapState(cartStore, ['cartList']),
+  },
+};
+</script>
+
 <!-- Global Styles 全域樣式：
-  設定全域樣式，例如背景色、字型、邊框等。使用 :root 或 body 元素是一種常見的做法。
+  設定全域樣式，例如背景色、字型、邊框等。
+  使用 :root 或 body 元素是一種常見的做法。
   :root {
     --primary-color: #3498db;
     --secondary-color: #2ecc71;
