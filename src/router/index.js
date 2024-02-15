@@ -86,6 +86,7 @@ const router = createRouter({
     }
     return { top: 0 };
   },
+  linkActiveClass: 'active',
 });
 
 // 4. 全域前置守衛 router.beforeEach
