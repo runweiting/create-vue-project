@@ -1,7 +1,7 @@
 // side effect
-import './assets/all.scss';
-// import 'bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+// import './assets/all.scss';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'sweetalert2/dist/sweetalert2.css';
 
