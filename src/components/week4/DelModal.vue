@@ -10,8 +10,8 @@ export default {
   data() {
     return {
       // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_URL,
-      apiPath: import.meta.env.VITE_PATH,
+      apiUrl: import.meta.env.VITE_APP_URL,
+      apiPath: import.meta.env.VITE_APP_PATH,
       delModal: null,
     };
   },
