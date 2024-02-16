@@ -1,19 +1,19 @@
-import './assets/main.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// side effect
+import './assets/all.scss';
 import 'bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'sweetalert2/dist/sweetalert2.css';
 
-// 具名匯入、sideEffects
+// 匯入 createApp、createPinia
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+// 匯入 axios、VueAxios
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-
 // 匯入 VueLoading
 import { LoadingPlugin } from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-
 // 匯入 VeeValidate
 import {
   Field, Form, ErrorMessage, defineRule, configure,
