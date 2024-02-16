@@ -3,7 +3,7 @@
     <div class="container py-2 d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <p class="p-2 mb-0">
-        {{ `目前有 ${(Object.keys(productList)).length} 項商品` }}
+        {{ `目前有 ${productListNum} 項商品` }}
       </p>
     </div>
     <div class="container table-responsive">
@@ -90,6 +90,8 @@ export default {
       apiUrl: import.meta.env.VITE_APP_URL,
       apiPath: import.meta.env.VITE_APP_PATH,
       title: '商品列表',
+      // 商品數量
+      productListNum: null,
       // 指定商品
       product: {},
       // vue-loading-overlay
@@ -100,6 +102,9 @@ export default {
         updateQty: '',
       },
     };
+  },
+  created() {
+    this.productListNum = this.productList.length;
   },
   mounted() {
     this.getProducts();

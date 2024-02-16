@@ -4,8 +4,8 @@ import { useLoading } from 'vue-loading-overlay';
 
 const $loading = useLoading({});
 
-const apiUrl = import.meta.env.VITE_URL;
-const apiPath = import.meta.env.VITE_PATH;
+const apiUrl = import.meta.env.VITE_APP_URL;
+const apiPath = import.meta.env.VITE_APP_PATH;
 
 export default defineStore('productsStore', {
   state: () => ({
