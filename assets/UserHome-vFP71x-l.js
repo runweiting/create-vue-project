@@ -1,0 +1,1 @@
+import{_ as s,o as t,c,a as e}from"./index-SKB7VdvU.js";const o={},n={class:"container"},_=e("h1",{class:"pt-5 text-center"},"WELCOME UNIQLOLO 網路旗艦店",-1),a=e("div",{class:"row"},null,-1),r=[_,a];function d(i,l){return t(),c("div",n,r)}const h=s(o,[["render",d]]);export{h as default};
