@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { defineStore } from 'pinia';
-import { useLoading } from 'vue-loading-overlay';
+import axios from "axios";
+import { defineStore } from "pinia";
+import { useLoading } from "vue-loading-overlay";
 
 const $loading = useLoading({});
 
 const apiUrl = import.meta.env.VITE_APP_URL;
 const apiPath = import.meta.env.VITE_APP_PATH;
 
-export default defineStore('productsStore', {
+export default defineStore("productsStore", {
   state: () => ({
     // 商品列表
     productList: [],

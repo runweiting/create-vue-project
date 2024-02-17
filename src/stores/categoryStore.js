@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { defineStore } from 'pinia';
+import axios from "axios";
+import { defineStore } from "pinia";
 
 const apiUrl = import.meta.env.VITE_APP_URL;
 const apiPath = import.meta.env.VITE_APP_PATH;
 
-export default defineStore('categoryStore', {
+export default defineStore("categoryStore", {
   state: () => ({
     // 從 GET 購物車列表中的 category 來分類
     categoryList: [],

@@ -7,6 +7,7 @@ module.exports = {
     "eslint:recommended",
     // 讓 ESLint 支援 Airbnb 規範
     "airbnb-base",
+    "prettier",
   ],
   parserOptions: {
     ecmaVersion: "latest",

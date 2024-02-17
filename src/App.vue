@@ -70,12 +70,12 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
-import cartStore from './stores/cartStore';
+import { mapState } from "pinia";
+import cartStore from "./stores/cartStore";
 
 export default {
   computed: {
-    ...mapState(cartStore, ['cartList']),
+    ...mapState(cartStore, ["cartList"]),
   },
 };
 </script>
