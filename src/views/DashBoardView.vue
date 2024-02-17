@@ -10,18 +10,7 @@
             <li class="nav-item">
               <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
               <RouterLink 
-              :to="{ name: 'home' }" class="nav-link text-decoration-none">商品列表</RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink 
-              :to="{ name: 'cart' }"
-              class="nav-link text-decoration-none"
-              >購物車<span class="badge rounded-pill bg-danger ms-2">{{ cartList.length }}</span></RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink
-              :to="{ name: 'login' }"
-              class="nav-link text-decoration-none">登入後台</RouterLink>
+              :to="{ name: 'dashboard' }" class="nav-link text-decoration-none">商品列表</RouterLink>
             </li>
           </ul>
         </div>

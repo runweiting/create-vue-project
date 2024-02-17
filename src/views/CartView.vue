@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <h1 class="pt-5 text-center">我的購物車</h1>
         <div class="row">
             <div class="col">
                 <CartList class="w-100 py-3" />

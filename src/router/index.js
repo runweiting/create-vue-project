@@ -2,7 +2,8 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Swal from "sweetalert2";
 import Products from "@/views/Week5View.vue";
 import Login from "../views/Week2LoginView.vue";
-import Dashboard from "../views/Week4AdminView.vue";
+import Dashboard from "../views/DashBoardView.vue";
+import AdminProducts from "../views/Week4AdminView.vue";
 import isUserLoggedIn from "../components/utils/utils";
 
 // 1. 定義基本路由 baseRoutes
@@ -11,6 +12,7 @@ const baseRoutes = [
     path: "/",
     redirect: "home",
     component: () => import("../views/FrontView.vue"),
+    meta: { navbarType: "frontend" },
     children: [
       {
         path: "home",
@@ -29,7 +31,7 @@ const baseRoutes = [
         },
       },
       {
-        path: "/admin",
+        path: "login",
         name: "login",
         component: Login,
         // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
@@ -43,13 +45,24 @@ const baseRoutes = [
 // 2. 定義後台相關路由 adminRoutes
 const adminRoutes = [
   {
-    path: "/admin/dashboard",
-    name: "dashboard",
+    path: "/admin",
+    redirect: "/admin/dashboard",
     component: Dashboard,
     meta: {
       requiresAuth: true,
       message: "這是後台商品頁面",
+      navbarType: "backend",
     },
+    children: [
+      {
+        path: "/admin/dashboard",
+        name: "dashboard",
+        component: AdminProducts,
+        meta: {
+          title: "後台 - 商品管理",
+        },
+      },
+    ],
   },
 ];
 
