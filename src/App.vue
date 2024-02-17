@@ -15,23 +15,41 @@
         <span class="navbar-brand mb-0 h1">Vue直播班</span>
         <nav class="nav nav-pills gap-2">
           <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
-          <RouterLink :to="{ name: 'week2' }"
-          class="nav-link text-decoration-none">登入</RouterLink>
+          <RouterLink
+            :to="{ name: 'week2' }"
+            class="nav-link text-decoration-none"
+            >登入</RouterLink
+          >
 
-          <RouterLink :to="{ name: 'week1' }"
-          class="nav-link text-decoration-none">第一週主線</RouterLink>
+          <RouterLink
+            :to="{ name: 'week1' }"
+            class="nav-link text-decoration-none"
+            >第一週主線</RouterLink
+          >
 
-          <RouterLink :to="{ name: 'week2-admin' }"
-          class="nav-link text-decoration-none">第二週主線</RouterLink>
+          <RouterLink
+            :to="{ name: 'week2-admin' }"
+            class="nav-link text-decoration-none"
+            >第二週主線</RouterLink
+          >
 
-          <RouterLink :to="{ name: 'week3-admin' }"
-          class="nav-link text-decoration-none">第三週主線</RouterLink>
+          <RouterLink
+            :to="{ name: 'week3-admin' }"
+            class="nav-link text-decoration-none"
+            >第三週主線</RouterLink
+          >
 
-          <RouterLink :to="{ name: 'week4-admin' }"
-          class="nav-link text-decoration-none">第四週主線</RouterLink>
+          <RouterLink
+            :to="{ name: 'week4-admin' }"
+            class="nav-link text-decoration-none"
+            >第四週主線</RouterLink
+          >
 
-          <RouterLink :to="{ name: 'week5' }"
-          class="nav-link text-decoration-none">第五週主線</RouterLink>
+          <RouterLink
+            :to="{ name: 'week5' }"
+            class="nav-link text-decoration-none"
+            >第五週主線</RouterLink
+          >
 
           <button type="button" class="btn">
             購物車

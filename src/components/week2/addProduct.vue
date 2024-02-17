@@ -1,5 +1,4 @@
 <script>
-
 export default {
   data() {
     return {
@@ -16,8 +15,11 @@ export default {
   },
   created() {
     // 從 cookies 讀取 token
-    // eslint-disable-next-line no-useless-escape
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = document.cookie.replace(
+      // eslint-disable-next-line no-useless-escape
+      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    );
     // axios headers 預設寫法
     this.axios.defaults.headers.common.Authorization = token;
     const url = `${this.apiUrl}/api/${this.apiPath}/products/all`;
@@ -43,10 +45,15 @@ export default {
   <div class="col-md-8 py-2">
     <h2>{{ title }}</h2>
     <div class="mb-3">
-      <input @change="upload" class="form-control" type="file" id="formFile" placeholder="請輸入圖片連結">
+      <input
+        @change="upload"
+        class="form-control"
+        type="file"
+        id="formFile"
+        placeholder="請輸入圖片連結"
+      />
     </div>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -16,8 +16,11 @@ export default {
   },
   created() {
     // 從 cookies 讀取 token
-    // eslint-disable-next-line no-useless-escape
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = document.cookie.replace(
+      // eslint-disable-next-line no-useless-escape
+      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    );
     // axios headers 預設寫法
     if (token) {
       this.axios.defaults.headers.common.Authorization = token;
@@ -40,7 +43,7 @@ export default {
       this.axios
         .post(url, this.user)
         .then((res) => {
-        // 將 expired 和 token 存入 cookies
+          // 將 expired 和 token 存入 cookies
           const { expired, token } = res.data;
           document.cookie = `myToken=${token}; expires=${new Date(expired)}`;
           Swal.fire({
@@ -103,19 +106,31 @@ export default {
       <div class="col-md-6">
         <form>
           <div class="form-floating mb-3">
-            <input v-model="user.username" type="email"
-            class="form-control" id="floatingInput"
-            placeholder="name@example.com" autocomplete="email">
+            <input
+              v-model="user.username"
+              type="email"
+              class="form-control"
+              id="floatingInput"
+              placeholder="name@example.com"
+              autocomplete="email"
+            />
             <label for="floatingInput">Email address</label>
           </div>
           <div class="form-floating mb-3">
-            <input v-model="user.password" type="password"
-            class="form-control"
-            id="floatingPassword" placeholder="Password" autocomplete="current-password">
+            <input
+              v-model="user.password"
+              type="password"
+              class="form-control"
+              id="floatingPassword"
+              placeholder="Password"
+              autocomplete="current-password"
+            />
             <label for="floatingPassword">Password</label>
           </div>
           <div>
-            <button @click="login"  type="button" class="btn btn-primary w-100">登入</button>
+            <button @click="login" type="button" class="btn btn-primary w-100">
+              登入
+            </button>
           </div>
         </form>
         <p class="text-secondary text-center pt-5">&copy; create-vue-project</p>
@@ -124,5 +139,4 @@ export default {
   </main>
 </template>
 
-<style>
-</style>
+<style></style>

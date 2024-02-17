@@ -18,8 +18,11 @@ export default {
   // created() 在初始化後立即調用，在讀取和掛載 DOM 之前，如設置初始數據、監聽事件等
   created() {
     // 從 cookies 讀取 token
-    // eslint-disable-next-line no-useless-escape
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = document.cookie.replace(
+      // eslint-disable-next-line no-useless-escape
+      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    );
     // axios headers 預設寫法
     this.axios.defaults.headers.common.Authorization = token;
   },
@@ -27,25 +30,22 @@ export default {
     // POST 登出
     logout() {
       const url = `${this.apiUrl}/logout`;
-      this.axios
-        .post(url)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          })
-            .then(() => {
-              // 清空 user
-              this.user = {};
-              // 清除 token
-              document.cookie = 'myToken=; expires=;';
-              // 清除 headers
-              this.axios.defaults.headers.common.Authorization = null;
-              // 導向登入頁面
-              this.$router.push({ name: 'login' });
-            });
+      this.axios.post(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          // 清空 user
+          this.user = {};
+          // 清除 token
+          document.cookie = 'myToken=; expires=;';
+          // 清除 headers
+          this.axios.defaults.headers.common.Authorization = null;
+          // 導向登入頁面
+          this.$router.push({ name: 'login' });
         });
+      });
     },
     // 2. 執行 $emit 將'showProductDetail' 事件和 item 傳入 Week2AdminView <ProductList>
     ItemInfo(item) {
@@ -56,11 +56,9 @@ export default {
   mounted() {
     // GET 取得後台產品列表
     const url = `${this.apiUrl}/api/${this.apiPath}/admin/products`;
-    this.axios
-      .get(url)
-      .then((res) => {
-        this.products = res.data.products;
-      });
+    this.axios.get(url).then((res) => {
+      this.products = res.data.products;
+    });
   },
 };
 </script>
@@ -84,20 +82,29 @@ export default {
           <td>{{ item.title }}</td>
           <td>{{ item.origin_price }}</td>
           <td>{{ item.price }}</td>
-          <td :class="{ 'text-success': item.is_enabled }">{{ item.is_enabled ? '啟用' : '未啟用' }}</td>
+          <td :class="{ 'text-success': item.is_enabled }">
+            {{ item.is_enabled ? "啟用" : "未啟用" }}
+          </td>
           <td>
             <!-- 1. 觸發 ItemInfo(item) -->
-            <button type="button" class="btn btn-primary" @click="ItemInfo(item)">查看細節</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="ItemInfo(item)"
+            >
+              查看細節
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="d-flex gap-2">
       <p class="p-2 mb-0">{{ `目前有 ${this.products.length} 項產品` }}</p>
-      <button @click="logout" type="button" class="btn btn-warning">登出</button>
+      <button @click="logout" type="button" class="btn btn-warning">
+        登出
+      </button>
     </div>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

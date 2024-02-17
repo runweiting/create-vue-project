@@ -54,8 +54,11 @@ export default {
         5. :product="selectedProduct" 將 "selectedProduct"
         傳遞至 ProductItem 子元件中，在 ProductItem 用 props 接收並賦值
       -->
-      <ProductItem v-if="selectedProduct" :product="selectedProduct"
-      @closeProductDetail="closeProductDetail" />
+      <ProductItem
+        v-if="selectedProduct"
+        :product="selectedProduct"
+        @closeProductDetail="closeProductDetail"
+      />
     </div>
   </main>
   <!-- // ? 1. Vue 中的事件機制是非同步的

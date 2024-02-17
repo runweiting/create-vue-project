@@ -1,10 +1,16 @@
 <template>
-  <div class="col-4 mt-4 mb-4" style="position: sticky;">
+  <div class="col-4 mt-4 mb-4" style="position: sticky">
     <div class="container py-2 d-flex justify-content-between">
       <h2>{{ title }}</h2>
-      <button @click="deleteAll" type="button"
-      class="btn btn-outline-danger btn-sm"
-      style="height: 38px" v-if="cartList.length !== 0">清空購物車</button>
+      <button
+        @click="deleteAll"
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+        style="height: 38px"
+        v-if="cartList.length !== 0"
+      >
+        清空購物車
+      </button>
     </div>
     <div class="container table-responsive">
       <table class="table table-hover align-middle">
@@ -19,32 +25,44 @@
         <tbody>
           <tr v-if="cartList.length === 0">
             <td colspan="4">
-              <small class="text-muted">
-                購物車目前沒有任何品項
-              </small>
+              <small class="text-muted"> 購物車目前沒有任何品項 </small>
             </td>
           </tr>
           <tr v-else v-for="item in cartList" :key="item.id">
-            <td style="width: 120px;">
-              <img :src="item.product.imageUrl" class="rounded cart-img">
+            <td style="width: 120px">
+              <img :src="item.product.imageUrl" class="rounded cart-img" />
             </td>
             <td style="width: 120px" class="pe-0">
               <div class="d-flex justify-content-between align-items-center">
-                <div class="input-group input-group-sm" style="width: 80px;">
+                <div class="input-group input-group-sm" style="width: 80px">
                   <!-- 加入 :disabled 避免重複觸發 -->
-                  <input :disable="item.id === updateQty" @change="putQty(item)"
-                  v-model="item.qty" type="number" min="1" class="form-control">
+                  <input
+                    :disable="item.id === updateQty"
+                    @change="putQty(item)"
+                    v-model="item.qty"
+                    type="number"
+                    min="1"
+                    class="form-control"
+                  />
                   <span class="input-group-text">{{ item.product.unit }}</span>
                 </div>
-                <div class="m-0 border-0 d-flex" style="width: 40px;">
-                  <button :class="{ 'd-none': item.qty > 1}" @click="deleteItem(item.id)"
-                    type="button" class="btn btn-outline-danger" style="scale: 60%;">
+                <div class="m-0 border-0 d-flex" style="width: 40px">
+                  <button
+                    :class="{ 'd-none': item.qty > 1 }"
+                    @click="deleteItem(item.id)"
+                    type="button"
+                    class="btn btn-outline-danger"
+                    style="scale: 60%"
+                  >
                     <i class="bi bi-trash3"></i>
                   </button>
-                  <span :class="{ 'd-none': item.qty === 1 }"
-                  v-if="item.id === updateQty"
-                  class="spinner-border spinner-border-sm ms-2"
-                  role="status" aria-hidden="true"></span>
+                  <span
+                    :class="{ 'd-none': item.qty === 1 }"
+                    v-if="item.id === updateQty"
+                    class="spinner-border spinner-border-sm ms-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
                 </div>
               </div>
             </td>
@@ -52,8 +70,14 @@
               <p class="fs-6 mb-0">{{ item.product.price }}元</p>
             </td>
             <td style="width: 30px" class="text-end p-0">
-              <button @click="deleteItem(item.id)" type="button"
-              class="btn btn-outline-danger btn-sm py-0" style="scale: 80%;">x</button>
+              <button
+                @click="deleteItem(item.id)"
+                type="button"
+                class="btn btn-outline-danger btn-sm py-0"
+                style="scale: 80%"
+              >
+                x
+              </button>
             </td>
           </tr>
         </tbody>
@@ -61,7 +85,7 @@
           <tr>
             <td>
               <small class="text-muted">
-                {{ `總共 ${ cartList.length } 項` }}
+                {{ `總共 ${cartList.length} 項` }}
               </small>
             </td>
             <td>總計</td>

@@ -15,14 +15,11 @@ export default defineStore('cartStore', {
     // GET 購物車列表
     getCart() {
       const url = `${apiUrl}/api/${apiPath}/cart`;
-      axios
-        .get(url)
-        .then((res) => {
-          this.cartList = res.data.data.carts;
-          this.cartTotal = res.data.data.total;
-        });
+      axios.get(url).then((res) => {
+        this.cartList = res.data.data.carts;
+        this.cartTotal = res.data.data.total;
+      });
     },
   },
-  getters: {
-  },
+  getters: {},
 });

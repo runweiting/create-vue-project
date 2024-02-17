@@ -28,8 +28,11 @@ export default {
   },
   created() {
     // 從 cookies 讀取 token
-    // eslint-disable-next-line no-useless-escape
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+    const token = document.cookie.replace(
+      // eslint-disable-next-line no-useless-escape
+      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    );
     // axios headers 預設寫法
     this.axios.defaults.headers.common.Authorization = token;
   },
@@ -50,23 +53,20 @@ export default {
             title: '驗證錯誤，請重新登入',
             icon: 'error',
             confirmButtonText: 'OK',
-          })
-            .then(() => {
-              this.$router.push({ name: 'login' });
-            });
+          }).then(() => {
+            this.$router.push({ name: 'login' });
+          });
         });
     },
     // GET 商品列表
     // 預設為第一頁，若 page 傳入值則取代 1
     getData(page = 1) {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`;
-      this.axios
-        .get(url)
-        .then((res) => {
-          const { products, pagination } = res.data;
-          this.products = products;
-          this.pagination = pagination;
-        });
+      this.axios.get(url).then((res) => {
+        const { products, pagination } = res.data;
+        this.products = products;
+        this.pagination = pagination;
+      });
     },
     // 切換 modal 狀態：新增、編輯、刪除
     openModal(isNew, item) {
@@ -96,23 +96,20 @@ export default {
     // POST 登出
     logout() {
       const url = `${this.apiUrl}/logout`;
-      this.axios
-        .post(url)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          })
-            .then(() => {
-              // 清除 token
-              document.cookie = 'myToken=; expires=;';
-              // 清除 headers
-              this.axios.defaults.headers.common.Authorization = null;
-              // 導向登入頁面
-              this.$router.push({ name: 'login' });
-            });
+      this.axios.post(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then(() => {
+          // 清除 token
+          document.cookie = 'myToken=; expires=;';
+          // 清除 headers
+          this.axios.defaults.headers.common.Authorization = null;
+          // 導向登入頁面
+          this.$router.push({ name: 'login' });
         });
+      });
     },
   },
 };
@@ -124,16 +121,29 @@ export default {
       <h2>{{ title }}</h2>
       <div class="d-flex justify-content-between gap-2 py-2">
         <p class="p-2 mb-0">
-          {{ `目前有 ${(Object.keys(this.products)).length} 項商品` }}
+          {{ `目前有 ${Object.keys(this.products).length} 項商品` }}
         </p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
-          <button @click="openModal('new')" type="button"
-          class="btn btn-primary" id="modalBtn">建立新的商品</button>
-          <button @click="logout" type="button" class="btn btn-warning">登出</button>
+          <button
+            @click="openModal('new')"
+            type="button"
+            class="btn btn-primary"
+            id="modalBtn"
+          >
+            建立新的商品
+          </button>
+          <button @click="logout" type="button" class="btn btn-warning">
+            登出
+          </button>
         </div>
         <!-- editModal -->
-        <edit-modal ref="editModal" :tempData="tempData" :is-new="isNew" @getData="getData">
+        <edit-modal
+          ref="editModal"
+          :tempData="tempData"
+          :is-new="isNew"
+          @getData="getData"
+        >
         </edit-modal>
         <!-- delModal -->
         <del-modal ref="delModal" :tempData="tempData" @getData="getData">
@@ -159,13 +169,28 @@ export default {
             <td>{{ item.origin_price }}</td>
             <td>{{ item.price }}</td>
             <td :class="{ 'text-success': item.is_enabled }">
-              {{ item.is_enabled ? '啟用' : '未啟用' }}</td>
+              {{ item.is_enabled ? "啟用" : "未啟用" }}
+            </td>
             <td>
-              <div class="btn-group" role="group" aria-label="Basic outlined example">
-                <button @click="openModal('edit', item)" type="button"
-                class="btn btn-outline-primary btn-sm">編輯</button>
-                <button @click="openModal('delete', item)" type="button"
-                class="btn btn-outline-danger btn-sm">刪除</button>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic outlined example"
+              >
+                <button
+                  @click="openModal('edit', item)"
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                >
+                  編輯
+                </button>
+                <button
+                  @click="openModal('delete', item)"
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  刪除
+                </button>
               </div>
             </td>
           </tr>
@@ -176,5 +201,4 @@ export default {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

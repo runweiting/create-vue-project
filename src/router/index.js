@@ -80,7 +80,8 @@ const router = createRouter({
     if (savedPosition) {
       return savedPosition;
       // 如果目標路由有 hash，將頁面滾動到 hash 所在的位置
-    } if (to.hash) {
+    }
+    if (to.hash) {
       return { selector: to.hash };
       // 其他情況將頁面滾動到頂部
     }

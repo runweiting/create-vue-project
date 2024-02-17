@@ -14,34 +14,55 @@ export default {
 };
 </script>
 <template>
-    <div class="px-4">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <!-- 前一頁 -->
-                <li :class="{'disabled': pages.current_page === 1}" class="page-item">
-                    <a @click.prevent="emitSinglePage(pages.current_page - 1)"
-                    class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <!-- 頁碼 -->
-                <li v-for="(item, index) in pages.total_pages" :key="index"
-                :class="{'active': item === pages.current_page}" class="page-item">
-                    <!-- 如為當前頁面 -->
-                    <span v-if="item === pages.current_page" class="page-link">{{ item }}</span>
-                    <!-- 不是當前頁面，可點擊 item 頁 -->
-                    <a v-else @click.prevent="emitSinglePage(item)"
-                    class="page-link" href="#">{{ item }}</a>
-                </li>
-                <!-- 下一頁 -->
-                <li :class="{'disabled': pages.current_page === pages.total_pages}"
-                class="page-item">
-                    <a @click.prevent="emitSinglePage(pages.current_page + 1)"
-                    class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+  <div class="px-4">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <!-- 前一頁 -->
+        <li :class="{ disabled: pages.current_page === 1 }" class="page-item">
+          <a
+            @click.prevent="emitSinglePage(pages.current_page - 1)"
+            class="page-link"
+            href="#"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <!-- 頁碼 -->
+        <li
+          v-for="(item, index) in pages.total_pages"
+          :key="index"
+          :class="{ active: item === pages.current_page }"
+          class="page-item"
+        >
+          <!-- 如為當前頁面 -->
+          <span v-if="item === pages.current_page" class="page-link">{{
+            item
+          }}</span>
+          <!-- 不是當前頁面，可點擊 item 頁 -->
+          <a
+            v-else
+            @click.prevent="emitSinglePage(item)"
+            class="page-link"
+            href="#"
+            >{{ item }}</a
+          >
+        </li>
+        <!-- 下一頁 -->
+        <li
+          :class="{ disabled: pages.current_page === pages.total_pages }"
+          class="page-item"
+        >
+          <a
+            @click.prevent="emitSinglePage(pages.current_page + 1)"
+            class="page-link"
+            href="#"
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </template>

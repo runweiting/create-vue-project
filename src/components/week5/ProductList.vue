@@ -21,31 +21,54 @@
         <tbody>
           <tr v-for="item in productList" :key="item.title">
             <td>
-              <img :src="item.imageUrl" class="rounded product-img">
+              <img :src="item.imageUrl" class="rounded product-img" />
             </td>
             <td>{{ item.title }}</td>
             <!-- 如果原價和價格一樣，就顯示價格 -->
             <td>
-              <p v-if="item.origin_price === item.price"
-              class="fs-5 fw-bold mb-0">{{ item.price }}元</p>
+              <p
+                v-if="item.origin_price === item.price"
+                class="fs-5 fw-bold mb-0"
+              >
+                {{ item.price }}元
+              </p>
               <!-- 如果不一樣，就顯示原價刪除線、價格 -->
               <div v-else>
-                <del class="fs-6 fw-bold text-secondary">原價{{ item.origin_price }}元</del>
+                <del class="fs-6 fw-bold text-secondary"
+                  >原價{{ item.origin_price }}元</del
+                >
                 <p class="fs-5 fw-bold mb-0">現在只要{{ item.price }}元</p>
               </div>
             </td>
             <td>
               <div class="d-flex flex-column gap-2">
-                <button :disabled="item.id === this.loadingStatus.getProduct"
-                @click="getProduct(item.id)" type="button"
-                class="btn btn-outline-secondary" id="modalBtn">查看更多
-                  <span v-if="item.id === this.loadingStatus.getProduct"
-                  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button
+                  :disabled="item.id === this.loadingStatus.getProduct"
+                  @click="getProduct(item.id)"
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="modalBtn"
+                >
+                  查看更多
+                  <span
+                    v-if="item.id === this.loadingStatus.getProduct"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
                 </button>
-                <button @click="addToCart(item.id)" type="button"
-                class="btn btn-outline-danger">加入購物車
-                  <span v-if="item.id === this.loadingStatus.updateQty"
-                  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button
+                  @click="addToCart(item.id)"
+                  type="button"
+                  class="btn btn-outline-danger"
+                >
+                  加入購物車
+                  <span
+                    v-if="item.id === this.loadingStatus.updateQty"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
                 </button>
               </div>
             </td>
@@ -57,8 +80,13 @@
     <!-- ShowModal -->
     <show-modal ref="showModal" :product="product" @addToCart="addToCart" />
   </div>
-  <cart-list :updateQty="loadingStatus.updateQty"
-  @updateData="putCart" @deleteData="deleteCart" @deleteAllData="deleteCarts" class="sticky" />
+  <cart-list
+    :updateQty="loadingStatus.updateQty"
+    @updateData="putCart"
+    @deleteData="deleteCart"
+    @deleteAllData="deleteCarts"
+    class="sticky"
+  />
   <order-detail @sendOrder="createOrder" ref="orderDetail" />
 </template>
 
@@ -125,13 +153,11 @@ export default {
     getProduct(targetId) {
       this.loadingStatus.getProduct = targetId;
       const url = `${this.apiUrl}/api/${this.apiPath}/product/${targetId}`;
-      this.axios
-        .get(url)
-        .then((res) => {
-          this.loadingStatus.getProduct = '';
-          this.product = res.data.product;
-          this.$refs.showModal.openModal();
-        });
+      this.axios.get(url).then((res) => {
+        this.loadingStatus.getProduct = '';
+        this.product = res.data.product;
+        this.$refs.showModal.openModal();
+      });
     },
     // POST 加入購物車
     addToCart(targetId, qty = 1) {
@@ -142,17 +168,15 @@ export default {
         qty,
       };
       this.$refs.showModal.hideModal();
-      this.axios
-        .post(url, { data: cart })
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          this.loadingStatus.updateQty = '';
-          this.getCart();
+      this.axios.post(url, { data: cart }).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
+        this.loadingStatus.updateQty = '';
+        this.getCart();
+      });
     },
     // PUT 修改購物車
     putCart(item) {
@@ -162,45 +186,39 @@ export default {
         product_id: item.product_id,
         qty: item.qty,
       };
-      this.axios
-        .put(url, { data: cart })
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          this.loadingStatus.updateQty = '';
-          this.getCart();
+      this.axios.put(url, { data: cart }).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
+        this.loadingStatus.updateQty = '';
+        this.getCart();
+      });
     },
     // DELETE 刪除購物車指定商品
     deleteCart(targetId) {
       const url = `${this.apiUrl}/api/${this.apiPath}/cart/${targetId}`;
-      this.axios
-        .delete(url)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          this.getCart();
+      this.axios.delete(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
+        this.getCart();
+      });
     },
     // DELETE 刪除購物車
     deleteCarts() {
       const url = `${this.apiUrl}/api/${this.apiPath}/carts`;
-      this.axios
-        .delete(url)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          this.getCart();
+      this.axios.delete(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          confirmButtonText: 'OK',
         });
+        this.getCart();
+      });
     },
     // POST 結帳
     createOrder(data) {

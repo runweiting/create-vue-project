@@ -25,7 +25,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <template>
@@ -34,8 +33,11 @@ export default {
       <!-- 3. 觸發 showProductDetail -->
       <ProductList @showProductDetail="showProductDetail" />
       <!-- 5. 觸發 v-if="selectedProduct" 執行 :product="selectedProduct" 到 ProductItem -->
-      <ProductItem v-if="selectedProduct" :product="selectedProduct"
-      @closeProductDetail="closeProductDetail" />
+      <ProductItem
+        v-if="selectedProduct"
+        :product="selectedProduct"
+        @closeProductDetail="closeProductDetail"
+      />
       <!-- v-else 當 selectedProduct 為 null時 -->
       <div v-else>
         <p>No product selected</p>
@@ -45,5 +47,4 @@ export default {
   </main>
 </template>
 
-<style>
-</style>
+<style></style>

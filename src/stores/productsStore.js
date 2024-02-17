@@ -19,7 +19,9 @@ export default defineStore('productsStore', {
     async getProducts(category, page = 1) {
       const loader = $loading.show();
       let url = `${apiUrl}/api/${apiPath}/products?page=${page}`;
-      if (category) { url += `&category=${category}`; }
+      if (category) {
+        url += `&category=${category}`;
+      }
       try {
         const res = await axios.get(url);
         const { products, pagination } = res.data;
@@ -36,7 +38,5 @@ export default defineStore('productsStore', {
       this.productList = this.productList.sort((a, b) => a.price - b.price);
     },
   },
-  getters: {
-
-  },
+  getters: {},
 });
