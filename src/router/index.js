@@ -35,8 +35,6 @@ const baseRoutes = [
         // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
         meta: {
           title: "登入後台",
-          requiresAuth: true,
-          message: "這是後台商品頁面",
         },
       },
     ],
