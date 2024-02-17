@@ -42,6 +42,7 @@
             </td>
             <td>
               <div class="d-flex flex-column gap-2">
+                <!-- 當用戶重複點擊時，disabled button -->
                 <button
                   :disabled="item.id === this.loadingStatus.getProduct"
                   @click="getProduct(item.id)"
@@ -50,6 +51,7 @@
                   id="modalBtn"
                 >
                   查看更多
+                  <!-- 當用戶點擊時，啟用 spinner 效果 -->
                   <span
                     v-if="item.id === this.loadingStatus.getProduct"
                     class="spinner-border spinner-border-sm"

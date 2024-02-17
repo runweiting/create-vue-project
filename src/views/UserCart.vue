@@ -3,10 +3,10 @@
         <h1 class="pt-5 text-center">我的購物車</h1>
         <div class="row">
             <div class="col">
-                <CartList class="w-100 py-3" />
+                <cart-list class="w-100 py-3" />
             </div>
             <div class="col">
-                <OrderDetail class="w-100 mt-4 p-3" @sendOrder="createOrder" ref="orderDetail" />
+                <order-detail class="w-100 mt-4 p-3" @sendOrder="createOrder" ref="orderDetail" />
             </div>
         </div>
     </div>
