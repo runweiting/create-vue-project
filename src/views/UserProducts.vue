@@ -1,6 +1,6 @@
 <template>
   <main class="container">
-    <h1 class="pt-5 text-center">WELCOME UNIQLOLO 網路旗艦店</h1>
+    <h1 class="pt-5 text-center">商品列表</h1>
     <div class="row py-2">
       <product-list />
     </div>

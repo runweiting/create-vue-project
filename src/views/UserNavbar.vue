@@ -10,7 +10,12 @@
             <li class="nav-item">
               <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
               <RouterLink 
-              :to="{ name: 'home' }" class="nav-link text-decoration-none">商品列表</RouterLink>
+              :to="{ name: 'home' }" class="nav-link text-decoration-none">首頁</RouterLink>
+            </li>
+            <li class="nav-item">
+              <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
+              <RouterLink 
+              :to="{ name: 'products' }" class="nav-link text-decoration-none">商品列表</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink 
