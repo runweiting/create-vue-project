@@ -10,60 +10,43 @@
 <template>
   <!-- 放置每頁重複出現的 HTML：如導航欄 -->
   <header>
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Vue直播班</span>
-        <nav class="nav nav-pills gap-2">
-          <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
-          <RouterLink
-            :to="{ name: 'week2' }"
-            class="nav-link text-decoration-none"
-            >登入</RouterLink
-          >
-
-          <RouterLink
-            :to="{ name: 'week1' }"
-            class="nav-link text-decoration-none"
-            >第一週主線</RouterLink
-          >
-
-          <RouterLink
-            :to="{ name: 'week2-admin' }"
-            class="nav-link text-decoration-none"
-            >第二週主線</RouterLink
-          >
-
-          <RouterLink
-            :to="{ name: 'week3-admin' }"
-            class="nav-link text-decoration-none"
-            >第三週主線</RouterLink
-          >
-
-          <RouterLink
-            :to="{ name: 'week4-admin' }"
-            class="nav-link text-decoration-none"
-            >第四週主線</RouterLink
-          >
-
-          <RouterLink
-            :to="{ name: 'week5' }"
-            class="nav-link text-decoration-none"
-            >第五週主線</RouterLink
-          >
-
-          <button type="button" class="btn">
-            購物車
-            <span class="badge rounded-pill bg-danger">
-              {{ cartList.length }}
-            </span>
-          </button>
-        </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container px-4">
+        <a class="navbar-brand mb-0" href="index.html">Vue直播班</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav nav-pills gap-2">
+            <li class="nav-item">
+              <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
+              <RouterLink 
+              :to="{ name: 'home' }" class="nav-link text-decoration-none">商品列表</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink 
+              :to="{ name: 'cart' }"
+              class="nav-link text-decoration-none"
+              >購物車<span class="badge rounded-pill bg-danger ms-2">{{ cartList.length }}</span></RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+              :to="{ name: 'login' }"
+              class="nav-link text-decoration-none">登入後台</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+              :to="{ name: 'dashboard' }"
+              class="nav-link text-decoration-none">後台商品列表</RouterLink>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
   <!-- 放置主要內容 -->
   <main>
-    <!-- RouterView 渲染路由內容 -->
+    <!-- 渲染路由 "/" -->
     <RouterView />
   </main>
   <!-- 放置每頁重複出現的 HTML：如頁尾 <footer /> -->
@@ -98,7 +81,7 @@ export default {
   outline: 1px solid yellowgreen
 }*/
 .nav-link.active {
-  background-color: #0d6efd;
-  color: white;
+  background-color: white;
+  color: black;
 }
 </style>

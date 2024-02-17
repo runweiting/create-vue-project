@@ -1,65 +1,53 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Week5View from "@/views/Week5View.vue";
 import Swal from "sweetalert2";
-import Week1View from "../views/Week1View.vue";
-import Week2LoginView from "../views/Week2LoginView.vue";
-import Week2AdminView from "../views/Week2AdminView.vue";
-import Week3AdminView from "../views/Week3AdminView.vue";
-import Week4AdminView from "../views/Week4AdminView.vue";
+import Products from "@/views/Week5View.vue";
+import Login from "../views/Week2LoginView.vue";
+import Dashboard from "../views/Week4AdminView.vue";
 import isUserLoggedIn from "../components/utils/utils";
 
 // 1. 定義基本路由 baseRoutes
 const baseRoutes = [
   {
     path: "/",
-    redirect: "/week1", // 根路徑的重定向
-  },
-  {
-    path: "/week1",
-    name: "week1",
-    component: Week1View,
-  },
-  {
-    path: "/week2",
-    name: "week2",
-    component: Week2LoginView,
-  },
-  {
-    path: "/week2-login",
-    name: "login",
-    component: Week2LoginView,
-  },
-  {
-    path: "/week5",
-    name: "week5",
-    component: Week5View,
+    redirect: "home",
+    component: () => import("../views/FrontView.vue"),
+    children: [
+      {
+        path: "home",
+        name: "home",
+        component: Products,
+        meta: {
+          title: "UNIQLOLO 網路旗艦店",
+        },
+      },
+      {
+        path: "cart",
+        name: "cart",
+        component: () => import("../views/CartView.vue"),
+        meta: {
+          title: "購物車",
+        },
+      },
+      {
+        path: "/admin",
+        name: "login",
+        component: Login,
+        // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
+        meta: {
+          title: "登入後台",
+          requiresAuth: true,
+          message: "這是後台商品頁面",
+        },
+      },
+    ],
   },
 ];
 // 2. 定義後台相關路由 adminRoutes
 const adminRoutes = [
   {
-    path: "/week2-admin",
-    name: "week2-admin",
-    component: Week2AdminView,
-    // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
-    meta: {
-      requiresAuth: true,
-      message: "這是後台商品頁面",
-    },
-  },
-  {
-    path: "/week3-admin",
-    name: "week3-admin",
-    component: Week3AdminView,
-    meta: {
-      requiresAuth: true,
-      message: "這是後台商品頁面",
-    },
-  },
-  {
-    path: "/week4-admin",
-    name: "week4-admin",
-    component: Week4AdminView,
+    path: "/admin/dashboard",
+    name: "dashboard",
+    component: Dashboard,
     meta: {
       requiresAuth: true,
       message: "這是後台商品頁面",

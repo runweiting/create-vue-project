@@ -1,6 +1,6 @@
 <template>
   <div class="col-8 mt-4 mb-4" ref="productList">
-    <div class="container py-2 d-flex justify-content-between">
+    <div class="container d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <p class="p-2 mb-0">
         {{ `目前有 ${productListNum} 項商品` }}
@@ -87,7 +87,11 @@
     @deleteAllData="deleteCarts"
     class="sticky"
   />
-  <order-detail @sendOrder="createOrder" ref="orderDetail" />
+  <div class="container">
+    <div class="row">
+      <order-detail @sendOrder="createOrder" ref="orderDetail" />
+    </div>
+  </div>
 </template>
 
 <script>

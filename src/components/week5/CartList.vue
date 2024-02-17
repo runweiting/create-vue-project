@@ -1,6 +1,6 @@
 <template>
   <div class="col-4 mt-4 mb-4" style="position: sticky">
-    <div class="container py-2 d-flex justify-content-between">
+    <div class="container d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <button
         @click="deleteAll"
