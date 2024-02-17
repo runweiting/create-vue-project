@@ -87,11 +87,6 @@
     @deleteAllData="deleteCarts"
     class="sticky"
   />
-  <div class="container">
-    <div class="row">
-      <order-detail @sendOrder="createOrder" ref="orderDetail" />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -104,7 +99,6 @@ import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
 import ShowModal from './ShowModal.vue';
 import CartList from './CartList.vue';
-import OrderDetail from './OrderDetail.vue';
 import CategoryList from './CategoryList.vue';
 import PaginationGroup from './PaginationGroup.vue';
 
@@ -112,7 +106,6 @@ export default {
   components: {
     ShowModal,
     CartList,
-    OrderDetail,
     CategoryList,
     PaginationGroup,
   },
@@ -223,32 +216,6 @@ export default {
         });
         this.getCart();
       });
-    },
-    // POST 結帳
-    createOrder(data) {
-      const order = {
-        data,
-      };
-      const url = `${this.apiUrl}/api/${this.apiPath}/order`;
-      this.axios
-        .post(url, order)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          // OrderDetail重置表單
-          this.$refs.orderDetail.resetForm();
-          this.getCart();
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: err.data.message,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        });
     },
   },
 };
