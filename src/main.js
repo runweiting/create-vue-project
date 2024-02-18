@@ -3,7 +3,7 @@
 // 依照第六週的最新修改 -> 出現問題的地方
 import "./assets/all.scss";
 // 以下為原本引入 bootstrap 方式
-// import 'bootstrap';
+import "bootstrap";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 import "bootstrap-icons/font/bootstrap-icons.css";

@@ -10,8 +10,4 @@
 /* {
   outline: 1px solid yellowgreen
 }*/
-.nav-link.active {
-  background-color: white;
-  color: black;
-}
 </style>

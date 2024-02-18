@@ -6,7 +6,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav nav-pills gap-2">
+          <ul class="navbar-nav gap-2">
             <li class="nav-item">
               <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
               <RouterLink 
@@ -46,3 +46,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.nav-link.active {
+  color: white !important;
+}
+</style>
