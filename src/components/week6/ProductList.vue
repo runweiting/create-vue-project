@@ -79,14 +79,10 @@
       </table>
       <pagination-group></pagination-group>
     </div>
-    <!-- ShowModal -->
-    <show-modal @addToCart="addToCart" />
   </div>
-  <cart-list class="sticky" />
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapState, mapActions } from 'pinia';
 
 // 匯入 stores
@@ -97,13 +93,11 @@ import loadingStore from '@/stores/loadingStore';
 import productInfoStore from '@/stores/productInfoStore';
 
 // 匯入 components
-import CartList from '../week5/CartList.vue';
 import CategoryList from '../week5/CategoryList.vue';
 import PaginationGroup from '../week5/PaginationGroup.vue';
 
 export default {
   components: {
-    CartList,
     CategoryList,
     PaginationGroup,
   },
@@ -131,7 +125,7 @@ export default {
   },
   methods: {
     ...mapActions(productsStore, ['getProducts']),
-    ...mapActions(cartStore, ['getCart']),
+    ...mapActions(cartStore, ['getCart', 'addToCart']),
     ...mapActions(categoryStore, ['getCategory']),
     ...mapActions(productInfoStore, ['setSelectedProduct']),
 
@@ -145,33 +139,13 @@ export default {
       try {
         const res = await this.axios.get(url);
         this.product = res.data.product;
-        console.log(this.product);
         // 將 product 帶入 productInfoStore
         const targetProduct = productInfoStore();
         targetProduct.setSelectedProduct(this.product);
         loading.loadingStatus.getProduct = "";
+      } finally {
         this.$router.push({ name: "productInfo" });
-      } catch (err) {
-        console.log(err);
       }
-    },
-    // POST 加入購物車
-    addToCart(targetId, qty = 1) {
-      this.loadingStatus.updateQty = targetId;
-      const url = `${this.apiUrl}/api/${this.apiPath}/cart`;
-      const cart = {
-        product_id: targetId,
-        qty,
-      };
-      this.axios.post(url, { data: cart }).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        this.loadingStatus.updateQty = '';
-        this.getCart();
-      });
     },
   },
 };

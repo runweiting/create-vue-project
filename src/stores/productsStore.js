@@ -38,5 +38,4 @@ export default defineStore("productsStore", {
       this.productList = this.productList.sort((a, b) => a.price - b.price);
     },
   },
-  getters: {},
 });

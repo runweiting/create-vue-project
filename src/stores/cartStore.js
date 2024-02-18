@@ -14,6 +14,26 @@ export default defineStore("cartStore", {
     cartTotal: 0,
   }),
   actions: {
+    // POST 加入購物車
+    addToCart(targetId, qty = 1) {
+      // 使用 loadingStore
+      const loading = loadingStore();
+      loading.loadingStatus.updateQty = targetId;
+      const url = `${apiUrl}/api/${apiPath}/cart`;
+      const cart = {
+        product_id: targetId,
+        qty,
+      };
+      axios.post(url, { data: cart }).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+        loading.loadingStatus.updateQty = "";
+        this.getCart();
+      });
+    },
     // GET 購物車列表
     getCart() {
       const url = `${apiUrl}/api/${apiPath}/cart`;
@@ -40,9 +60,8 @@ export default defineStore("cartStore", {
           confirmButtonText: "OK",
         });
         loading.loadingStatus.updateQty = "";
+      } finally {
         this.getCart();
-      } catch (err) {
-        console.log("catch", err);
       }
     },
     // DELETE 刪除購物車指定商品

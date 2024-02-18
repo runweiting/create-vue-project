@@ -16,7 +16,7 @@
 import Swal from 'sweetalert2';
 import { mapActions } from 'pinia';
 import cartStore from '@/stores/cartStore';
-import CartList from '@/components/week5/CartList.vue';
+import CartList from '@/components/week6/CartList.vue';
 import OrderDetail from '@/components/week5/OrderDetail.vue';
 
 export default {
@@ -29,6 +29,9 @@ export default {
             apiUrl: import.meta.env.VITE_APP_URL,
             apiPath: import.meta.env.VITE_APP_PATH,
         }
+    },
+    mounted() {
+        this.getCart();
     },
     methods: {
         ...mapActions(cartStore, ['getCart']),

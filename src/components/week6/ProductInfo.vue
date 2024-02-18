@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import productInfoStore from '@/stores/productInfoStore';
+import cartStore from '@/stores/cartStore';
 
 export default {
-  emits: ['addToCart'],
   data() {
     return {
       qty: 1,
@@ -55,9 +55,7 @@ export default {
     ...mapState(productInfoStore, ['selectedProduct'])
   },
   methods: {
-    addToCart(id) {
-      this.$emit('addToCart', id, this.qty);
-    },
+    ...mapActions(cartStore, ['addToCart']),
   },
   watch: {
     // 當傳入的 product 值有變化時，重置 qty
