@@ -7,7 +7,8 @@
 */
 import { defineStore } from "pinia";
 
-export default defineStore("loadingStore", {
+export default defineStore({
+  id: "loadingStore",
   state: () => ({
     // Bootstrap Spinner
     loadingStatus: {

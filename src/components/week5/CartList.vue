@@ -3,7 +3,7 @@
     <div class="container d-flex justify-content-between">
       <h2>{{ title }}</h2>
       <button
-        @click="deleteAll"
+        @click="deleteCarts"
         type="button"
         class="btn btn-outline-danger btn-sm"
         style="height: 38px"
@@ -38,7 +38,7 @@
                   <!-- 加入 :disabled 避免重複觸發 -->
                   <input
                     :disable="item.id === loadingStatus.updateQty"
-                    @change="putQty(item)"
+                    @click="putCart(item)"
                     v-model="item.qty"
                     type="number"
                     min="1"
@@ -49,7 +49,7 @@
                 <div class="m-0 border-0 d-flex" style="width: 40px">
                   <button
                     :class="{ 'd-none': item.qty > 1 }"
-                    @click="deleteItem(item.id)"
+                    @click="deleteCart(item.id)"
                     type="button"
                     class="btn btn-outline-danger"
                     style="scale: 60%"
@@ -71,7 +71,7 @@
             </td>
             <td style="width: 30px" class="text-end p-0">
               <button
-                @click="deleteItem(item.id)"
+                @click="deleteCart(item.id)"
                 type="button"
                 class="btn btn-outline-danger btn-sm py-0"
                 style="scale: 80%"
@@ -99,12 +99,11 @@
 </template>
 
 <script>
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import cartStore from '@/stores/cartStore';
 import loadingStore from '@/stores/loadingStore';
 
 export default {
-  emits: ['updateData', 'deleteData', 'deleteAllData'],
   data() {
     return {
       title: '購物車列表',
@@ -115,15 +114,7 @@ export default {
     ...mapState(loadingStore, ['loadingStatus'])
   },
   methods: {
-    putQty(item) {
-      this.$emit('updateData', item);
-    },
-    deleteItem(id) {
-      this.$emit('deleteData', id);
-    },
-    deleteAll() {
-      this.$emit('deleteAllData');
-    },
+    ...mapActions(cartStore, ['putCart', 'deleteCart', 'deleteCarts']),
   },
 };
 </script>

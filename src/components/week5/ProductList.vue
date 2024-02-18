@@ -82,12 +82,7 @@
     <!-- ShowModal -->
     <show-modal ref="showModal" :product="product" @addToCart="addToCart" />
   </div>
-  <cart-list
-    @updateData="putCart"
-    @deleteData="deleteCart"
-    @deleteAllData="deleteCarts"
-    class="sticky"
-  />
+  <cart-list class="sticky" />
 </template>
 
 <script>
@@ -134,7 +129,6 @@ export default {
   },
   computed: {
     ...mapState(productsStore, ['productList']),
-    ...mapState(cartStore, ['cartList', 'cartTotal']),
     ...mapState(categoryStore, ['categoryList']),
     ...mapState(loadingStore, ['loadingStatus'])
   },
@@ -142,7 +136,6 @@ export default {
     ...mapActions(productsStore, ['getProducts']),
     ...mapActions(cartStore, ['getCart']),
     ...mapActions(categoryStore, ['getCategory']),
-
     // GET 指定商品
     getProduct(targetId) {
       this.loadingStatus.getProduct = targetId;
@@ -169,48 +162,6 @@ export default {
           confirmButtonText: 'OK',
         });
         this.loadingStatus.updateQty = '';
-        this.getCart();
-      });
-    },
-    // PUT 修改購物車
-    putCart(item) {
-      this.loadingStatus.updateQty = item.id;
-      const url = `${this.apiUrl}/api/${this.apiPath}/cart/${item.id}`;
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty,
-      };
-      this.axios.put(url, { data: cart }).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        this.loadingStatus.updateQty = '';
-        this.getCart();
-      });
-    },
-    // DELETE 刪除購物車指定商品
-    deleteCart(targetId) {
-      const url = `${this.apiUrl}/api/${this.apiPath}/cart/${targetId}`;
-      this.axios.delete(url).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        this.getCart();
-      });
-    },
-    // DELETE 刪除購物車
-    deleteCarts() {
-      const url = `${this.apiUrl}/api/${this.apiPath}/carts`;
-      this.axios.delete(url).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
         this.getCart();
       });
     },
