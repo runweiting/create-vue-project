@@ -19,6 +19,10 @@ module.exports = {
         map: [["@", "./src"]],
         extensions: [".js", ".vue"],
       },
+      node: {
+        extensions: [".js", ".jsx", ".json", ".vue"],
+        paths: ["src"],
+      },
     },
     // import/core-modules 告訴 ESLint 這些套件是可以安裝在 devDependencies 裡面的，而不是 dependencies 裡面
     "import/core-modules": ["vite", "@vitejs/plugin-vue"],

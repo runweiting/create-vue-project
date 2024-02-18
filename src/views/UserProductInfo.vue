@@ -1,18 +1,18 @@
 <template>
   <main class="container">
-    <h1 class="pt-5 text-center">商品列表</h1>
+    <h1 class="pt-5 text-start">單一商品介紹</h1>
     <div class="row py-2">
-      <product-list />
+      <product-info />
     </div>
   </main>
 </template>
 
 <script>
-import ProductList from '../components/week6/ProductList.vue';
+import ProductInfo from '@/components/week6/ProductInfo.vue';
 
 export default {
   components: {
-    ProductList,
+    ProductInfo,
   },
 };
 </script>

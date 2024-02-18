@@ -27,6 +27,14 @@ const baseRoutes = [
         },
       },
       {
+        path: "products/:id",
+        name: "productInfo",
+        component: () => import("../views/UserProductInfo.vue"),
+        meta: {
+          title: "單一商品介紹",
+        },
+      },
+      {
         path: "cart",
         name: "cart",
         component: () => import("../views/UserCart.vue"),
