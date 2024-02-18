@@ -37,7 +37,7 @@
                 <div class="input-group input-group-sm" style="width: 80px">
                   <!-- 加入 :disabled 避免重複觸發 -->
                   <input
-                    :disable="item.id === updateQty"
+                    :disable="item.id === loadingStatus.updateQty"
                     @change="putQty(item)"
                     v-model="item.qty"
                     type="number"
@@ -58,7 +58,7 @@
                   </button>
                   <span
                     :class="{ 'd-none': item.qty === 1 }"
-                    v-if="item.id === updateQty"
+                    v-if="item.id === loadingStatus.updateQty"
                     class="spinner-border spinner-border-sm ms-2"
                     role="status"
                     aria-hidden="true"
@@ -101,9 +101,9 @@
 <script>
 import { mapState } from 'pinia';
 import cartStore from '@/stores/cartStore';
+import loadingStore from '@/stores/loadingStore';
 
 export default {
-  props: ['updateQty'],
   emits: ['updateData', 'deleteData', 'deleteAllData'],
   data() {
     return {
@@ -112,6 +112,7 @@ export default {
   },
   computed: {
     ...mapState(cartStore, ['cartList', 'cartTotal']),
+    ...mapState(loadingStore, ['loadingStatus'])
   },
   methods: {
     putQty(item) {

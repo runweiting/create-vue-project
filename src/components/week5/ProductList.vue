@@ -83,7 +83,6 @@
     <show-modal ref="showModal" :product="product" @addToCart="addToCart" />
   </div>
   <cart-list
-    :updateQty="loadingStatus.updateQty"
     @updateData="putCart"
     @deleteData="deleteCart"
     @deleteAllData="deleteCarts"
@@ -95,10 +94,13 @@
 import Swal from 'sweetalert2';
 import { mapState, mapActions } from 'pinia';
 
-// 匯入 Components
+// 匯入 stores
 import productsStore from '@/stores/productsStore';
 import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
+import loadingStore from '@/stores/loadingStore';
+
+// 匯入 components
 import ShowModal from './ShowModal.vue';
 import CartList from './CartList.vue';
 import CategoryList from './CategoryList.vue';
@@ -123,11 +125,6 @@ export default {
       product: {},
       // vue-loading-overlay
       fullPage: false,
-      // Bootstrap Spinners
-      loadingStatus: {
-        getProduct: '',
-        updateQty: '',
-      },
     };
   },
   mounted() {
@@ -139,6 +136,7 @@ export default {
     ...mapState(productsStore, ['productList']),
     ...mapState(cartStore, ['cartList', 'cartTotal']),
     ...mapState(categoryStore, ['categoryList']),
+    ...mapState(loadingStore, ['loadingStatus'])
   },
   methods: {
     ...mapActions(productsStore, ['getProducts']),
