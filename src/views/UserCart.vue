@@ -30,9 +30,6 @@ export default {
             apiPath: import.meta.env.VITE_APP_PATH,
         }
     },
-    mounted() {
-        this.getCart();
-    },
     methods: {
         ...mapActions(cartStore, ['getCart']),
         // POST 結帳

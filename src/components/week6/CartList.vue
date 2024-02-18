@@ -109,12 +109,15 @@ export default {
       title: '購物車列表',
     };
   },
+  mounted() {
+    this.getCart();
+  },
   computed: {
     ...mapState(cartStore, ['cartList', 'cartTotal']),
     ...mapState(loadingStore, ['loadingStatus'])
   },
   methods: {
-    ...mapActions(cartStore, ['putCart', 'deleteCart', 'deleteCarts']),
+    ...mapActions(cartStore, ['getCart', 'putCart', 'deleteCart', 'deleteCarts']),
   },
 };
 </script>

@@ -115,7 +115,6 @@ export default {
   },
   mounted() {
     this.getProducts();
-    this.getCart();
     this.getCategory();
   },
   computed: {
@@ -125,7 +124,7 @@ export default {
   },
   methods: {
     ...mapActions(productsStore, ['getProducts']),
-    ...mapActions(cartStore, ['getCart', 'addToCart']),
+    ...mapActions(cartStore, ['addToCart']),
     ...mapActions(categoryStore, ['getCategory']),
     ...mapActions(productInfoStore, ['setSelectedProduct']),
 
