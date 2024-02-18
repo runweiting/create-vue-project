@@ -1,1 +1,0 @@
-import{f as o,g as r}from"./index-SKB7VdvU.js";const s="https://vue3-course-api.hexschool.io/v2",c="runweiting",i=o("cartStore",{state:()=>({cartList:[],cartTotal:0}),actions:{getCart(){const a=`${s}/api/${c}/cart`;r.get(a).then(t=>{this.cartList=t.data.data.carts,this.cartTotal=t.data.data.total})}},getters:{}});export{i as c};
