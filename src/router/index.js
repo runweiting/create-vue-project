@@ -53,6 +53,18 @@ const baseRoutes = [
       },
     ],
   },
+  {
+    // 404 頁面
+    path: "/:pathMatch(.*)*",
+    component: () => import("../views/NotFound.vue"),
+  },
+  {
+    // 特定頁面下的重新導向
+    path: "/home/:pathMatch(.*)*",
+    redirect: {
+      name: "products",
+    },
+  },
 ];
 // 2. 定義後台相關路由 adminRoutes
 const adminRoutes = [
