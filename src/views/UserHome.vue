@@ -14,7 +14,7 @@
                     :grabCursor="true"
                     :modules="swiperEffects.cards.modules"
                     :pagination="{ clickable: true }"
-                    :autoplay="{ delay: 3000 }"
+                    :autoplay="{ delay: 3000, disableOnInteraction: true }"
                 >
                     <swiper-slide>Slide 1</swiper-slide>
                     <swiper-slide>Slide 2</swiper-slide>
@@ -80,11 +80,13 @@ export default {
                 cards: {
                     effect: 'cards',
                     modules: [EffectCards, Pagination, Autoplay],
+                    loop: true,
                     config: null // cards 效果不需要配置
                 },
                 creative: {
                     effect: 'creative',
                     modules: [EffectCreative, Pagination, Autoplay],
+                    loop: true,
                     creativeEffect: {
                         prev: {
                             shadow: true,
