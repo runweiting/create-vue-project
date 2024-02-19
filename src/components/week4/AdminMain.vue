@@ -112,37 +112,10 @@ export default {
       pagination: {},
     };
   },
-  created() {
-    // 從 cookies 讀取 token
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
-      '$1',
-    );
-    // axios headers 預設寫法
-    this.axios.defaults.headers.common.Authorization = token;
-  },
   mounted() {
-    this.checkAdmin();
+    this.getData();
   },
   methods: {
-    // POST 驗證登入
-    checkAdmin() {
-      const url = `${this.apiUrl}/api/user/check`;
-      this.axios
-        .post(url)
-        .then(() => {
-          this.getData();
-        })
-        .catch(() => {
-          Swal.fire({
-            title: '驗證錯誤，請重新登入',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            this.$router.push({ name: 'login' });
-          });
-        });
-    },
     // GET 商品列表
     // 預設為第一頁，若 page 傳入值則取代 1
     getData(page = 1) {

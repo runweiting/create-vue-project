@@ -32,6 +32,44 @@
   </main>
 </template>
 
+<script>
+import Swal from 'sweetalert2';
+
+const { VITE_APP_URL } = import.meta.env;
+
+export default {
+  created() {
+    // 從 cookies 讀取 token
+    const token = document.cookie.replace(
+      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
+      '$1',
+    );
+    // axios headers 預設寫法
+    this.axios.defaults.headers.common.Authorization = token;
+  },
+  mounted() {
+    this.checkAdmin();
+  },
+  methods: {
+    // POST 驗證登入
+    checkAdmin() {
+      const url = `${VITE_APP_URL}/api/user/check`;
+      this.axios
+        .post(url)
+        .catch(() => {
+          Swal.fire({
+            title: '驗證錯誤，請重新登入',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.$router.push({ name: 'login' });
+          });
+        });
+    },
+  }
+}
+</script>
+
 <style lang="scss">
 .nav-link.active {
   color: white !important;
