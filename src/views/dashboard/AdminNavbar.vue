@@ -17,6 +17,10 @@
               <RouterLink 
               :to="{ name: 'admin/orders' }" class="nav-link text-decoration-none">訂單列表</RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink 
+              :to="{ name: 'home' }" class="nav-link text-decoration-none">回到前台</RouterLink>
+            </li>
           </ul>
         </div>
       </div>
