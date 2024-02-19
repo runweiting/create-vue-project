@@ -13,6 +13,8 @@
                     :effect="swiperEffects.cards.effect"
                     :grabCursor="true"
                     :modules="swiperEffects.cards.modules"
+                    :pagination="{ clickable: true }"
+                    :autoplay="{ delay: 3000 }"
                 >
                     <swiper-slide>Slide 1</swiper-slide>
                     <swiper-slide>Slide 2</swiper-slide>
@@ -31,6 +33,8 @@
                     :effect="swiperEffects.creative.effect"
                     :modules="swiperEffects.creative.modules"
                     :creativeEffect="swiperEffects.creative.creativeEffect"
+                    :pagination="{ clickable: true }"
+                    :autoplay="{ delay: 4000 }"
                 >
                     <swiper-slide>Slide 1</swiper-slide>
                     <swiper-slide>Slide 2</swiper-slide>
@@ -55,10 +59,12 @@ import 'swiper/css';
 // 3. side effect 所需 modules 的 css
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-creative';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay'
 // 4. 匯入自定義 css
 import '../assets/swiper/effectCards.css';
 // 5. 依需求匯入所需 modules
-import { EffectCards, EffectCreative } from 'swiper/modules';
+import { EffectCards, EffectCreative, Pagination, Autoplay } from 'swiper/modules';
 
 export default {
     // 6. 註冊元件
@@ -73,12 +79,12 @@ export default {
             swiperEffects: {
                 cards: {
                     effect: 'cards',
-                    modules: [EffectCards],
+                    modules: [EffectCards, Pagination, Autoplay],
                     config: null // cards 效果不需要配置
                 },
                 creative: {
                     effect: 'creative',
-                    modules: [EffectCreative],
+                    modules: [EffectCreative, Pagination, Autoplay],
                     creativeEffect: {
                         prev: {
                             shadow: true,
