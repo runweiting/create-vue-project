@@ -29,10 +29,11 @@
             />
             <label for="floatingPassword">Password</label>
           </div>
-          <div>
-            <button @click="login" type="button" class="btn btn-primary w-100">
+          <div class="d-flex gap-2">
+            <button @click="login" type="button" class="btn btn-primary w-50">
               登入
             </button>
+            <router-link to="/" class="btn btn-primary w-50">回到首頁</router-link>
           </div>
         </form>
         <p class="text-secondary text-center pt-5">&copy; create-vue-project</p>
