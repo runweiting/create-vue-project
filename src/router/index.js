@@ -71,7 +71,7 @@ const adminRoutes = [
   {
     path: "/admin",
     redirect: "/admin/dashboard",
-    component: () => import("../views/AdminNavbar.vue"),
+    component: () => import("../views/dashboard/AdminNavbar.vue"),
     meta: {
       requiresAuth: true,
       message: "這是後台商品頁面",
@@ -81,7 +81,7 @@ const adminRoutes = [
       {
         path: "/admin/dashboard",
         name: "dashboard",
-        component: () => import("../views/AdminProducts.vue"),
+        component: () => import("../views/dashboard/AdminProducts.vue"),
         meta: {
           title: "後台 - 商品管理",
         },

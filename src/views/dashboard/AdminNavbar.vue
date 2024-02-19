@@ -1,4 +1,5 @@
 <template>
+  <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container px-4">
         <a class="navbar-brand mb-0" href="index.html">UNIQLOLO</a>
@@ -16,13 +17,16 @@
         </div>
       </div>
     </nav>
-    <!-- 渲染路由 "/" children：商品列表、購物車 -->
+  </header>
+  <main>
+    <!-- 渲染路由 "/admin" children：dashboard-->
     <router-view></router-view>
+  </main>
 </template>
 
 <script>
 import { mapState } from "pinia";
-import cartStore from "../stores/cartStore";
+import cartStore from "../../stores/cartStore";
 
 export default {
   computed: {

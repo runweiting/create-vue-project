@@ -1,5 +1,5 @@
 <script>
-import AdminMain from '../components/week4/AdminMain.vue';
+import AdminMain from '../../components/week4/AdminMain.vue';
 
 export default {
   components: {
