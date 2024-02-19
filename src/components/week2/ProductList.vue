@@ -19,8 +19,7 @@ export default {
   created() {
     // 從 cookies 讀取 token
     const token = document.cookie.replace(
-      // eslint-disable-next-line no-useless-escape
-      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
       '$1',
     );
     // axios headers 預設寫法
