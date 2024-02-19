@@ -125,7 +125,7 @@ export default {
           icon: 'success',
           confirmButtonText: 'OK',
         });
-        this.$router.push({ name: 'dashboard' });
+        this.$router.push({ name: 'admin' });
       } else {
         // 未登入，導向登入頁面
         Swal.fire({

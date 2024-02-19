@@ -1,3 +1,89 @@
+<template>
+  <div class="col mt-4 mb-4">
+    <div class="container py-2">
+      <h2>{{ title }}</h2>
+      <div class="d-flex justify-content-between gap-2 py-2">
+        <p class="p-2 mb-0">
+          {{ `目前有 ${Object.keys(this.products).length} 項商品` }}
+        </p>
+        <!-- Button trigger modal -->
+        <div class="d-flex justify-content-end gap-2">
+          <button
+            @click="openModal('new')"
+            type="button"
+            class="btn btn-primary"
+            id="modalBtn"
+          >
+            建立新的商品
+          </button>
+          <button @click="logout" type="button" class="btn btn-warning">
+            登出
+          </button>
+        </div>
+        <!-- editModal -->
+        <edit-modal
+          ref="editModal"
+          :tempData="tempData"
+          :is-new="isNew"
+          @getData="getData"
+        >
+        </edit-modal>
+        <!-- delModal -->
+        <del-modal ref="delModal" :tempData="tempData" @getData="getData">
+        </del-modal>
+      </div>
+    </div>
+    <div class="container">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="fw-bold">分類</th>
+            <th scope="col" class="fw-bold">商品名稱</th>
+            <th scope="col" class="fw-bold">原價</th>
+            <th scope="col" class="fw-bold">售價</th>
+            <th scope="col" class="fw-bold">是否啟用</th>
+            <th scope="col" class="fw-bold">編輯</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in products" :key="item.title">
+            <td>{{ item.category }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.origin_price }}</td>
+            <td>{{ item.price }}</td>
+            <td :class="{ 'text-success': item.is_enabled }">
+              {{ item.is_enabled ? "啟用" : "未啟用" }}
+            </td>
+            <td>
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic outlined example"
+              >
+                <button
+                  @click="openModal('edit', item)"
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                >
+                  編輯
+                </button>
+                <button
+                  @click="openModal('delete', item)"
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  刪除
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <Pagination :pages="pagination" @showPage="getData" />
+  </div>
+</template>
+
 <script>
 import Swal from 'sweetalert2';
 import EditModal from '@/components/week4/EditModal.vue';
@@ -114,91 +200,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <div class="col mt-4 mb-4">
-    <div class="container py-2">
-      <h2>{{ title }}</h2>
-      <div class="d-flex justify-content-between gap-2 py-2">
-        <p class="p-2 mb-0">
-          {{ `目前有 ${Object.keys(this.products).length} 項商品` }}
-        </p>
-        <!-- Button trigger modal -->
-        <div class="d-flex justify-content-end gap-2">
-          <button
-            @click="openModal('new')"
-            type="button"
-            class="btn btn-primary"
-            id="modalBtn"
-          >
-            建立新的商品
-          </button>
-          <button @click="logout" type="button" class="btn btn-warning">
-            登出
-          </button>
-        </div>
-        <!-- editModal -->
-        <edit-modal
-          ref="editModal"
-          :tempData="tempData"
-          :is-new="isNew"
-          @getData="getData"
-        >
-        </edit-modal>
-        <!-- delModal -->
-        <del-modal ref="delModal" :tempData="tempData" @getData="getData">
-        </del-modal>
-      </div>
-    </div>
-    <div class="container">
-      <table class="table table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th scope="col" class="fw-bold">分類</th>
-            <th scope="col" class="fw-bold">商品名稱</th>
-            <th scope="col" class="fw-bold">原價</th>
-            <th scope="col" class="fw-bold">售價</th>
-            <th scope="col" class="fw-bold">是否啟用</th>
-            <th scope="col" class="fw-bold">編輯</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in products" :key="item.title">
-            <td>{{ item.category }}</td>
-            <td>{{ item.title }}</td>
-            <td>{{ item.origin_price }}</td>
-            <td>{{ item.price }}</td>
-            <td :class="{ 'text-success': item.is_enabled }">
-              {{ item.is_enabled ? "啟用" : "未啟用" }}
-            </td>
-            <td>
-              <div
-                class="btn-group"
-                role="group"
-                aria-label="Basic outlined example"
-              >
-                <button
-                  @click="openModal('edit', item)"
-                  type="button"
-                  class="btn btn-outline-primary btn-sm"
-                >
-                  編輯
-                </button>
-                <button
-                  @click="openModal('delete', item)"
-                  type="button"
-                  class="btn btn-outline-danger btn-sm"
-                >
-                  刪除
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <Pagination :pages="pagination" @showPage="getData" />
-  </div>
-</template>
-
-<style scoped></style>

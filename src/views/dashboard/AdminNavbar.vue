@@ -7,11 +7,15 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav nav-pills gap-2">
+          <ul class="navbar-nav gap-2">
             <li class="nav-item">
               <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
               <RouterLink 
-              :to="{ name: 'dashboard' }" class="nav-link text-decoration-none">商品列表</RouterLink>
+              :to="{ name: 'admin/products' }" class="nav-link text-decoration-none">商品列表</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink 
+              :to="{ name: 'admin/orders' }" class="nav-link text-decoration-none">訂單列表</RouterLink>
             </li>
           </ul>
         </div>
@@ -24,13 +28,8 @@
   </main>
 </template>
 
-<script>
-import { mapState } from "pinia";
-import cartStore from "../../stores/cartStore";
-
-export default {
-  computed: {
-    ...mapState(cartStore, ["cartList"]),
-  },
-};
-</script>
+<style lang="scss">
+.nav-link.active {
+  color: white !important;
+}
+</style>

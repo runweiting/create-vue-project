@@ -70,7 +70,8 @@ const baseRoutes = [
 const adminRoutes = [
   {
     path: "/admin",
-    redirect: "/admin/dashboard",
+    name: "admin",
+    redirect: "admin/products",
     component: () => import("../views/dashboard/AdminNavbar.vue"),
     meta: {
       requiresAuth: true,
@@ -79,11 +80,19 @@ const adminRoutes = [
     },
     children: [
       {
-        path: "/admin/dashboard",
-        name: "dashboard",
+        path: "products",
+        name: "admin/products",
         component: () => import("../views/dashboard/AdminProducts.vue"),
         meta: {
           title: "後台 - 商品管理",
+        },
+      },
+      {
+        path: "orders",
+        name: "admin/orders",
+        component: () => import("../views/dashboard/AdminOrders.vue"),
+        meta: {
+          title: "後台 - 訂單管理",
         },
       },
     ],
