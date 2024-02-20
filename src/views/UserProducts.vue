@@ -3,7 +3,7 @@
     <h1 class="pt-5 text-center">商品列表</h1>
     <div class="row py-2">
       <product-list />
-      <cart-list class="sticky" />
+      <cart-list />
     </div>
   </main>
 </template>

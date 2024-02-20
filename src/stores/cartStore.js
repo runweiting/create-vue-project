@@ -28,7 +28,8 @@ export default defineStore("cartStore", {
         Swal.fire({
           title: res.data.message,
           icon: "success",
-          confirmButtonText: "OK",
+          showConfirmButton: false,
+          timer: 1500,
         });
         loading.loadingStatus.updateQty = "";
         this.getCart();
@@ -57,7 +58,8 @@ export default defineStore("cartStore", {
         Swal.fire({
           title: res.data.message,
           icon: "success",
-          confirmButtonText: "OK",
+          showConfirmButton: false,
+          timer: 1500,
         });
         loading.loadingStatus.updateQty = "";
       } finally {
@@ -71,7 +73,8 @@ export default defineStore("cartStore", {
         Swal.fire({
           title: res.data.message,
           icon: "success",
-          confirmButtonText: "OK",
+          showConfirmButton: false,
+          timer: 1500,
         });
         this.getCart();
       });
@@ -83,7 +86,8 @@ export default defineStore("cartStore", {
         Swal.fire({
           title: res.data.message,
           icon: "success",
-          confirmButtonText: "OK",
+          showConfirmButton: false,
+          timer: 1500,
         });
         this.getCart();
       });
