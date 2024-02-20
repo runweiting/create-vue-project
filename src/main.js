@@ -18,6 +18,8 @@ import { Field, Form, ErrorMessage, defineRule, configure } from "vee-validate";
 import * as AllRules from "@vee-validate/rules";
 import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
+// 匯入 CKEditor
+import CKEditor from "@ckeditor/ckeditor5-vue";
 
 import App from "./App.vue";
 import router from "./router";
@@ -43,6 +45,7 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(VueAxios, axios);
 app.use(LoadingPlugin);
+app.use(CKEditor);
 
 // 使 app 所有子元件都能存取全局屬性 this.$router 與 this.$route
 // this.$router：存取路由 Router，用來進行導航、切換路由，提供方法如 push、replace、go，用於改變 URL 並觸發相應的路由

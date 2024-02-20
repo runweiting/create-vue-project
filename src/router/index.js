@@ -95,6 +95,14 @@ const adminRoutes = [
           title: "後台 - 訂單管理",
         },
       },
+      {
+        path: "articles",
+        name: "admin/articles",
+        component: () => import("../views/dashboard/AdminArticles.vue"),
+        meta: {
+          title: "後台 - 文章管理",
+        },
+      },
     ],
   },
 ];

@@ -19,6 +19,10 @@
             </li>
             <li class="nav-item">
               <RouterLink 
+              :to="{ name: 'admin/articles' }" class="nav-link text-decoration-none">編輯文章</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink 
               :to="{ name: 'home' }" class="nav-link text-decoration-none">回到前台</RouterLink>
             </li>
           </ul>
