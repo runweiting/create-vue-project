@@ -1,0 +1,1 @@
+import{_ as e,o as t,c,a as o}from"./index-SQJ36rKT.js";const s={},n={class:"container"},a=o("h1",{class:"pt-5 text-center"},"404 沒有這一頁喔～",-1),_=[a];function r(d,i){return t(),c("div",n,_)}const l=e(s,[["render",r]]);export{l as default};
