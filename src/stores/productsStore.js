@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 // 因為是獨立作用域的 .js，所以需要額外載入
 import { useLoading } from "vue-loading-overlay";
 // 在 Vue.js 中，使用 $ 前綴來表示這是一個特殊的對象或全局對象
-// $loading 代表使用 useLoading({}) 方法建立的一個對象，它提供了顯示和隱藏 loading 等功能
+// $loading 代表使用 useLoading({}) 建立的一個對象，它提供了顯示和隱藏 loading 等功能
 const $loading = useLoading({});
 
 const apiUrl = import.meta.env.VITE_APP_URL;
@@ -15,11 +15,14 @@ export default defineStore("productsStore", {
     productList: [],
     pagination: {},
     // vue-loading-overlay
-    fullPage: false,
+    // fullPage: false, 須指定渲染容器，才需設定
   }),
   actions: {
     // GET 商品列表
     async getProducts(category, page = 1) {
+      // 如需指定渲染的 container
+      // 可寫在 .show({ container: this.fullPage ? null : this.$refs.xxx })
+      // 建立 loader 實體元件
       const loader = $loading.show();
       let url = `${apiUrl}/api/${apiPath}/products?page=${page}`;
       if (category) {

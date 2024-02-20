@@ -23,7 +23,7 @@ export default {
   watch: {
     // 帶入類別參數
     currentCategory() {
-      this.getProducts(1, this.currentCategory);
+      this.getProducts(this.currentCategory, 1);
     },
   },
   computed: {
