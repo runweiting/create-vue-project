@@ -30,10 +30,10 @@
             <label for="floatingPassword">Password</label>
           </div>
           <div class="d-flex gap-2">
+            <router-link to="/" class="btn btn-primary w-50">回到首頁</router-link>
             <button @click="login" type="button" class="btn btn-primary w-50">
               登入
             </button>
-            <router-link to="/" class="btn btn-primary w-50">回到首頁</router-link>
           </div>
         </form>
         <p class="text-secondary text-center pt-5">&copy; create-vue-project</p>
@@ -78,7 +78,8 @@ export default {
         Swal.fire({
           title: '已成功登入，不需重複登入',
           icon: 'success',
-          confirmButtonText: 'OK',
+          showConfirmButton: false,
+          timer: 1500,
         });
         this.goToWeek4Admin();
         return;
@@ -93,7 +94,8 @@ export default {
           Swal.fire({
             title: '您已成功登入',
             icon: 'success',
-            confirmButtonText: 'OK',
+            showConfirmButton: false,
+            timer: 1500,
           }).then(() => {
             this.goToWeek4Admin();
           });
@@ -124,7 +126,8 @@ export default {
         Swal.fire({
           title: '這是後台商品頁面',
           icon: 'success',
-          confirmButtonText: 'OK',
+          showConfirmButton: false,
+          timer: 1500,
         });
         this.$router.push({ name: 'admin' });
       } else {

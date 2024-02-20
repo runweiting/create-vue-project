@@ -158,7 +158,8 @@ export default {
         Swal.fire({
           title: res.data.message,
           icon: 'success',
-          confirmButtonText: 'OK',
+          showConfirmButton: false,
+          timer: 1500,
         }).then(() => {
           // 清除 token
           document.cookie = 'myToken=; expires=;';
