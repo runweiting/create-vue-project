@@ -20,6 +20,10 @@ import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
 // 匯入 CKEditor
 import CKEditor from "@ckeditor/ckeditor5-vue";
+// 匯入 vue-i18n
+import { createI18n } from "vue-i18n";
+import zh from "./languages/zh_TW.json";
+import en from "./languages/en.json";
 
 import App from "./App.vue";
 import router from "./router";
@@ -35,9 +39,17 @@ configure({
 });
 setLocale("zh_TW");
 
+// 建立 i18n 實體
+const i18n = createI18n({
+  legacy: false, // 啟用新的 Vue3 選項
+  locale: "en", // 設置默認語言
+  messages: {
+    en,
+    "zh-TW": zh, // 引入 zh-TW.json 文件
+  },
+});
 // 建立 Vue 實體
 const app = createApp(App);
-
 // 建立 Pinia 實體
 const pinia = createPinia();
 
@@ -46,6 +58,7 @@ app.use(pinia);
 app.use(VueAxios, axios);
 app.use(LoadingPlugin);
 app.use(CKEditor);
+app.use(i18n);
 
 // 使 app 所有子元件都能存取全局屬性 this.$router 與 this.$route
 // this.$router：存取路由 Router，用來進行導航、切換路由，提供方法如 push、replace、go，用於改變 URL 並觸發相應的路由
