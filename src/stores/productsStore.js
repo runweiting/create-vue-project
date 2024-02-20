@@ -1,7 +1,9 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+// 因為是獨立作用域的 .js，所以需要額外載入
 import { useLoading } from "vue-loading-overlay";
-
+// 在 Vue.js 中，使用 $ 前綴來表示這是一個特殊的對象或全局對象
+// $loading 代表使用 useLoading({}) 方法建立的一個對象，它提供了顯示和隱藏 loading 等功能
 const $loading = useLoading({});
 
 const apiUrl = import.meta.env.VITE_APP_URL;
@@ -12,6 +14,7 @@ export default defineStore("productsStore", {
     // 商品列表
     productList: [],
     pagination: {},
+    // vue-loading-overlay
     fullPage: false,
   }),
   actions: {

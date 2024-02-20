@@ -109,8 +109,6 @@ export default {
       title: '商品列表',
       // 指定商品
       product: {},
-      // vue-loading-overlay
-      fullPage: false,
     };
   },
   mounted() {
