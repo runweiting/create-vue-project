@@ -10,42 +10,30 @@
                     :grabCursor="true" 滑鼠可抓取
                     :modules="swiperModules" 使用 swiperModules -->
                 <swiper
-                    :effect="swiperEffects.cards.effect"
-                    :grabCursor="true"
-                    :modules="swiperEffects.cards.modules"
-                    :pagination="{ clickable: true }"
-                    :autoplay="{ delay: 3000, disableOnInteraction: true }"
+                :effect="swiperEffects.cards.effect"
+                :grabCursor="true"
+                :modules="swiperEffects.cards.modules"
+                :pagination="{ clickable: true }"
+                :autoplay="{ delay: 3000, disableOnInteraction: true }"
                 >
-                    <swiper-slide>Slide 1</swiper-slide>
-                    <swiper-slide>Slide 2</swiper-slide>
-                    <swiper-slide>Slide 3</swiper-slide>
-                    <swiper-slide>Slide 4</swiper-slide>
-                    <swiper-slide>Slide 5</swiper-slide>
-                    <swiper-slide>Slide 6</swiper-slide>
-                    <swiper-slide>Slide 7</swiper-slide>
-                    <swiper-slide>Slide 8</swiper-slide>
-                    <swiper-slide>Slide 9</swiper-slide>
+                    <swiper-slide v-for="item in mensWearCards" :key="item.id">
+                        <img :src="item.imageUrl" :alt="item.title">
+                    </swiper-slide>
                 </swiper>
             </div>
             <div class="col">
                 <swiper
-                    :grabCursor="true"
-                    :effect="swiperEffects.creative.effect"
-                    :modules="swiperEffects.creative.modules"
-                    :creativeEffect="swiperEffects.creative.creativeEffect"
-                    :pagination="{ clickable: true }"
-                    :autoplay="{ delay: 4000 }"
+                :grabCursor="true"
+                :effect="swiperEffects.creative.effect"
+                :modules="swiperEffects.creative.modules"
+                :creativeEffect="swiperEffects.creative.creativeEffect"
+                :pagination="{ clickable: true }"
+                :autoplay="{ delay: 4000 }"
                 >
-                    <swiper-slide>Slide 1</swiper-slide>
-                    <swiper-slide>Slide 2</swiper-slide>
-                    <swiper-slide>Slide 3</swiper-slide>
-                    <swiper-slide>Slide 4</swiper-slide>
-                    <swiper-slide>Slide 5</swiper-slide>
-                    <swiper-slide>Slide 6</swiper-slide>
-                    <swiper-slide>Slide 7</swiper-slide>
-                    <swiper-slide>Slide 8</swiper-slide>
-                    <swiper-slide>Slide 9</swiper-slide>
-            </swiper>
+                    <swiper-slide v-for="item in womensWearCards" :key="item.id">
+                        <img :src="item.imageUrl" :alt="item.title">
+                    </swiper-slide>
+                </swiper>
             </div>
         </div>
     </div>
@@ -65,6 +53,10 @@ import 'swiper/css/autoplay'
 import '../assets/swiper/effectCards.css';
 // 5. 依需求匯入所需 modules
 import { EffectCards, EffectCreative, Pagination, Autoplay } from 'swiper/modules';
+
+import { mapState, mapActions } from 'pinia';
+import productsStore from '@/stores/productsStore';
+import cartStore from '@/stores/cartStore';
 
 export default {
     // 6. 註冊元件
@@ -98,9 +90,28 @@ export default {
                     },
                 }
             },
+            mensWearCards: [],
+            womensWearCards: [],
         }
     },
+    mounted() {
+        this.loadingData();
+    },
+    computed: {
+        ...mapState(productsStore, ['productList']),
+    },
     methods: {
-  }
+        ...mapActions(productsStore, ['getProducts']),
+        ...mapActions(cartStore, ['getCart']),
+        async loadingData() {
+            await Promise.all([this.getProducts(), this.getCart()]);
+            this.mensWearCards = this.productList.filter(item => item.category === "男裝");
+            console.log(this.mensWearCards);
+            this.womensWearCards = this.productList.filter(item => item.category === "女裝");
+        },
+    }
 }
 </script>
+
+<style scope>
+</style>
