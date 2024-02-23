@@ -10,24 +10,31 @@
                     <ul class="navbar-nav gap-2">
                         <li class="nav-item">
                         <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
-                        <RouterLink 
-                        :to="{ name: 'home' }" class="nav-link text-decoration-none">首頁</RouterLink>
+                            <RouterLink 
+                            :to="{ name: 'home' }" class="nav-link text-decoration-none">{{ $t('menu.home') }}
+                            </RouterLink>
                         </li>
                         <li class="nav-item">
                         <!-- RouterLink 生成路由連結，編譯後轉為 <a>，to 代表要進入的路由 -->
-                        <RouterLink 
-                        :to="{ name: 'products' }" class="nav-link text-decoration-none">商品列表</RouterLink>
+                            <RouterLink 
+                            :to="{ name: 'products' }" class="nav-link text-decoration-none">{{ $t('menu.products') }}</RouterLink>
                         </li>
                         <li class="nav-item">
-                        <RouterLink 
-                        :to="{ name: 'cart' }"
-                        class="nav-link text-decoration-none"
-                        >購物車<span class="badge rounded-pill bg-danger ms-2">{{ cartList.length }}</span></RouterLink>
+                            <RouterLink 
+                            :to="{ name: 'cart' }"
+                            class="nav-link text-decoration-none"
+                            >{{ $t('menu.cart') }}<span class="badge rounded-pill bg-danger ms-2">{{ cartList.length }}</span></RouterLink>
                         </li>
                         <li class="nav-item">
-                        <RouterLink
-                        :to="{ name: 'login' }"
-                        class="nav-link text-decoration-none">登入後台</RouterLink>
+                            <RouterLink
+                            :to="{ name: 'login' }"
+                            class="nav-link text-decoration-none">{{ $t('menu.login') }}</RouterLink>
+                        </li>
+                        <li class="nav-item">
+                            <select class="form-select" @change="changeLanguage">
+                                <option value="zh-TW">中文</option>
+                                <option value="en">英文</option>
+                            </select>
                         </li>
                     </ul>
                 </div>
@@ -47,6 +54,12 @@ export default {
   computed: {
     ...mapState(cartStore, ["cartList"]),
   },
+  methods: {
+    changeLanguage(event) {
+        const selectLanguage = event.target.value;
+        this.$i18n.locale = selectLanguage;
+    },
+  }
 };
 </script>
 

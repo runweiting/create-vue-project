@@ -1,14 +1,6 @@
 <template>
-    <div class="container">
+    <div class="container" data-aos="fade-up">
         <h1 class="pt-5 text-center">WELCOME UNIQLOLO 網路旗艦店</h1>
-        <div class="d-flex justify-content-center gap-2">
-          <button @click="switchToEnglish" class="btn btn-primary">English</button>
-          <button @click="switchToChinese" class="btn btn-primary">中文</button>
-        </div>
-        <h3>{{ $t('menu.aboutUs') }}</h3>
-        <h3>{{ $t('menu.productContent') }}</h3>
-        <h3>{{ $t('menu.blog') }}</h3>
-        <h3>{{ $t('menu.faq') }}</h3>
     </div>
     <div class="container position-relative" style="height: 100vh;">
         <div class="row">
@@ -109,12 +101,6 @@ export default {
         }
     },
     methods: {
-    switchToEnglish () {
-      this.$i18n.locale = 'en'
-    },
-    switchToChinese () {
-      this.$i18n.locale = 'zh-TW'
-    }
   }
 }
 </script>

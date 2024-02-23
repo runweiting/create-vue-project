@@ -24,11 +24,11 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { createI18n } from "vue-i18n";
 import zh from "./languages/zh_TW.json";
 import en from "./languages/en.json";
-
+// 匯入 根節點 root、路由配置
 import App from "./App.vue";
 import router from "./router";
 
-// Object.keys 將 AllRules 轉為陣列 forEach 將驗證規則加入 VeeValidate
+// 將 AllRules 轉為陣列 forEach 將驗證規則加入 VeeValidate
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
 });
@@ -41,19 +41,22 @@ setLocale("zh_TW");
 
 // 建立 i18n 實體
 const i18n = createI18n({
-  legacy: false, // 啟用新的 Vue3 選項
-  locale: "en", // 設置默認語言
+  // 啟用新的 Vue3 選項
+  legacy: false,
+  // 設置默認語言
+  locale: "zh-TW",
   messages: {
     en,
-    "zh-TW": zh, // 引入 zh-TW.json 文件
+    // 引入 zh-TW.json 文件
+    "zh-TW": zh,
   },
 });
-// 建立 Vue 實體
+// 使用 App 建立 app 實體
 const app = createApp(App);
-// 建立 Pinia 實體
+// 建立 pinia 實體
 const pinia = createPinia();
 
-// 啟用套件
+// app plugin
 app.use(pinia);
 app.use(VueAxios, axios);
 app.use(LoadingPlugin);
@@ -65,11 +68,11 @@ app.use(i18n);
 // this.$route：當前路由資訊物件 Route，如路由的 path、params、query
 app.use(router);
 
-// 全域註冊
-// VeeValidate 元件
+// app component
+// VeeValidate
 app.component("VField", Field);
 app.component("VForm", Form);
 app.component("ErrorMessage", ErrorMessage);
 
-// 掛載 Vue 實體至 DOM
+// app 掛載至根節點
 app.mount("#app");
