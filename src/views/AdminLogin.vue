@@ -44,7 +44,7 @@
 
 <script>
 import Swal from 'sweetalert2';
-import isUserLoggedIn from '../components/utils/utils';
+import isUserLoggedIn from '../components/utils/isUserLoggedIn';
 
 export default {
   data() {
@@ -142,4 +142,4 @@ export default {
     },
   },
 };
-</script>
+</script>../components/utils/isUserLoggedIn

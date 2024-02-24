@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Swal from "sweetalert2";
-import isUserLoggedIn from "../components/utils/utils";
+import isUserLoggedIn from "../components/utils/isUserLoggedIn";
 
 // 1. 定義基本路由 baseRoutes
 const baseRoutes = [
