@@ -90,7 +90,6 @@ import productsStore from '@/stores/productsStore';
 import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
 import loadingStore from '@/stores/loadingStore';
-import productInfoStore from '@/stores/productInfoStore';
 
 // 匯入 components
 import CategoryList from '../week5/CategoryList.vue';
@@ -124,7 +123,6 @@ export default {
     ...mapActions(productsStore, ['getProducts']),
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(categoryStore, ['getCategory']),
-    ...mapActions(productInfoStore, ['setSelectedProduct']),
 
     // GET 指定商品
     async getProduct(targetId) {
@@ -136,9 +134,6 @@ export default {
       try {
         const res = await this.axios.get(url);
         this.product = res.data.product;
-        // 將 product 帶入 productInfoStore
-        const targetProduct = productInfoStore();
-        targetProduct.setSelectedProduct(this.product);
         loading.loadingStatus.getProduct = "";
       } finally {
         this.$router.push({ name: "productInfo" });

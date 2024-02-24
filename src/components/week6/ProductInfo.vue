@@ -51,6 +51,9 @@ export default {
       qty: 1,
     };
   },
+  mounted() {
+    
+  },
   computed: {
     ...mapState(productInfoStore, ['selectedProduct'])
   },

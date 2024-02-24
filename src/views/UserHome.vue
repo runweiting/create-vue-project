@@ -17,7 +17,9 @@
                 :autoplay="{ delay: 3000, disableOnInteraction: true }"
                 >
                     <swiper-slide v-for="item in mensWearCards" :key="item.id">
-                        <img :src="item.imageUrl" :alt="item.title">
+                        <router-link :to="`/products/${item.id}`">
+                            <img :src="item.imageUrl" :alt="item.title">
+                        </router-link>
                     </swiper-slide>
                 </swiper>
             </div>
@@ -31,7 +33,9 @@
                 :autoplay="{ delay: 4000 }"
                 >
                     <swiper-slide v-for="item in womensWearCards" :key="item.id">
-                        <img :src="item.imageUrl" :alt="item.title">
+                        <router-link :to="`/products/${item.id}`">
+                            <img :src="item.imageUrl" :alt="item.title">
+                        </router-link>
                     </swiper-slide>
                 </swiper>
             </div>
