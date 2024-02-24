@@ -6,7 +6,7 @@
                     <h2>這是訂單頁面</h2>
                     <div class="d-flex justify-content-between gap-2 py-2">
                         <p class="p-2 mb-0">
-                        {{ `目前有 ${Object.keys(this.orders).length} 項商品` }}
+                        {{ `目前有 ${Object.keys(this.orderList).length} 項商品` }}
                         </p>
                         <!-- Button trigger modal -->
                         <div class="d-flex justify-content-end gap-2">
@@ -15,11 +15,7 @@
                         </button>
                         </div>
                         <!-- orderModal -->
-                        <order-modal
-                        ref="orderModal"
-                        :currentOrder="order"
-                        @getData="getData"
-                        >
+                        <order-modal ref="orderModal" :currentOrder="order">
                         </order-modal>
                     </div>
                 </div>
@@ -38,7 +34,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="item in orders" :key="item.title">
+                        <tr v-for="item in orderList" :key="item.title">
                             <td>
                                 <span class="d-block">
                                     {{ timestampToDate(item.create_at).formattedDate }}
@@ -85,7 +81,7 @@
                         </tbody>
                     </table>
                 </div>
-                <Pagination :pages="pagination" @showPage="getData" />
+                <Pagination :pages="pagination" @showPage="getOrders" />
             </main>
         </div>
     </main>
@@ -93,10 +89,13 @@
 
 <script>
 import Swal from 'sweetalert2';
+import { mapActions, mapState } from 'pinia';
+import ordersStore from '@/stores/ordersStore';
+
 import OrderModal from '../../components/week7/OrderModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
 
-const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
+const { VITE_APP_URL } = import.meta.env;
 
 export default {
   components: {
@@ -106,48 +105,23 @@ export default {
   data() {
     return {      
       title: '訂單列表',
-      orders: [],
-      order: {},
-      pagination: {},
+      order: [],
     };
   },
+  computed: {
+    ...mapState(ordersStore, ['orderList', 'pagination']),
+  },
   mounted() {
-    this.getData();
+    this.getOrders();
   },
   methods: {
-    timestampToDate(timestamp) {
-        // 建立 Date 實體，將時間戳 * 1000轉為毫秒
-        const date = new Date(timestamp * 1000);
-        const year = date.getFullYear();
-        // 月份從 0 算起要 + 1
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-        const formattedDate = `${year}/${month}/${day}`;
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
-        return {
-            formattedDate,
-            formattedTime,
-        };
-    },
-    // GET 訂單列表
-    // 預設為第一頁，若 page 傳入值則取代 1
-    getData(page = 1) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders?page=${page}`;
-      this.axios.get(url).then((res) => {
-        const { orders, pagination } = res.data;
-        this.orders = orders;
-        this.pagination = pagination;
-        console.log(this.orders);
-      });
-    },
+    ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
     // 查看訂單
     checkOrder(id) {
-        this.order = this.orders.filter(item => item.id === id);
-        console.log(this.order);
-        this.$refs.orderModal.orderModal.show();
+      console.log(this.orderList);
+      this.order = this.orderList.filter((item) => item.id === id);
+      console.log(this.order);
+      this.$refs.orderModal.orderModal.show();
     },
     // POST 登出
     logout() {
