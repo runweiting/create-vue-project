@@ -1,1 +1,0 @@
-import{_ as s,o as c,c as o,a as e}from"./index-dCO-lWwc.js";const t={},n={class:"col mt-4 mb-4"},a=e("div",{class:"container py-2"},[e("h2",null,"這是訂單頁面")],-1),r=[a];function _(d,i){return c(),o("main",n,r)}const m=s(t,[["render",_]]);export{m as default};
