@@ -2,44 +2,50 @@
 <template>
   <!-- orderModal -->
   <div
-    class="modal fade"
-    id="orderModal"
-    tabindex="-1"
-    aria-labelledby="orderModalLabel"
-    aria-hidden="true"
+  class="modal fade"
+  id="orderModal"
+  tabindex="-1"
+  aria-labelledby="orderModalLabel"
+  aria-hidden="true"
   >
     <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content" v-for="item in tempOrder" :key="item.id">
-        <div class="modal-header bg-warning">
+      <div v-for="order in tempOrder" :key="order.id"
+      class="modal-content">
+        <div class="modal-header bg-dark opacity-75 text-white">
           <h5 class="modal-title" id="orderModalLabel">
-            <span>訂單編號：{{ item.id }}</span>
+            <span>訂單編號：{{ order.id }}</span>
+            <br>
           </h5>
           <button
             type="button"
-            class="btn-close text-white"
+            class="btn btn-outline-light"
             data-bs-dismiss="modal"
             aria-label="Close"
-          ></button>
+          ><i class="bi bi-x-lg"></i>
+          </button>
         </div>
         <div class="modal-body">
           <div class="container-fluid">
-            <div class="row mb-2 pb-2">
-              <div class="col-md-5">
-                <h5>訂單狀態</h5>
-                <div class="d-flex gap-2">
-                  <div class="form-check">
-                    <input v-model="item.is_paid" class="form-check-input" type="checkbox" value="" id="flexCheckDefault" true-value="true"
-                    false-value="false">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      已付款
-                    </label>
+            <div class="row mb-5">
+              <div class="border rounded p-2 bg-light">
+                <div class="row mb-2">
+                  <div class="col-md-5 d-flex align-items-center gap-3">
+                    <label for="payment" class="col-form-label">付款狀態：</label>
+                    <div>
+                      <select v-model="order.is_paid" :disabled="inputDisabled" class="form-select" id="payment">
+                        <option :value="true">
+                          已付款
+                        </option>
+                        <option :value="false">
+                          未付款
+                        </option>
+                      </select>
+                    </div>
+                    <i v-if="order.is_paid" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                    <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                   </div>
-                  <div class="form-check">
-                    <input v-model="item.is_paid" class="form-check-input" type="checkbox" value="" id="flexCheckDefault" true-value="false"
-                    false-value="true">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      未付款
-                    </label>
+                  <div class="col-md-7">
+                    <button @click="togglerEdit" type="button" class="btn btn-warning">修改訂單</button>
                   </div>
                 </div>
               </div>
@@ -51,37 +57,37 @@
                   <div class="row mb-2">
                     <label for="date" class="col-sm-3 col-form-label">建立時間：</label>
                     <div class="col-sm-9">
-                      <input v-model="timestampToDate(item.create_at).formattedDay" type="text" class="form-control" id="date">
+                      <input v-model="timestampToDate(order.create_at).formattedDay" :disabled="inputDisabled" type="text" class="form-control" id="date">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="Email" class="col-sm-3 col-form-label">Email：</label>
                     <div class="col-sm-9">
-                      <input v-model="item.user.email" type="email" class="form-control" id="Email">
+                      <input v-model="order.user.email" :disabled="inputDisabled" type="email" class="form-control" id="Email">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="name" class="col-sm-3 col-form-label">收件姓名：</label>
                     <div class="col-sm-9">
-                      <input v-model="item.user.name" type="text" class="form-control" id="name">
+                      <input v-model="order.user.name" :disabled="inputDisabled" type="text" class="form-control" id="name">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="tel" class="col-sm-3 col-form-label">聯絡電話：</label>
                     <div class="col-sm-9">
-                      <input v-model="item.user.tel" type="text" class="form-control" id="tel">
+                      <input v-model="order.user.tel" :disabled="inputDisabled" type="text" class="form-control" id="tel">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="address" class="col-sm-3 col-form-label">收件地址：</label>
                     <div class="col-sm-9">
-                      <input v-model="item.user.address" type="text" class="form-control" id="address">
+                      <input v-model="order.user.address" :disabled="inputDisabled" type="text" class="form-control" id="address">
                     </div>
                   </div>
                   <div class="row mb-2">
-                    <label for="note" class="col-sm-3 col-form-label">備註：</label>
+                    <label for="note" class="col-sm-3 col-form-label">留言：</label>
                     <div class="col-sm-9">
-                      <textarea class="form-control" name="note" id="note" cols="10" rows="10" style="height: 150px;"></textarea>
+                      <textarea v-model="order.user.message" :disabled="inputDisabled" class="form-control" name="note" id="note" cols="10" rows="10" style="height: 100px;"></textarea>
                     </div>
                   </div>
                 </form>
@@ -104,7 +110,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="item in item.products" :key="item.id">
+                      <tr v-for="item in order.products" :key="item.id">
                         <td class="d-flex align-items-center gap-1">
                           <img :src="item.product.imageUrl" class="rounded order-img" />
                           <small>{{ item.product.title }}</small>
@@ -112,9 +118,9 @@
                         <td class="pe-0">
                           <div class="d-flex justify-content-between align-items-center">
                             <div class="input-group input-group-sm">
-                              <input                                v-model="item.qty"
-                                type="number" min="1"
-                                class="form-control" id="qty"
+                              <input v-model="item.qty" :disabled="inputDisabled" @click="updateTotal(order)" 
+                              type="number" min="1"
+                              class="form-control" 
                               />
                               <span class="input-group-text">{{ item.product.unit }}</span>
                             </div>
@@ -124,8 +130,7 @@
                           <p class="fs-6 mb-0">{{ item.product.price }}元</p>
                         </td>
                         <td class="text-end p-0">
-                          <button
-                            @click="deleteOrder(item.id)"
+                          <button :disabled="inputDisabled"  @click="deleteOrder"
                             type="button"
                             class="btn btn-outline-danger btn-sm py-0"
                             style="scale: 80%"
@@ -139,11 +144,18 @@
                       <tr>
                         <td>
                           <span>
-                            {{ `總共 ${(Object.keys(item.products)).length} 項` }}
+                            {{ `總共 ${(Object.keys(order.products)).length} 項` }}
                           </span>
                         </td>
                         <td>訂單金額</td>
-                        <td class="text-end fs-5 text-danger fw-bold">{{ item.total }}元</td>
+                        <td class="text-end fs-5 text-danger fw-bold">
+                          <span v-if="!inputDisabled">
+                            {{ calculateTotal }}元
+                          </span>
+                          <span v-else>
+                            {{ order.total }}元
+                          </span>
+                        </td>
                         <td></td>
                       </tr>
                     </tfoot>
@@ -161,7 +173,7 @@
           >
             取消
           </button>
-          <button @click="updateOrder(item.id)" type="button" class="btn btn-danger">
+          <button @click="updateOrder(order)" type="button" class="btn btn-danger">
             更新訂單
           </button>
         </div>
@@ -186,7 +198,26 @@ export default {
     return {
       orderModal: null,
       tempOrder: [],
-    };
+      inputDisabled: true,
+      calculateTotal: null,
+    }
+  },
+  created() {
+    this.tempOrder = [ ...this.currentOrder ];
+  },
+  watch: {
+    // watch 監視 currentOrder 屬性，當其值發生變化時，觸發 handler 方法
+    currentOrder: {
+      // 表示要深度監視 currentOrder，當其內部屬性發生變化時，觸發 handler 方法
+      deep: true,
+      // handler 方法接收一個參數 updateOrder (代表 currentOrder 的新值)
+      handler(updateOrder) {
+        // 將 currentOrder 的新值賦值 tempOrder，這樣可以保持 tempOrder 與 currentOrder 同步更新
+        this.tempOrder = updateOrder;
+        // this.putOrder(updateOrder);
+      },
+    },
+    
   },
   mounted() {
     this.orderModal = new Modal(document.querySelector('#orderModal'), {
@@ -195,49 +226,48 @@ export default {
       // 禁止點擊 Modal 以外區域以關閉對話框
       backdrop: 'static',
     });
-    console.log(this.tempOrder);
-    console.log(this.currentOrder);
-  },
-  created() {
-    this.tempOrder = { ...this.currentOrder };
-  },
-  watch: {
-    // 當元件被創建時，currentOrder 可能還未被傳入。為了確保 tempOrder 在 currentOrder 更新時同步更新，使用 watch 監聽 currentOrder 的變化，然後更新 tempOrder
-    currentOrder: {
-      // 若要深度監聽，對象內部屬性的變化也觸發
-      deep: true,
-      handler(updateOrder) {
-        this.tempOrder = updateOrder;
-      },
-    },
+    this.updateTotal();
+    console.log(this.tempOrder)
   },
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
-    // PUT 訂單
-    updateOrder(id) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${id}`;
+    // 編輯開關
+    togglerEdit() {
+      this.inputDisabled = false;
+    },
+    // 重新計算訂單總價
+    updateTotal() {
+      this.tempOrder.forEach((order) => {
+        order.products.forEach((item) => {
+          this.calculateTotal += item.product.price * item.qty
+        });
+      })   
+    },
+    // PUT 修改訂單：整筆訂單
+    updateOrder(order) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${order.id}`;
       this.axios
       .put(url, {
-        data: this.tempOrder,
+        "data": order,
       })
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-        })
-        .then(() => {
-          this.orderModal.hide();
-          this.getOrders();
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: err.response.data.message,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
+      .then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
         });
+        this.getOrders();
+        this.inputDisabled = true;
+        this.orderModal.hide();
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: err.response.data.message,
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      });
     },
   },
 };

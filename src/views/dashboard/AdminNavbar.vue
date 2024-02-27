@@ -60,6 +60,9 @@ export default {
       const url = `${VITE_APP_URL}/api/user/check`;
       this.axios
         .post(url)
+        .then((res) => {
+          console.log(res)
+        })
         .catch(() => {
           Swal.fire({
             title: '驗證錯誤，請重新登入',

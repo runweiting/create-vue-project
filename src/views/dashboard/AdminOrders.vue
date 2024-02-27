@@ -6,16 +6,19 @@
                     <h2>這是訂單頁面</h2>
                     <div class="d-flex justify-content-between gap-2 py-2">
                         <p class="p-2 mb-0">
-                        {{ `目前有 ${Object.keys(this.orderList).length} 項商品` }}
+                        {{ `一頁顯示 ${Object.keys(this.orderList).length} 項商品` }}
                         </p>
                         <!-- Button trigger modal -->
                         <div class="d-flex justify-content-end gap-2">
-                        <button @click="logout" type="button" class="btn btn-warning">
-                            登出
-                        </button>
+                          <button @click="deleteOrders" type="button" class="btn btn-danger">
+                            刪除全部訂單
+                          </button>
+                          <button @click="logout" type="button" class="btn btn-warning">
+                              登出
+                          </button>
                         </div>
                         <!-- orderModal -->
-                        <order-modal ref="orderModal" :currentOrder="order">
+                        <order-modal ref="orderModal" :currentOrder="selectedOrder">
                         </order-modal>
                     </div>
                 </div>
@@ -69,7 +72,7 @@
                                     查看訂單
                                     </button>
                                     <button
-                                    @click="deleteOrder()"
+                                    @click="deleteOrder(item.id)"
                                     type="button"
                                     class="btn btn-outline-danger btn-sm"
                                     >
@@ -95,7 +98,7 @@ import ordersStore from '@/stores/ordersStore';
 import OrderModal from '../../components/week7/OrderModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
 
-const { VITE_APP_URL } = import.meta.env;
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   components: {
@@ -105,7 +108,7 @@ export default {
   data() {
     return {      
       title: '訂單列表',
-      order: [],
+      selectedOrder: [],
     };
   },
   computed: {
@@ -118,10 +121,35 @@ export default {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
     // 查看訂單
     checkOrder(id) {
-      console.log(this.orderList);
-      this.order = this.orderList.filter((item) => item.id === id);
-      console.log(this.order);
+      this.selectedOrder = this.orderList.filter((item) => item.id === id);
+      console.log('order',this.selectedOrder);
       this.$refs.orderModal.orderModal.show();
+    },
+    // DELETE 刪除指定訂單
+    deleteOrder(orderId) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart/${orderId}`;
+      this.axios.delete(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.getOrders();
+      });
+    },
+    // DELETE 刪除全部訂單
+    deleteOrders() {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/carts`;
+      this.axios.delete(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.getOrders();
+      });
     },
     // POST 登出
     logout() {

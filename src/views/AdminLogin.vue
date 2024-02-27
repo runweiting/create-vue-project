@@ -46,12 +46,11 @@
 import Swal from 'sweetalert2';
 import isUserLoggedIn from '../components/utils/isUserLoggedIn';
 
+const { VITE_APP_URL } = import.meta.env;
+
 export default {
   data() {
     return {
-      // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_APP_URL,
-      apiPath: import.meta.env.VITE_APP_PATH,
       user: {
         username: '',
         password: '',
@@ -61,8 +60,7 @@ export default {
   created() {
     // 從 cookies 讀取 token
     const token = document.cookie.replace(
-      // eslint-disable-next-line no-useless-escape
-      /(?:(?:^|.*;\s*)myToken\s*\=\s*([^;]*).*$)|^.*$/,
+      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
       '$1',
     );
     // axios headers 預設寫法
@@ -81,10 +79,10 @@ export default {
           showConfirmButton: false,
           timer: 1500,
         });
-        this.goToWeek4Admin();
+        this.goToAdmin();
         return;
       }
-      const url = `${this.apiUrl}/admin/signin`;
+      const url = `${VITE_APP_URL}/admin/signin`;
       this.axios
         .post(url, this.user)
         .then((res) => {
@@ -97,7 +95,7 @@ export default {
             showConfirmButton: false,
             timer: 1500,
           }).then(() => {
-            this.goToWeek4Admin();
+            this.goToAdmin();
           });
           // 清空 user
           this.user = {};
@@ -116,11 +114,12 @@ export default {
               icon: 'error',
               confirmButtonText: 'OK',
             });
-          }
+          };
+          console.log(err)
         });
     },
     // 如有 token 導向後台
-    goToWeek4Admin() {
+    goToAdmin() {
       if (isUserLoggedIn()) {
         // 已登入，可進入後台
         Swal.fire({
@@ -142,4 +141,4 @@ export default {
     },
   },
 };
-</script>../components/utils/isUserLoggedIn
+</script>

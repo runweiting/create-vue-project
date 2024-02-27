@@ -4,7 +4,7 @@
       <h2>{{ title }}</h2>
       <div class="d-flex justify-content-between gap-2 py-2">
         <p class="p-2 mb-0">
-          {{ `目前有 ${Object.keys(this.products).length} 項商品` }}
+          {{ `一頁顯示 ${Object.keys(this.products).length} 項商品` }}
         </p>
         <!-- Button trigger modal -->
         <div class="d-flex justify-content-end gap-2">
@@ -52,7 +52,8 @@
             <td>{{ item.origin_price }}</td>
             <td>{{ item.price }}</td>
             <td>
-              <i v-if="item.is_enabled" class="bi bi-check-circle-fill text-success"></i>
+              <i v-if="item.is_enabled" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+              <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
             </td>
             <td>
               <div
