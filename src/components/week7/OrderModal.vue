@@ -9,7 +9,7 @@
   aria-hidden="true"
   >
     <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div v-for="order in tempOrder" :key="order.id"
+      <div v-for="order in tempOrder" :key="'orderID-' + order.id"
       class="modal-content">
         <div class="modal-header bg-dark opacity-75 text-white">
           <h5 class="modal-title" id="orderModalLabel">
@@ -110,7 +110,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="item in order.products" :key="item.id">
+                      <tr v-for="item in order.products" :key="item.product.title">
                         <td class="d-flex align-items-center gap-1">
                           <img :src="item.product.imageUrl" class="rounded order-img" />
                           <small>{{ item.product.title }}</small>
@@ -118,7 +118,7 @@
                         <td class="pe-0">
                           <div class="d-flex justify-content-between align-items-center">
                             <div class="input-group input-group-sm">
-                              <input v-model="item.qty" :disabled="inputDisabled" @click="updateTotal(order)" 
+                              <input v-model="item.qty" :disabled="inputDisabled" @click="updateTotal" 
                               type="number" min="1"
                               class="form-control" 
                               />
@@ -149,11 +149,11 @@
                         </td>
                         <td>訂單金額</td>
                         <td class="text-end fs-5 text-danger fw-bold">
-                          <span v-if="!inputDisabled">
-                            {{ calculateTotal }}元
+                          <span v-if="inputDisabled">
+                            {{ order.total }}元
                           </span>
                           <span v-else>
-                            {{ order.total }}元
+                            {{ calculateTotal }}元
                           </span>
                         </td>
                         <td></td>
@@ -226,7 +226,6 @@ export default {
       // 禁止點擊 Modal 以外區域以關閉對話框
       backdrop: 'static',
     });
-    this.updateTotal();
     console.log(this.tempOrder)
   },
   methods: {
@@ -234,21 +233,31 @@ export default {
     // 編輯開關
     togglerEdit() {
       this.inputDisabled = false;
+      this.updateTotal();
     },
     // 重新計算訂單總價
     updateTotal() {
+      
+      const subTotal = [];
+      // 遍歷訂單中每個商品
       this.tempOrder.forEach((order) => {
-        order.products.forEach((item) => {
-          this.calculateTotal += item.product.price * item.qty
+        Object.values(order.products).forEach((product) => {
+          console.log(product);
+          console.log(product.qty);
+          subTotal.push(product.qty * product.product.price);
         });
-      })   
+      });
+      console.log(subTotal);
+      this.calculateTotal = subTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      console.log(this.calculateTotal);
+      console.log(this.tempOrder)
     },
-    // PUT 修改訂單：整筆訂單
-    updateOrder(order) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${order.id}`;
+    // PUT 更新訂單
+    updateOrder() {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${this.tempOrder.id}`;
       this.axios
       .put(url, {
-        "data": order,
+        "data": this.tempOrder[0],
       })
       .then((res) => {
         Swal.fire({
@@ -257,9 +266,15 @@ export default {
           showConfirmButton: false,
           timer: 1500,
         });
-        this.getOrders();
-        this.inputDisabled = true;
+      })
+      .then(() => {
         this.orderModal.hide();
+        // 獲取最新的訂單數據
+        this.getOrders();
+        // 將新的訂單數據設置給組件的數據屬性
+        this.tempOrder = [...this.currentOrder];
+        // 將 inputDisabled 屬性重置為 true，以禁用編輯功能
+        this.inputDisabled = true;
       })
       .catch((err) => {
         Swal.fire({

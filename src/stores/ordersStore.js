@@ -19,6 +19,7 @@ export default defineStore("orderStore", {
         const { orders, pagination } = res.data;
         this.orderList = orders;
         this.pagination = pagination;
+        console.log(res.data);
       });
     },
     timestampToDate(timestamp) {

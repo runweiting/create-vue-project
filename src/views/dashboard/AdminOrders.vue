@@ -65,7 +65,7 @@
                                     aria-label="Basic outlined example"
                                 >
                                     <button
-                                    @click="checkOrder(item.id)"
+                                    @click="checkOrder(item)"
                                     type="button"
                                     class="btn btn-outline-primary btn-sm"
                                     >
@@ -120,8 +120,8 @@ export default {
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
     // 查看訂單
-    checkOrder(id) {
-      this.selectedOrder = this.orderList.filter((item) => item.id === id);
+    checkOrder(item) {
+      this.selectedOrder = [ ...item ]
       console.log('order',this.selectedOrder);
       this.$refs.orderModal.orderModal.show();
     },
