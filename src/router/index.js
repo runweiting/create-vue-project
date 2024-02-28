@@ -96,6 +96,14 @@ const adminRoutes = [
         },
       },
       {
+        path: "coupons",
+        name: "admin/coupons",
+        component: () => import("../views/dashboard/AdminCoupons.vue"),
+        meta: {
+          title: "後台 - 優惠卷管理",
+        },
+      },
+      {
         path: "articles",
         name: "admin/articles",
         component: () => import("../views/dashboard/AdminArticles.vue"),

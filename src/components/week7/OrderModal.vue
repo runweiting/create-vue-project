@@ -57,7 +57,7 @@
                     <label for="date" class="col-sm-3 col-form-label">建立時間：</label>
                     <div class="col-sm-9">
                       <input
-                      v-model="timestampToDate(tempOrder.create_at).formattedDay" :disabled="inputDisabled" type="text" class="form-control" id="date">
+                      v-model="formatDate(tempOrder.create_at).formattedDate" :disabled="inputDisabled" type="text" class="form-control" id="date">
                     </div>
                   </div>
                   <div class="row mb-2">
@@ -192,6 +192,7 @@ import Swal from 'sweetalert2';
 import Modal from 'bootstrap/js/dist/modal';
 import { mapActions } from 'pinia';
 import ordersStore from '@/stores/ordersStore';
+import timestampToDate from '../utils/timestampToDate';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -245,6 +246,11 @@ export default {
   },
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
+    // 轉換 timestamp
+    formatDate(timestamp) {
+      const { formattedDay, formattedDate } = timestampToDate(timestamp);
+      return { formattedDay, formattedDate }
+    },
     // 修改訂單
     togglerEdit() {
       this.inputDisabled = false;

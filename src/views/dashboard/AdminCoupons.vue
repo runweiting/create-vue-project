@@ -3,15 +3,15 @@
         <div class="row py-2">
             <main class="col mt-4 mb-4">
                 <div class="container py-2">
-                    <h2>這是訂單頁面</h2>
+                    <h2>這是優惠卷頁面</h2>
                     <div class="d-flex justify-content-between gap-2 py-2">
                         <p class="p-2 mb-0">
-                        {{ `一頁顯示 ${Object.keys(this.tempOrderList).length} 項商品` }}
+                        {{ `一頁顯示 ${Object.keys(this.tempCouponList).length} 項商品` }}
                         </p>
                         <!-- Button trigger modal -->
                         <div class="d-flex justify-content-end gap-2">
                           <button @click="deleteOrders" type="button" class="btn btn-danger">
-                            刪除全部訂單
+                            新增優惠卷
                           </button>
                           <button @click="logout" type="button" class="btn btn-warning">
                               登出
@@ -26,45 +26,33 @@
                     <table class="table table-hover">
                         <thead class="table-dark">
                         <tr>
-                            <th scope="col" class="fw-bold">日期</th>
-                            <th scope="col" class="fw-bold">序號</th>
-                            <th scope="col" class="fw-bold">訂單編號</th>
-                            <th scope="col" class="fw-bold">品項</th>
-                            <th scope="col" class="fw-bold">金額</th>
-                            <th scope="col" class="fw-bold">訂單狀態</th>
-                            <th scope="col" class="fw-bold">付款日期</th>
+                            <th scope="col" class="fw-bold">優惠卷標題</th>
+                            <th scope="col" class="fw-bold">優惠碼</th>
+                            <th scope="col" class="fw-bold">折扣</th>
+                            <th scope="col" class="fw-bold">起始日</th>
+                            <th scope="col" class="fw-bold">截止日</th>
+                            <th scope="col" class="fw-bold">啟用狀態</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                          <tr v-if="!tempOrderList">
+                          <tr v-if="!tempCouponList">
                             <td colspan="7">
                               <small class="text-muted">
-                                目前沒有任何訂單
+                                目前沒有任何優惠卷
                               </small>
                             </td>
                           </tr>
-                          <tr v-for="item in tempOrderList" :key="item.title">
+                          <tr v-for="item in tempCouponList" :key="item.title">
+                              <td>{{ item.title }}</td>
+                              <td>{{ item.code }}</td>
+                              <td>{{ item.percent }}</td>
+                              <td>{{ item.start_date }}</td>
+                              <td>{{ formatDate(item.due_date) }}</td>
                               <td>
-                                  <span class="d-block">
-                                      {{ formatDate(item.create_at).formattedDate }}
-                                  </span>
-                                  <small class="text-muted">
-                                      {{ formatDate(item.create_at).formattedTime }}
-                                  </small>
+                                <i v-if="item.is_enabled" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                                <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                               </td>
-                              <td>{{ item.num }}</td>
-                              <td>{{ item.id }}</td>
-                              <td>
-                                  {{ (Object.keys(item.products)).length }}
-                              </td>
-                              <td>
-                                {{ item.calculateTotal }}
-                              </td>
-                              <td :class="{ 'text-success': item.is_paid, 'text-danger': !item.is_paid }">
-                                  {{ item.is_paid ? "已付款" : "未付款" }}
-                              </td>
-                              <td></td>
                               <td>
                                   <div
                                       class="btn-group"
@@ -76,7 +64,7 @@
                                       type="button"
                                       class="btn btn-outline-primary btn-sm"
                                       >
-                                      查看訂單
+                                      編輯
                                       </button>
                                       <button
                                       @click="deleteOrder(item.id)"
@@ -100,7 +88,7 @@
 <script>
 import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
-import ordersStore from '@/stores/ordersStore';
+import couponsStore from '@/stores/couponsStore';
 import timestampToDate from '@/components/utils/timestampToDate';
 
 import OrderModal from '../../components/week7/OrderModal.vue';
@@ -116,37 +104,35 @@ export default {
   data() {
     return {      
       title: '訂單列表',
-      tempOrderList: [],
+      tempCouponList: [],
       selectedOrder: {},
     };
   },
   created() {
-    this.tempOrderList = [
-      ...this.orderList
+    this.tempCouponList = [
+      ...this.couponList
     ];
   },
   watch: {
-    orderList: {
+    couponList: {
       deep: true,
-      handler(updateOrderList) {
-        this.tempOrderList = updateOrderList;
+      handler(updateCouponList) {
+        this.tempCouponList = updateCouponList;
       }
     }
   },
   computed: {
-    ...mapState(ordersStore, ['orderList', 'pagination', 'calculateTotal']),
+    ...mapState(couponsStore, ['couponList', 'pagination']),
   },
   mounted() {
-    this.getOrders();
+    this.getCoupons();
   },
   methods: {
-    ...mapActions(ordersStore, ['getOrders']),
+    ...mapActions(couponsStore, ['getCoupons']),
     // 轉換 timestamp
     formatDate(timestamp) {
-      const { formattedDate, formattedTime } = timestampToDate(timestamp);
-      return {
-        formattedDate, formattedTime
-      }
+      const { formattedDate } = timestampToDate(timestamp);
+      return formattedDate;
     },
     // 查看訂單
     checkOrder(item) {

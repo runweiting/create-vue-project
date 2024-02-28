@@ -102,7 +102,7 @@ export default {
       // 新增 apiUrl、apiPath
       apiUrl: import.meta.env.VITE_APP_URL,
       apiPath: import.meta.env.VITE_APP_PATH,
-      title: '商品列表',
+      title: '這是商品頁面',
       // 商品列表
       products: [],
       isNew: false,
