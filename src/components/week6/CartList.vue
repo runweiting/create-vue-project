@@ -93,6 +93,20 @@
               <td class="text-end">{{ cartTotal }}元</td>
               <td></td>
             </tr>
+            <tr>
+              <td colspan="4">
+                <router-link v-if="cartList.length === 0" :to="{ name: 'products' }">
+                  <button type="button" class="btn btn-outline-primary w-100" style="height: 38px">
+                    前往商品列表
+                  </button>
+                </router-link>
+                <router-link v-else :to="{ name: 'cart' }">
+                  <button type="button" class="btn btn-outline-success w-100" style="height: 38px">
+                    前往購物車
+                  </button>
+                </router-link>
+              </td>
+            </tr>
           </tfoot>
         </table>
       </div>

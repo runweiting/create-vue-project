@@ -9,14 +9,13 @@
   aria-hidden="true"
   >
     <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div v-for="order in tempOrder" :key="'orderID-' + order.id"
-      class="modal-content">
+      <div class="modal-content">
         <div class="modal-header bg-dark opacity-75 text-white">
           <h5 class="modal-title" id="orderModalLabel">
-            <span>訂單編號：{{ order.id }}</span>
+            <span>訂單編號：{{ tempOrder.id }}</span>
             <br>
           </h5>
-          <button
+          <button @click="cancelUpdateOrder"
             type="button"
             class="btn btn-outline-light"
             data-bs-dismiss="modal"
@@ -32,7 +31,7 @@
                   <div class="col-md-5 d-flex align-items-center gap-3">
                     <label for="payment" class="col-form-label">付款狀態：</label>
                     <div>
-                      <select v-model="order.is_paid" :disabled="inputDisabled" class="form-select" id="payment">
+                      <select v-model="tempOrder.is_paid" :disabled="inputDisabled" class="form-select" id="payment">
                         <option :value="true">
                           已付款
                         </option>
@@ -41,7 +40,7 @@
                         </option>
                       </select>
                     </div>
-                    <i v-if="order.is_paid" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                    <i v-if="tempOrder.is_paid" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
                     <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                   </div>
                   <div class="col-md-7">
@@ -57,37 +56,38 @@
                   <div class="row mb-2">
                     <label for="date" class="col-sm-3 col-form-label">建立時間：</label>
                     <div class="col-sm-9">
-                      <input v-model="timestampToDate(order.create_at).formattedDay" :disabled="inputDisabled" type="text" class="form-control" id="date">
+                      <input
+                      v-model="timestampToDate(tempOrder.create_at).formattedDay" :disabled="inputDisabled" type="text" class="form-control" id="date">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="Email" class="col-sm-3 col-form-label">Email：</label>
                     <div class="col-sm-9">
-                      <input v-model="order.user.email" :disabled="inputDisabled" type="email" class="form-control" id="Email">
+                      <input v-model="tempOrder.user.email" :disabled="inputDisabled" type="email" class="form-control" id="Email">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="name" class="col-sm-3 col-form-label">收件姓名：</label>
                     <div class="col-sm-9">
-                      <input v-model="order.user.name" :disabled="inputDisabled" type="text" class="form-control" id="name">
+                      <input v-model="tempOrder.user.name" :disabled="inputDisabled" type="text" class="form-control" id="name">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="tel" class="col-sm-3 col-form-label">聯絡電話：</label>
                     <div class="col-sm-9">
-                      <input v-model="order.user.tel" :disabled="inputDisabled" type="text" class="form-control" id="tel">
+                      <input v-model="tempOrder.user.tel" :disabled="inputDisabled" type="text" class="form-control" id="tel">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="address" class="col-sm-3 col-form-label">收件地址：</label>
                     <div class="col-sm-9">
-                      <input v-model="order.user.address" :disabled="inputDisabled" type="text" class="form-control" id="address">
+                      <input v-model="tempOrder.user.address" :disabled="inputDisabled" type="text" class="form-control" id="address">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="note" class="col-sm-3 col-form-label">留言：</label>
                     <div class="col-sm-9">
-                      <textarea v-model="order.user.message" :disabled="inputDisabled" class="form-control" name="note" id="note" cols="10" rows="10" style="height: 100px;"></textarea>
+                      <textarea v-model="tempOrder.user.message" :disabled="inputDisabled" class="form-control" name="note" id="note" cols="10" rows="10" style="height: 100px;"></textarea>
                     </div>
                   </div>
                 </form>
@@ -104,13 +104,13 @@
                     <thead class="table-warning">
                       <tr class="align-middle" style="height: 48px">
                         <th scope="col" class="fw-bold" style="width: 60%">商品</th>
-                        <th scope="col" class="fw-bold" style="width: 15%">數量</th>
-                        <th scope="col" class="fw-bold text-end" style="width: 20%">單價</th>
+                        <th scope="col" class="fw-bold" style="width: 20%">數量</th>
+                        <th scope="col" class="fw-bold text-end" style="width: 15%">單價</th>
                         <th style="width: 5%"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="item in order.products" :key="item.product.title">
+                      <tr v-for="(item) in tempOrder.products" :key="item.id">
                         <td class="d-flex align-items-center gap-1">
                           <img :src="item.product.imageUrl" class="rounded order-img" />
                           <small>{{ item.product.title }}</small>
@@ -144,16 +144,21 @@
                       <tr>
                         <td>
                           <span>
-                            {{ `總共 ${(Object.keys(order.products)).length} 項` }}
+                            {{ `總共 ${(Object.keys(tempOrder.products)).length} 項` }}
                           </span>
                         </td>
-                        <td>訂單金額</td>
+                        <td>
+                          原始金額：
+                          <br>
+                          更新金額：
+                        </td>
                         <td class="text-end fs-5 text-danger fw-bold">
-                          <span v-if="inputDisabled">
-                            {{ order.total }}元
+                          <span :class="{ 'fs-6': subTotal, 'fw-normal': subTotal, 'text-dark': subTotal, 'text-decoration-line-through': subTotal }">
+                              {{ tempOrder.calculateTotal }}元
                           </span>
-                          <span v-else>
-                            {{ calculateTotal }}元
+                          <br>
+                          <span :class="{ 'fs-6': !subTotal, 'fw-normal': !subTotal, 'text-dark': !subTotal, 'text-decoration-line-through': !subTotal }">
+                              {{ subTotal }}元
                           </span>
                         </td>
                         <td></td>
@@ -166,14 +171,14 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
+          <button @click="cancelUpdateOrder"
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
           >
             取消
           </button>
-          <button @click="updateOrder(order)" type="button" class="btn btn-danger">
+          <button @click="updateOrder" type="button" class="btn btn-danger">
             更新訂單
           </button>
         </div>
@@ -192,18 +197,28 @@ const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   props: {
-    currentOrder: Array,
+    currentOrder: Object,
   },
   data() {
     return {
       orderModal: null,
-      tempOrder: [],
+      tempOrder: {},
       inputDisabled: true,
-      calculateTotal: null,
+      subTotal: 0,
     }
   },
   created() {
-    this.tempOrder = [ ...this.currentOrder ];
+    // 確保 tempOrder, user 使用前已初始化
+    this.tempOrder = {
+      ...this.currentOrder,
+      products: {},
+      user: {
+        email: '',
+        name: '',
+        tel: '',
+        address: '',
+      }
+    };
   },
   watch: {
     // watch 監視 currentOrder 屬性，當其值發生變化時，觸發 handler 方法
@@ -230,34 +245,31 @@ export default {
   },
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
-    // 編輯開關
+    // 修改訂單
     togglerEdit() {
       this.inputDisabled = false;
       this.updateTotal();
     },
     // 重新計算訂單總價
     updateTotal() {
-      
-      const subTotal = [];
-      // 遍歷訂單中每個商品
-      this.tempOrder.forEach((order) => {
-        Object.values(order.products).forEach((product) => {
-          console.log(product);
-          console.log(product.qty);
-          subTotal.push(product.qty * product.product.price);
-        });
+      this.subTotal = this.tempOrder.calculateTotal;
+      let total = 0;
+      Object.values(this.tempOrder.products).forEach((product) => {
+        total += product.qty * product.product.price;
       });
-      console.log(subTotal);
-      this.calculateTotal = subTotal.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-      console.log(this.calculateTotal);
-      console.log(this.tempOrder)
+      this.subTotal = total;
+    },
+    // 關閉修改訂單
+    cancelUpdateOrder() {
+      this.subTotal = 0;
+      this.inputDisabled = true;
     },
     // PUT 更新訂單
     updateOrder() {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${this.tempOrder.id}`;
       this.axios
       .put(url, {
-        "data": this.tempOrder[0],
+        "data": this.tempOrder,
       })
       .then((res) => {
         Swal.fire({
@@ -268,13 +280,12 @@ export default {
         });
       })
       .then(() => {
+        this.subTotal = 0;
+        this.inputDisabled = true;
         this.orderModal.hide();
-        // 獲取最新的訂單數據
         this.getOrders();
         // 將新的訂單數據設置給組件的數據屬性
         this.tempOrder = [...this.currentOrder];
-        // 將 inputDisabled 屬性重置為 true，以禁用編輯功能
-        this.inputDisabled = true;
       })
       .catch((err) => {
         Swal.fire({

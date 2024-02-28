@@ -6,7 +6,7 @@
                     <h2>這是訂單頁面</h2>
                     <div class="d-flex justify-content-between gap-2 py-2">
                         <p class="p-2 mb-0">
-                        {{ `一頁顯示 ${Object.keys(this.orderList).length} 項商品` }}
+                        {{ `一頁顯示 ${Object.keys(this.tempOrderList).length} 項商品` }}
                         </p>
                         <!-- Button trigger modal -->
                         <div class="d-flex justify-content-end gap-2">
@@ -37,50 +37,57 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="item in orderList" :key="item.title">
-                            <td>
-                                <span class="d-block">
-                                    {{ timestampToDate(item.create_at).formattedDate }}
-                                </span>
-                                <small class="text-muted">
-                                    {{ timestampToDate(item.create_at).formattedTime }}
-                                </small>
+                          <tr v-if="!tempOrderList">
+                            <td colspan="7">
+                              <small class="text-muted">
+                                目前沒有任何訂單
+                              </small>
                             </td>
-                            <td>{{ item.num }}</td>
-                            <td>{{ item.id }}</td>
-                            <td>
-                                {{ (Object.keys(item.products)).length }}
-                            </td>
-                            <td>
-                                {{ item.total }}
-                            </td>
-                            <td :class="{ 'text-success': item.is_paid, 'text-danger': !item.is_paid }">
-                                {{ item.is_paid ? "已付款" : "未付款" }}
-                            </td>
-                            <td></td>
-                            <td>
-                                <div
-                                    class="btn-group"
-                                    role="group"
-                                    aria-label="Basic outlined example"
-                                >
-                                    <button
-                                    @click="checkOrder(item)"
-                                    type="button"
-                                    class="btn btn-outline-primary btn-sm"
-                                    >
-                                    查看訂單
-                                    </button>
-                                    <button
-                                    @click="deleteOrder(item.id)"
-                                    type="button"
-                                    class="btn btn-outline-danger btn-sm"
-                                    >
-                                    刪除
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                          </tr>
+                          <tr v-for="item in tempOrderList" :key="item.title">
+                              <td>
+                                  <span class="d-block">
+                                      {{ timestampToDate(item.create_at).formattedDate }}
+                                  </span>
+                                  <small class="text-muted">
+                                      {{ timestampToDate(item.create_at).formattedTime }}
+                                  </small>
+                              </td>
+                              <td>{{ item.num }}</td>
+                              <td>{{ item.id }}</td>
+                              <td>
+                                  {{ (Object.keys(item.products)).length }}
+                              </td>
+                              <td>
+                                {{ item.calculateTotal }}
+                              </td>
+                              <td :class="{ 'text-success': item.is_paid, 'text-danger': !item.is_paid }">
+                                  {{ item.is_paid ? "已付款" : "未付款" }}
+                              </td>
+                              <td></td>
+                              <td>
+                                  <div
+                                      class="btn-group"
+                                      role="group"
+                                      aria-label="Basic outlined example"
+                                  >
+                                      <button
+                                      @click="checkOrder(item)"
+                                      type="button"
+                                      class="btn btn-outline-primary btn-sm"
+                                      >
+                                      查看訂單
+                                      </button>
+                                      <button
+                                      @click="deleteOrder(item.id)"
+                                      type="button"
+                                      class="btn btn-outline-danger btn-sm"
+                                      >
+                                      刪除
+                                      </button>
+                                  </div>
+                              </td>
+                          </tr>
                         </tbody>
                     </table>
                 </div>
@@ -108,11 +115,25 @@ export default {
   data() {
     return {      
       title: '訂單列表',
-      selectedOrder: [],
+      tempOrderList: [],
+      selectedOrder: {},
     };
   },
+  created() {
+    this.tempOrderList = [
+      ...this.orderList
+    ];
+  },
+  watch: {
+    orderList: {
+      deep: true,
+      handler(updateOrderList) {
+        this.tempOrderList = updateOrderList;
+      }
+    }
+  },
   computed: {
-    ...mapState(ordersStore, ['orderList', 'pagination']),
+    ...mapState(ordersStore, ['orderList', 'pagination', 'calculateTotal']),
   },
   mounted() {
     this.getOrders();
@@ -121,26 +142,30 @@ export default {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
     // 查看訂單
     checkOrder(item) {
-      this.selectedOrder = [ ...item ]
+      this.selectedOrder = { ...item };
       console.log('order',this.selectedOrder);
       this.$refs.orderModal.orderModal.show();
     },
     // DELETE 刪除指定訂單
     deleteOrder(orderId) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart/${orderId}`;
-      this.axios.delete(url).then((res) => {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${orderId}`;
+      this.axios.delete(url)
+      .then((res) => {
         Swal.fire({
           title: res.data.message,
           icon: "success",
           showConfirmButton: false,
           timer: 1500,
         });
+      })
+      .then(() => {
         this.getOrders();
-      });
+      })
     },
     // DELETE 刪除全部訂單
     deleteOrders() {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/carts`;
+      // /v2/api/{api_path}/admin/orders/all
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders/all`;
       this.axios.delete(url).then((res) => {
         Swal.fire({
           title: res.data.message,
