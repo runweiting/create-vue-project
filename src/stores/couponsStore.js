@@ -21,8 +21,8 @@ export default defineStore("couponsStore", {
         const { coupons, pagination } = res.data;
         const newCouponFormat = coupons.map((coupon) => ({
           ...coupon,
-          // 加入起始日屬性
-          start_date: null,
+          // 數字轉換布林值
+          is_enabled: Boolean(coupon.is_enabled),
         }));
         this.couponList = newCouponFormat;
         this.pagination = pagination;

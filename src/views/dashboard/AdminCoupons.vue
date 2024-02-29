@@ -18,68 +18,68 @@
                           </button>
                         </div>
                         <!-- orderModal -->
-                        <order-modal ref="orderModal" :currentOrder="selectedOrder">
-                        </order-modal>
+                        <coupon-modal ref="couponModal" :currentCoupon="selectedCoupon">
+                        </coupon-modal>
                     </div>
                 </div>
                 <div class="container">
-                    <table class="table table-hover">
-                        <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="fw-bold">優惠卷標題</th>
-                            <th scope="col" class="fw-bold">優惠碼</th>
-                            <th scope="col" class="fw-bold">折扣</th>
-                            <th scope="col" class="fw-bold">起始日</th>
-                            <th scope="col" class="fw-bold">截止日</th>
-                            <th scope="col" class="fw-bold">啟用狀態</th>
-                            <th></th>
+                  <table class="table table-hover">
+                      <thead class="table-dark">
+                      <tr>
+                          <th scope="col" class="fw-bold">優惠卷標題</th>
+                          <th scope="col" class="fw-bold">優惠碼</th>
+                          <th scope="col" class="fw-bold">折扣</th>
+                          <th scope="col" class="fw-bold">起始日</th>
+                          <th scope="col" class="fw-bold">截止日</th>
+                          <th scope="col" class="fw-bold">啟用狀態</th>
+                          <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-if="!tempCouponList">
+                          <td colspan="7">
+                            <small class="text-muted">
+                              目前沒有任何優惠卷
+                            </small>
+                          </td>
                         </tr>
-                        </thead>
-                        <tbody>
-                          <tr v-if="!tempCouponList">
-                            <td colspan="7">
-                              <small class="text-muted">
-                                目前沒有任何優惠卷
-                              </small>
+                        <tr v-for="item in tempCouponList" :key="item.title">
+                            <td>{{ item.title }}</td>
+                            <td>{{ item.code }}</td>
+                            <td>{{ item.percent }}</td>
+                            <td>{{ formatDate(item.start_date) }}</td>
+                            <td>{{ formatDate(item.due_date) }}</td>
+                            <td>
+                              <i v-if="item.is_enabled" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                              <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                             </td>
-                          </tr>
-                          <tr v-for="item in tempCouponList" :key="item.title">
-                              <td>{{ item.title }}</td>
-                              <td>{{ item.code }}</td>
-                              <td>{{ item.percent }}</td>
-                              <td>{{ item.start_date }}</td>
-                              <td>{{ formatDate(item.due_date) }}</td>
-                              <td>
-                                <i v-if="item.is_enabled" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
-                                <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
-                              </td>
-                              <td>
-                                  <div
-                                      class="btn-group"
-                                      role="group"
-                                      aria-label="Basic outlined example"
-                                  >
-                                      <button
-                                      @click="checkOrder(item)"
-                                      type="button"
-                                      class="btn btn-outline-primary btn-sm"
-                                      >
-                                      編輯
-                                      </button>
-                                      <button
-                                      @click="deleteOrder(item.id)"
-                                      type="button"
-                                      class="btn btn-outline-danger btn-sm"
-                                      >
-                                      刪除
-                                      </button>
-                                  </div>
-                              </td>
-                          </tr>
-                        </tbody>
-                    </table>
+                            <td>
+                                <div
+                                    class="btn-group"
+                                    role="group"
+                                    aria-label="Basic outlined example"
+                                >
+                                    <button
+                                    @click="checkCoupon(item)"
+                                    type="button"
+                                    class="btn btn-outline-primary btn-sm"
+                                    >
+                                    編輯
+                                    </button>
+                                    <button
+                                    @click="deleteOrder(item.id)"
+                                    type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                    >
+                                    刪除
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                      </tbody>
+                  </table>
                 </div>
-                <Pagination :pages="pagination" @showPage="getOrders" />
+                <Pagination :pages="pagination" @showPage="getCoupons" />
             </main>
         </div>
     </main>
@@ -91,21 +91,21 @@ import { mapActions, mapState } from 'pinia';
 import couponsStore from '@/stores/couponsStore';
 import timestampToDate from '@/components/utils/timestampToDate';
 
-import OrderModal from '../../components/week7/OrderModal.vue';
+import CouponModal from '../../components/week7/CouponModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   components: {
-    OrderModal,
+    CouponModal,
     Pagination,
   },
   data() {
     return {      
       title: '訂單列表',
       tempCouponList: [],
-      selectedOrder: {},
+      selectedCoupon: {},
     };
   },
   created() {
@@ -134,11 +134,11 @@ export default {
       const { formattedDate } = timestampToDate(timestamp);
       return formattedDate;
     },
-    // 查看訂單
-    checkOrder(item) {
-      this.selectedOrder = { ...item };
-      console.log('order',this.selectedOrder);
-      this.$refs.orderModal.orderModal.show();
+    // 查看優惠卷
+    checkCoupon(item) {
+      this.selectedCoupon = { ...item };
+      console.log('coupon',this.selectedCoupon);
+      this.$refs.couponModal.couponModal.show();
     },
     // DELETE 刪除指定訂單
     deleteOrder(orderId) {
