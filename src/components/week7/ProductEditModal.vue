@@ -261,12 +261,12 @@ export default {
     });
   },
   methods: {
-    // POST 新增商品 or PUT 編輯商品
+     // POST or PUT 新增商品
     updateData() {
       // -> 新增商品
       let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
       let method = 'post';
-      // -> 編輯現有商品
+      // -> 編輯商品
       if (!this.isNew) {
         url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
         method = 'put';

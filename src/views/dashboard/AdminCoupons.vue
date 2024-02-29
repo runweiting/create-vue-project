@@ -17,7 +17,7 @@
                               登出
                           </button>
                         </div>
-                        <!-- orderModal -->
+                        <!-- couponModal -->
                         <coupon-modal ref="couponModal" :currentCoupon="selectedCoupon" :is-new="isNew">
                         </coupon-modal>
                     </div>
@@ -91,8 +91,8 @@ import { mapActions, mapState } from 'pinia';
 import couponsStore from '@/stores/couponsStore';
 import timestampToDate from '@/components/utils/timestampToDate';
 
-import CouponModal from '../../components/week7/CouponModal.vue';
-import Pagination from '../../components/week7/Pagination.vue';
+import CouponModal from '@/components/week7/CouponModal.vue';
+import Pagination from '@/components/week7/Pagination.vue';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 

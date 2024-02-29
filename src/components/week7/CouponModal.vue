@@ -15,7 +15,7 @@
             <span>優惠卷ID：{{ tempCoupon.id }}</span>
             <br>
           </h5>
-          <button @click="cancelUpdateOrder"
+          <button @click="cancelUpdate"
             type="button"
             class="btn btn-outline-light"
             data-bs-dismiss="modal"
@@ -105,7 +105,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button @click="cancelUpdateOrder"
+          <button @click="cancelUpdate"
             type="button"
             class="btn btn-secondary"
             data-bs-dismiss="modal"
@@ -142,8 +142,6 @@ export default {
       inputDisabled: true,
       startDateTimestamp: null,
       dueDateTimestamp: null,
-      // 顯示或隱藏啟用日期
-      showStartDateInput: true,
     }
   },
   created() {
@@ -201,16 +199,16 @@ export default {
     togglerEdit() {
       this.inputDisabled = false;
     },
-    // 關閉修改訂單
-    cancelUpdateOrder() {
+    // 關閉修改
+    cancelUpdate() {
       this.inputDisabled = true;
     },
-    // PUT 更新優惠卷
+    // POST or PUT 新增優惠卷
     updateCoupon() {
       // -> 新增優惠卷
       let url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon`;
       let method = 'post';
-      // -> 編輯現有優惠卷
+      // -> 編輯優惠卷
       if (!this.isNew) {
         url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
         method = 'put';
