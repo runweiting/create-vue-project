@@ -87,8 +87,8 @@
 
 <script>
 import Swal from 'sweetalert2';
-import EditModal from './EditModal.vue';
-import DelModal from './DelModal.vue';
+import EditModal from './ProductEditModal.vue';
+import DelModal from './ProductDelModal.vue';
 import Pagination from './Pagination.vue';
 
 export default {

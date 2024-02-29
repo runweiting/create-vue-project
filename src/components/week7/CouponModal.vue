@@ -113,7 +113,7 @@
             取消
           </button>
           <button @click="updateCoupon" type="button" class="btn btn-danger">
-            更新訂單
+            確認
           </button>
         </div>
       </div>
@@ -133,6 +133,7 @@ const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   props: {
     currentCoupon: Object,
+    isNew: Boolean,
   },
   data() {
     return {
@@ -141,6 +142,8 @@ export default {
       inputDisabled: true,
       startDateTimestamp: null,
       dueDateTimestamp: null,
+      // 顯示或隱藏啟用日期
+      showStartDateInput: true,
     }
   },
   created() {
@@ -204,14 +207,20 @@ export default {
     },
     // PUT 更新優惠卷
     updateCoupon() {
+      // -> 新增優惠卷
+      let url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon`;
+      let method = 'post';
+      // -> 編輯現有優惠卷
+      if (!this.isNew) {
+        url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
+        method = 'put';
+      };
       // 更新啟用日期和截止日期
       this.tempCoupon.start_date = this.startDateTimestamp;
       this.tempCoupon.due_date = this.dueDateTimestamp;
       // Boolean to Number
       const isEnabledValue = this.tempCoupon.is_enabled ? 1 : 0;
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
-      this.axios
-      .put(url, {
+      this.axios[method](url, {
         "data": {
           ...this.tempCoupon,
           is_enabled: isEnabledValue,

@@ -10,7 +10,7 @@
                         </p>
                         <!-- Button trigger modal -->
                         <div class="d-flex justify-content-end gap-2">
-                          <button @click="deleteOrders" type="button" class="btn btn-danger">
+                          <button @click="openModal('new')" type="button" class="btn btn-danger">
                             新增優惠卷
                           </button>
                           <button @click="logout" type="button" class="btn btn-warning">
@@ -18,7 +18,7 @@
                           </button>
                         </div>
                         <!-- orderModal -->
-                        <coupon-modal ref="couponModal" :currentCoupon="selectedCoupon">
+                        <coupon-modal ref="couponModal" :currentCoupon="selectedCoupon" :is-new="isNew">
                         </coupon-modal>
                     </div>
                 </div>
@@ -60,14 +60,14 @@
                                     aria-label="Basic outlined example"
                                 >
                                     <button
-                                    @click="checkCoupon(item)"
+                                    @click="openModal('edit', item)"
                                     type="button"
                                     class="btn btn-outline-primary btn-sm"
                                     >
                                     編輯
                                     </button>
                                     <button
-                                    @click="deleteOrder(item.id)"
+                                    @click="deleteCoupon(item.id)"
                                     type="button"
                                     class="btn btn-outline-danger btn-sm"
                                     >
@@ -106,6 +106,7 @@ export default {
       title: '訂單列表',
       tempCouponList: [],
       selectedCoupon: {},
+      isNew: false,
     };
   },
   created() {
@@ -134,15 +135,23 @@ export default {
       const { formattedDate } = timestampToDate(timestamp);
       return formattedDate;
     },
-    // 查看優惠卷
-    checkCoupon(item) {
-      this.selectedCoupon = { ...item };
-      console.log('coupon',this.selectedCoupon);
-      this.$refs.couponModal.couponModal.show();
+    // 切換 modal 狀態：新增、編輯
+    openModal(state, item) {
+      // 新增
+      if (state === 'new') {
+        this.selectedCoupon = {};
+        this.isNew = true;
+        this.$refs.couponModal.couponModal.show();
+        // 編輯
+      } else if (state === 'edit') {
+        this.selectedCoupon = { ...item };
+        this.isNew = false;
+        this.$refs.couponModal.couponModal.show();
+      }
     },
-    // DELETE 刪除指定訂單
-    deleteOrder(orderId) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${orderId}`;
+    // DELETE 刪除指定優惠卷
+    deleteCoupon(couponId) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${couponId}`;
       this.axios.delete(url)
       .then((res) => {
         Swal.fire({
@@ -153,22 +162,8 @@ export default {
         });
       })
       .then(() => {
-        this.getOrders();
+        this.getCoupons();
       })
-    },
-    // DELETE 刪除全部訂單
-    deleteOrders() {
-      // /v2/api/{api_path}/admin/orders/all
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders/all`;
-      this.axios.delete(url).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.getOrders();
-      });
     },
     // POST 登出
     logout() {
@@ -192,57 +187,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* label 樣式 */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-/* input 樣式，隱藏 checkbox */
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-/* span 樣式，透過 -webkit-transition 和 transition 屬性，設定滑動效果 */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 34px;
-}
-/* span :before 偽元素樣式 */
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  top: 2px;
-  background-color: white;
-  /*  -webkit- 支援舊版瀏覽器 */
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 50%;
-}
-/* 當 input:checked .slider 圓點背景顏色變成綠色 */
-input:checked + .slider {
-  background-color: green;
-}
-/* 當 input:checked .slider:before 圓點滑動至右側 */
-input:checked + .slider:before {
-  /*  -webkit- 、 -ms- 支援舊版瀏覽器 */
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-</style>

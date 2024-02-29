@@ -21,7 +21,7 @@ export default defineStore("couponsStore", {
         const { coupons, pagination } = res.data;
         const newCouponFormat = coupons.map((coupon) => ({
           ...coupon,
-          // 數字轉換布林值
+          // Number to Boolean
           is_enabled: Boolean(coupon.is_enabled),
         }));
         this.couponList = newCouponFormat;
