@@ -1,0 +1,1 @@
+function u($){const t=new Date($*1e3),e=t.getFullYear(),o=t.getMonth()+1,n=t.getDate(),s=t.getHours(),a=t.getMinutes(),c=t.getSeconds(),r=`${e}/${o}/${n}`,m=`${s}:${a}:${c}`,d=`${e}/${o}/${n} ${s}:${a}:${c}`;return{formattedDate:r,formattedTime:m,formattedDay:d}}export{u as t};
