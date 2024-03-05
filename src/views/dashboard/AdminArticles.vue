@@ -4,7 +4,6 @@
             <main class="col mt-4 mb-4">
                 <div class="container py-2">
                     <h2>這是文章頁面</h2>
-                    {{ tempArticleList }}
                     <div class="d-flex justify-content-between gap-2 py-2">
                         <p class="p-2 mb-0">
                         {{ `一頁顯示 ${Object.keys(this.tempArticleList).length} 篇文章` }}
@@ -19,7 +18,7 @@
                           </button>
                         </div>
                         <!-- articleModal -->
-                        <article-modal ref="articleModal" :currentArticle="selectedArticle" :is-new="isNew">
+                        <article-modal ref="articleModal" :is-new="isNew">
                         </article-modal>
                     </div>
                 </div>
@@ -57,14 +56,14 @@
                                     aria-label="Basic outlined example"
                                 >
                                     <button
-                                    @click="openModal('edit', item)"
+                                    @click="openModal('edit', item.id)"
                                     type="button"
                                     class="btn btn-outline-primary btn-sm"
                                     >
                                     編輯
                                     </button>
                                     <button
-                                    @click="deleteCoupon(item.id)"
+                                    @click="deleteArticle(item.id)"
                                     type="button"
                                     class="btn btn-outline-danger btn-sm"
                                     >
@@ -100,7 +99,6 @@ export default {
         return {
             title: '文章列表',
             tempArticleList: [],
-            selectedArticle: {},
             isNew: false,
         }
     },
@@ -124,23 +122,24 @@ export default {
         this.getArticles();
     },
     methods: {
-        ...mapActions(articlesStore, ['getArticles']),
+        ...mapActions(articlesStore, ['getArticles', 'getArticle', 'deleteArticle', 'postArticle']),
         // 轉換 timestamp
         formatDate(timestamp) {
             const { formattedDate } = timestampToDate(timestamp);
             return formattedDate;
         },
-        openModal(state, item) {
+        openModal(state, id) {
             // 新增
             if (state === 'new') {
-                this.selectedArticle = {};
+                this.postArticle();
                 this.isNew = true;
                 this.$refs.articleModal.articleModal.show();
                 // 編輯 
             } else if (state === 'edit') {
-                this.selectedArticle = { ...item };
-                this.isNew = false;
-                this.$refs.articleModal.articleModal.show();
+                this.getArticle(id).then(() => {
+                    this.isNew = false;
+                    this.$refs.articleModal.articleModal.show();
+                });
             }
         }
     }

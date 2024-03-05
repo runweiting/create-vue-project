@@ -27,6 +27,14 @@
           <div class="container-fluid">
             <div class="row mb-5">
               <div class="border rounded p-2 bg-light">
+                <div v-if="!isNaN(tempArticle.create_at)" class="row mb-2">
+                  <div class="col-md-6 d-flex align-items-center gap-3">
+                    <label for="dateInput" class="col-form-label">啟用日期：</label>
+                    <div class="col-sm-6">
+                      <input v-model="formatDate(tempArticle.create_at).formattedDate" disabled class="form-control" type="text" id="dateInput">
+                    </div>
+                  </div>
+                </div>
                 <div class="row mb-2">
                   <div class="col-md-6 d-flex align-items-center gap-3">
                     <label for="enabled" class="col-form-label">啟用狀態：</label>
@@ -96,8 +104,8 @@
                   <div class="row mb-2">
                     <label for="dateInput" class="col-sm-4 col-form-label">發佈日期：</label>
                     <div class="col-sm-8">
-                      <input
-                      v-model="tempArticle.created_at" :disabled="inputDisabled" type="date" class="form-control" id="title">
+                      <input @change="validateDateInput"
+                      v-model="tempArticle.create_at" :disabled="inputDisabled" type="date" class="form-control" id="title">
                     </div>
                   </div>
               </div>
@@ -130,7 +138,7 @@
 <script>
 import Swal from 'sweetalert2';
 import Modal from 'bootstrap/js/dist/modal';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import articlesStore from '@/stores/articlesStore';
@@ -140,7 +148,6 @@ const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   props: {
-    currentArticle: Object,
     isNew: Boolean,
   },
   data() {
@@ -148,9 +155,9 @@ export default {
       articleModal: null,
       tempArticle: {},
       inputDisabled: true,
+      createAtDateTimestamp: null,
       // ckeditor
       editor: ClassicEditor,
-      editorData: '<p>Hello world!!</p>',
       editorConfig: {
         toolbar: ['heading', '|', 'bold', 'italic', 'link']
       },
@@ -159,18 +166,21 @@ export default {
     }
   },
   created() {
-    // 初始化 tempCoupon
+    // 初始化 tempArticle
     this.tempArticle = {
-      ...this.currentArticle,
+      ...this.selectedArticle,
     };
   },
   watch: {
-    currentArticle: {
+    selectedArticle: {
       deep: true,
       handler(updateArticle) {
         this.tempArticle = updateArticle;
       },
     },
+  },
+  computed: {
+    ...mapState(articlesStore, ['selectedArticle']),
   },
   mounted() {
     this.articleModal = new Modal(document.querySelector('#articleModal'), {
@@ -197,6 +207,11 @@ export default {
       const { formattedDate } = timestampToDate(timestamp);
       return { formattedDate }
     },
+    // validateDateInput
+    validateDateInput() {
+      const createAtDate = Math.floor(Date.parse(this.tempArticle.create_at) / 1000);
+      this.createAtDateTimestamp = createAtDate;
+    },
     // 修改訂單
     togglerEdit() {
       this.inputDisabled = false;
@@ -215,9 +230,12 @@ export default {
         url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/article/${this.tempArticle.id}`;
         method = 'put';
       };
+      // 更新啟用日期
+      this.tempArticle.create_at = this.createAtDateTimestamp;
       this.axios[method](url, {
         "data": this.tempArticle})
       .then((res) => {
+        console.log(res);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
@@ -231,6 +249,7 @@ export default {
         this.articleModal.hide();
       })
       .catch((err) => {
+        console.log(err);
         Swal.fire({
           title: err,
           icon: 'error',
@@ -241,10 +260,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.order-img {
-  object-fit: cover;
-  height: 50px;
-}
-</style>

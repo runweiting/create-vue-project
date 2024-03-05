@@ -65,21 +65,21 @@
                     <label for="title" class="col-sm-4 col-form-label">優惠卷標題：</label>
                     <div class="col-sm-8">
                       <input
-                      v-model="tempCoupon.title" :disabled="inputDisabled" type="text" class="form-control" id="title">
+                      v-model.lazy="tempCoupon.title" :disabled="inputDisabled" type="text" class="form-control" id="title">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="code" class="col-sm-4 col-form-label">優惠卷碼：</label>
                     <div class="col-sm-8">
                       <input
-                      v-model="tempCoupon.code" :disabled="inputDisabled" type="text" class="form-control" id="code">
+                      v-model.lazy="tempCoupon.code" :disabled="inputDisabled" type="text" class="form-control" id="code">
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="percent" class="col-sm-4 col-form-label">折扣百分比：</label>
                     <div class="col-sm-8">
                       <input
-                      v-model="tempCoupon.percent" :disabled="inputDisabled" type="text" class="form-control" id="percent">
+                      v-model.lazy="tempCoupon.percent" :disabled="inputDisabled" type="text" class="form-control" id="percent">
                     </div>
                   </div>
                 </form>

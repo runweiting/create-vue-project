@@ -67,7 +67,8 @@ export default {
         .then((res) => {
           console.log(res)
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           Swal.fire({
             title: '驗證錯誤，請重新登入',
             icon: 'error',
