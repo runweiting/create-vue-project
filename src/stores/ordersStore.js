@@ -26,6 +26,7 @@ export default defineStore("orderStore", {
         }));
         this.orderList = newOrderFormat;
         this.pagination = pagination;
+        console.log(this.orderList);
       });
     },
     updateTotal(order) {

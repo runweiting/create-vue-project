@@ -31,6 +31,7 @@
                             <th scope="col" class="fw-bold">訂單編號</th>
                             <th scope="col" class="fw-bold">品項</th>
                             <th scope="col" class="fw-bold">金額</th>
+                            <th scope="col" class="fw-bold">優惠卷</th>
                             <th scope="col" class="fw-bold">訂單狀態</th>
                             <th scope="col" class="fw-bold">付款日期</th>
                             <th></th>
@@ -59,7 +60,16 @@
                                   {{ (Object.keys(item.products)).length }}
                               </td>
                               <td>
-                                {{ item.calculateTotal }}
+                                <span v-if="item.total">
+                                  {{ item.total }}
+                                </span>
+                                <span v-else>
+                                  {{ item.calculateTotal }}
+                                </span>
+                              </td>
+                              <td>
+                                <i v-if="item.calculateTotal !== item.total" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                                <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                               </td>
                               <td :class="{ 'text-success': item.is_paid, 'text-danger': !item.is_paid }">
                                   {{ item.is_paid ? "已付款" : "未付款" }}

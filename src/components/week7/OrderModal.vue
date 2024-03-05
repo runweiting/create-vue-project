@@ -96,7 +96,6 @@
                 <div class="container">
                   <div class="d-flex justify-content-between">
                     <h5>商品內容</h5>
-                    <span class="fs-6 text-danger">優惠碼：</span>
                   </div>
                 </div>
                 <div class="container table-responsive">
@@ -111,9 +110,13 @@
                     </thead>
                     <tbody>
                       <tr v-for="(item) in tempOrder.products" :key="item.id">
-                        <td class="d-flex align-items-center gap-1">
+                        <td class="d-flex align-items-center gap-2">
                           <img :src="item.product.imageUrl" class="rounded order-img" />
-                          <small>{{ item.product.title }}</small>
+                          <div>
+                            <small>{{ item.product.title }}</small>
+                            <br>
+                            <small v-if="item.coupon" class="text-danger">優惠碼：{{ item.coupon.code }}、折數：{{ item.coupon.percent }}%</small>
+                          </div>
                         </td>
                         <td class="pe-0">
                           <div class="d-flex justify-content-between align-items-center">
@@ -151,15 +154,22 @@
                           原始金額：
                           <br>
                           更新金額：
+                          <br>
+                          折扣金額：
                         </td>
-                        <td class="text-end fs-5 text-danger fw-bold">
-                          <span :class="{ 'fs-6': subTotal, 'fw-normal': subTotal, 'text-dark': subTotal, 'text-decoration-line-through': subTotal }">
+                        <td class="text-end text-danger fw-bold">
+                          <span :class="{ 'fw-normal': subTotal, 'text-dark': subTotal, 'text-decoration-line-through': subTotal }">
                               {{ tempOrder.calculateTotal }}元
                           </span>
                           <br>
-                          <span :class="{ 'fs-6': !subTotal, 'fw-normal': !subTotal, 'text-dark': !subTotal, 'text-decoration-line-through': !subTotal }">
+                          <span :class="{ 'fw-normal': !subTotal, 'text-dark': !subTotal, 'text-decoration-line-through': !subTotal }">
                               {{ subTotal }}元
                           </span>
+                          <br>
+                          <span v-if="tempOrder.calculateTotal !== tempOrder.total">
+                            {{ tempOrder.total }}元
+                          </span>
+                          <span v-else :class="{ 'fw-normal': tempOrder.calculateTotal == tempOrder.total, 'text-dark': tempOrder.calculateTotal == tempOrder.total }">無優惠碼</span>
                         </td>
                         <td></td>
                       </tr>
