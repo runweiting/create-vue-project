@@ -90,8 +90,17 @@
                 </small>
               </td>
               <td>總計</td>
-              <td class="text-end">{{ cartTotal }}元</td>
+              <td v-if="!couponState.success" class="text-end">{{ cartTotal }}元</td>
+              <td v-else class="text-end">{{ couponState.data.final_total }}元</td>
               <td></td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <div class="input-group">
+                  <input :disabled="couponState.success" v-model="couponCode" type="text" class="form-control" :placeholder="couponState.success ? couponState.message : '請輸入優惠碼'" aria-label="coupon_code" aria-describedby="coupon_code">
+                  <button @click="applyCoupon(couponCode)" class="btn btn-secondary" type="button" id="coupon_code">套用優惠卷</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <td colspan="4">
@@ -115,14 +124,18 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '@/stores/cartStore';
 import loadingStore from '@/stores/loadingStore';
+import couponsStore from '@/stores/couponsStore';
 
 export default {
   data() {
     return {
       title: '購物車列表',
+      // 優惠碼
+      couponCode: null,
     };
   },
   mounted() {
@@ -130,10 +143,26 @@ export default {
   },
   computed: {
     ...mapState(cartStore, ['cartList', 'cartTotal']),
-    ...mapState(loadingStore, ['loadingStatus'])
+    ...mapState(loadingStore, ['loadingStatus']),
+    ...mapState(couponsStore, ['couponState'])
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'putCart', 'deleteCart', 'deleteCarts']),
+    ...mapActions(couponsStore, ['postCoupon']),
+    applyCoupon() {
+      this.postCoupon(this.couponCode)
+      .then(() => {
+        this.couponCode = '';
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: '套用優惠卷失敗',
+          text: err.message || '發生未知錯誤',
+          icon: 'error',
+          confirmButtonText: '確定'
+        });
+      })
+    },
   },
 };
 </script>

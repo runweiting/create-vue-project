@@ -77,6 +77,8 @@
 
 <script>
 import { ErrorMessage } from 'vee-validate';
+import { mapActions } from 'pinia';
+import couponsStore from '@/stores/couponsStore';
 
 export default {
   emits: ['sendOrder'],
@@ -97,8 +99,10 @@ export default {
   },
   components: { ErrorMessage },
   methods: {
+    ...mapActions(couponsStore, ['clearCoupon']),
     OnSubmit() {
       this.$emit('sendOrder', this.data);
+      this.clearCoupon();
     },
     resetForm() {
       this.$refs.form.resetForm();

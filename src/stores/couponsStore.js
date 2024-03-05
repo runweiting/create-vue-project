@@ -1,5 +1,5 @@
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { defineStore } from "pinia";
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
@@ -9,6 +9,8 @@ export default defineStore("couponsStore", {
     // 優惠卷列表
     couponList: [],
     pagination: {},
+    // 優惠卷狀態
+    couponState: {},
   }),
   actions: {
     // GET 優惠卷列表
@@ -27,6 +29,29 @@ export default defineStore("couponsStore", {
         this.pagination = pagination;
         console.log(this.couponList);
       });
+    },
+    // POST 優惠卷
+    postCoupon(code) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`;
+      return axios
+        .post(url, {
+          data: { code },
+        })
+        .then((res) => {
+          this.couponState = res.data;
+          console.log(this.couponState);
+        })
+        .catch((err) => {
+          Swal.fire({
+            title: err.data.message,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        });
+    },
+    // 清除優惠卷
+    clearCoupon() {
+      this.couponState = {};
     },
   },
 });
