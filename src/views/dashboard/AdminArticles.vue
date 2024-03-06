@@ -13,9 +13,6 @@
                           <button @click="openModal('new')" type="button" class="btn btn-danger">
                             新增文章
                           </button>
-                          <button @click="logout" type="button" class="btn btn-warning">
-                              登出
-                          </button>
                         </div>
                         <!-- articleModal -->
                         <article-modal ref="articleModal" :is-new="isNew">
@@ -82,7 +79,6 @@
 </template>
 
 <script>
-// import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import articlesStore from '@/stores/articlesStore';
 import timestampToDate from '@/components/utils/timestampToDate';

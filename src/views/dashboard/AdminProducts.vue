@@ -8,7 +8,6 @@
             <p class="p-2 mb-0">
               {{ `一頁顯示 ${Object.keys(this.products).length} 項商品` }}
             </p>
-            <!-- Button trigger modal -->
             <div class="d-flex justify-content-end gap-2">
               <button
                 @click="openModal('new')"
@@ -17,9 +16,6 @@
                 id="modalBtn"
               >
                 建立新的商品
-              </button>
-              <button @click="logout" type="button" class="btn btn-warning">
-                登出
               </button>
             </div>
             <!-- editModal -->
@@ -37,24 +33,24 @@
         </div>
         <div class="container">
           <table class="table table-hover">
-            <thead class="table-dark">
+            <thead class="table-dark fw-bold">
               <tr>
-                <th scope="col" class="fw-bold">分類</th>
-                <th scope="col" class="fw-bold"></th>
-                <th scope="col" class="fw-bold">商品名稱</th>
-                <th scope="col" class="fw-bold">原價</th>
-                <th scope="col" class="fw-bold">售價</th>
-                <th scope="col" class="fw-bold">是否啟用</th>
-                <th scope="col" class="fw-bold">編輯</th>
+                <th scope="col">商品主圖</th>
+                <th scope="col">商品名稱</th>
+                <th scope="col">分類</th>
+                <th scope="col">原價</th>
+                <th scope="col">售價</th>
+                <th scope="col">是否啟用</th>
+                <th scope="col">編輯</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in products" :key="item.title">
-                <td>{{ item.category }}</td>
                 <td>
-                  <img :src="item.imageUrl" style="height: 48px;">
+                  <img :src="item.imageUrl" class="rounded" style="height: 48px;">
                 </td>
                 <td>{{ item.title }}</td>
+                <td>{{ item.category }}</td>
                 <td>{{ item.origin_price }}</td>
                 <td>{{ item.price }}</td>
                 <td>
@@ -94,8 +90,6 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
-import loginStore from '@/stores/loginStore';
 import EditModal from '../../components/week7/ProductEditModal.vue';
 import DelModal from '../../components/week7/ProductDelModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
@@ -124,7 +118,6 @@ export default {
     this.getData();
   },
   methods: {
-    ...mapActions(loginStore, ['logout']),
     // GET 商品列表
     // 預設為第一頁，若 page 傳入值則取代 1
     getData(page = 1) {

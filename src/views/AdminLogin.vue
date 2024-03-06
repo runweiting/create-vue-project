@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import isUserLoggedIn from '../components/utils/isUserLoggedIn';
 
 const { VITE_APP_URL } = import.meta.env;
@@ -58,27 +58,20 @@ export default {
     };
   },
   created() {
-    // 從 cookies 讀取 token
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
-      '$1',
-    );
-    // axios headers 預設寫法
-    if (token) {
-      this.axios.defaults.headers.common.Authorization = token;
-    }
+    // // 從 cookies 讀取 token
+    // const token = document.cookie.replace(
+    //   /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1',
+    // );
+    // // axios headers 預設寫法
+    // if (token) {
+    //   this.axios.defaults.headers.common.Authorization = token;
+    // }
   },
   methods: {
     // POST 登入及驗證
     login() {
       // 驗證是否有 token
       if (isUserLoggedIn()) {
-        Swal.fire({
-          title: '已成功登入，不需重複登入',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        });
         this.goToAdmin();
         return;
       }
@@ -122,12 +115,6 @@ export default {
     goToAdmin() {
       if (isUserLoggedIn()) {
         // 已登入，可進入後台
-        Swal.fire({
-          title: '這是後台商品頁面',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        });
         this.$router.push({ name: 'admin' });
       } else {
         // 未登入，導向登入頁面

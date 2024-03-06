@@ -29,6 +29,11 @@
               <RouterLink 
               :to="{ name: 'home' }" class="nav-link text-decoration-none">回到前台</RouterLink>
             </li>
+            <li class="nav-item">
+              <button @click="logout" type="button" class="btn btn-warning">
+                登出
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -41,43 +46,15 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
-
-const { VITE_APP_URL } = import.meta.env;
+import loginStore from '@/stores/loginStore';
+import { mapActions } from 'pinia';
 
 export default {
   created() {
-    // 從 cookies 讀取 token
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/,
-      '$1',
-    );
-    // axios headers 預設寫法
-    this.axios.defaults.headers.common.Authorization = token;
-  },
-  mounted() {
-    this.checkAdmin();
+    this.checkLogin();
   },
   methods: {
-    // POST 驗證登入
-    checkAdmin() {
-      const url = `${VITE_APP_URL}/api/user/check`;
-      this.axios
-        .post(url)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err);
-          Swal.fire({
-            title: '驗證錯誤，請重新登入',
-            icon: 'error',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            this.$router.push({ name: 'login' });
-          });
-        });
-    },
+    ...mapActions(loginStore, ['checkLogin', 'logout']),
   }
 }
 </script>
