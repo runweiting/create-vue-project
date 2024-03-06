@@ -86,7 +86,7 @@
 import { mapState, mapActions } from 'pinia';
 
 // 匯入 stores
-import productsStore from '@/stores/productsStore';
+import userProductsStore from '@/stores/userProductsStore';
 import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
 import loadingStore from '@/stores/loadingStore';
@@ -115,12 +115,12 @@ export default {
     this.getCategory();
   },
   computed: {
-    ...mapState(productsStore, ['productList']),
+    ...mapState(userProductsStore, ['productList']),
     ...mapState(categoryStore, ['categoryList']),
     ...mapState(loadingStore, ['loadingStatus'])
   },
   methods: {
-    ...mapActions(productsStore, ['getProducts']),
+    ...mapActions(userProductsStore, ['getProducts']),
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(categoryStore, ['getCategory']),
 

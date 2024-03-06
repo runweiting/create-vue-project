@@ -1,5 +1,5 @@
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { defineStore } from "pinia";
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
@@ -26,7 +26,6 @@ export default defineStore("orderStore", {
         }));
         this.orderList = newOrderFormat;
         this.pagination = pagination;
-        console.log(this.orderList);
       });
     },
     updateTotal(order) {
@@ -39,6 +38,36 @@ export default defineStore("orderStore", {
         total += product.qty * product.product.price;
       });
       return total;
+    },
+    // DELETE 刪除指定訂單
+    deleteOrder(orderId) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${orderId}`;
+      axios
+        .delete(url)
+        .then((res) => {
+          Swal.fire({
+            title: res.data.message,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .then(() => {
+          this.getOrders();
+        });
+    },
+    // DELETE 刪除全部訂單
+    deleteOrders() {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders/all`;
+      axios.delete(url).then((res) => {
+        Swal.fire({
+          title: res.data.message,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.getOrders();
+      });
     },
   },
 });

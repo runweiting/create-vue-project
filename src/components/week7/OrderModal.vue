@@ -167,7 +167,7 @@
                           </span>
                           <br>
                           <span v-if="tempOrder.calculateTotal !== tempOrder.total">
-                            {{ tempOrder.total }}元
+                            {{ Math.round(tempOrder.total) }}元
                           </span>
                           <span v-else :class="{ 'fw-normal': tempOrder.calculateTotal == tempOrder.total, 'text-dark': tempOrder.calculateTotal == tempOrder.total }">無優惠碼</span>
                         </td>

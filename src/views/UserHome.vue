@@ -59,7 +59,7 @@ import '../assets/swiper/effectCards.css';
 import { EffectCards, EffectCreative, Pagination, Autoplay } from 'swiper/modules';
 
 import { mapState, mapActions } from 'pinia';
-import productsStore from '@/stores/productsStore';
+import productsStore from '@/stores/userProductsStore';
 import cartStore from '@/stores/cartStore';
 
 export default {

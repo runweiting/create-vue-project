@@ -90,7 +90,7 @@ import Swal from 'sweetalert2';
 import { mapState, mapActions } from 'pinia';
 
 // 匯入 stores
-import productsStore from '@/stores/productsStore';
+import productsStore from '@/stores/userProductsStore';
 import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
 import loadingStore from '@/stores/loadingStore';

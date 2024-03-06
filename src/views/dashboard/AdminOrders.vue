@@ -22,15 +22,15 @@
                 <div class="container">
                     <table class="table table-hover">
                         <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="fw-bold">日期</th>
-                            <th scope="col" class="fw-bold">序號</th>
-                            <th scope="col" class="fw-bold">訂單編號</th>
-                            <th scope="col" class="fw-bold">品項</th>
-                            <th scope="col" class="fw-bold">金額</th>
-                            <th scope="col" class="fw-bold">優惠卷</th>
-                            <th scope="col" class="fw-bold">訂單狀態</th>
-                            <th scope="col" class="fw-bold">付款日期</th>
+                        <tr class="fw-bold">
+                            <th scope="col">日期</th>
+                            <th scope="col">序號</th>
+                            <th scope="col">訂單編號</th>
+                            <th scope="col">品項</th>
+                            <th scope="col">金額</th>
+                            <th scope="col">優惠卷</th>
+                            <th scope="col">訂單狀態</th>
+                            <th scope="col">付款日期</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -58,7 +58,7 @@
                               </td>
                               <td>
                                 <span v-if="item.total">
-                                  {{ item.total }}
+                                  {{ Math.round(item.total) }}
                                 </span>
                                 <span v-else>
                                   {{ item.calculateTotal }}
@@ -105,15 +105,12 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import ordersStore from '@/stores/ordersStore';
 import timestampToDate from '@/components/utils/timestampToDate';
 
 import OrderModal from '../../components/week7/OrderModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
-
-const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   components: {
@@ -147,7 +144,7 @@ export default {
     this.getOrders();
   },
   methods: {
-    ...mapActions(ordersStore, ['getOrders']),
+    ...mapActions(ordersStore, ['getOrders', 'deleteOrder', 'deleteOrders']),
     // 轉換 timestamp
     formatDate(timestamp) {
       const { formattedDate, formattedTime } = timestampToDate(timestamp);
@@ -158,93 +155,8 @@ export default {
     // 查看訂單
     checkOrder(item) {
       this.selectedOrder = { ...item };
-      console.log('order',this.selectedOrder);
       this.$refs.orderModal.orderModal.show();
-    },
-    // DELETE 刪除指定訂單
-    deleteOrder(orderId) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${orderId}`;
-      this.axios.delete(url)
-      .then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .then(() => {
-        this.getOrders();
-      })
-    },
-    // DELETE 刪除全部訂單
-    deleteOrders() {
-      // /v2/api/{api_path}/admin/orders/all
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders/all`;
-      this.axios.delete(url).then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.getOrders();
-      });
     },
   },
 };
 </script>
-
-<style>
-/* label 樣式 */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-/* input 樣式，隱藏 checkbox */
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-/* span 樣式，透過 -webkit-transition 和 transition 屬性，設定滑動效果 */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 34px;
-}
-/* span :before 偽元素樣式 */
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  top: 2px;
-  background-color: white;
-  /*  -webkit- 支援舊版瀏覽器 */
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 50%;
-}
-/* 當 input:checked .slider 圓點背景顏色變成綠色 */
-input:checked + .slider {
-  background-color: green;
-}
-/* 當 input:checked .slider:before 圓點滑動至右側 */
-input:checked + .slider:before {
-  /*  -webkit- 、 -ms- 支援舊版瀏覽器 */
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-</style>

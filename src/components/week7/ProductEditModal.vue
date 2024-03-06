@@ -41,7 +41,7 @@
                 <h4 class="fw-bold">多圖新增</h4>
                 <!-- // ? v-if 資料是否已有多圖，有則顯示，沒有不顯示 -->
                 <div v-if="Array.isArray(tempProduct.imagesUrl)" class="mb-4">
-                  <div v-for="(url, key) in tempProduct.imagesUrl" :key="key">
+                  <div v-for="(key) in tempProduct.imagesUrl" :key="key">
                     <label :for="`url${key}`" class="form-label"
                       >圖片網址</label
                     >
@@ -219,6 +219,7 @@
 import Swal from 'sweetalert2';
 import Modal from 'bootstrap/js/dist/modal';
 
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   props: {
     tempData: Object,
@@ -227,9 +228,6 @@ export default {
   emit: ['getData'],
   data() {
     return {
-      // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_APP_URL,
-      apiPath: import.meta.env.VITE_APP_PATH,
       editModal: null,
       tempProduct: {
         imagesUrl: [],
@@ -264,11 +262,11 @@ export default {
      // POST or PUT 新增商品
     updateData() {
       // -> 新增商品
-      let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
+      let url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`;
       let method = 'post';
       // -> 編輯商品
       if (!this.isNew) {
-        url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
+        url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${this.tempProduct.id}`;
         method = 'put';
       }
       this.axios[method](url, {
@@ -302,7 +300,7 @@ export default {
       const formData = new FormData();
       // 在 formData 最後一個子節點插入 file 和 'file-to-upload'
       formData.append('file-to-upload', file);
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/upload`;
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/upload`;
       this.axios.post(url, formData);
     },
   },

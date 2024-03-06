@@ -16,10 +16,10 @@
       <div class="container table-responsive">
         <table class="table table-hover align-middle">
           <thead class="table-warning">
-            <tr class="align-middle" style="height: 48px">
-              <th scope="col" class="fw-bold">品名</th>
-              <th scope="col" class="fw-bold">數量/單位</th>
-              <th scope="col" class="fw-bold text-end">單價</th>
+            <tr class="align-middle fw-bold" style="height: 48px">
+              <th scope="col">品名</th>
+              <th scope="col">數量/單位</th>
+              <th scope="col" class="text-end">單價</th>
               <th></th>
             </tr>
           </thead>
@@ -91,7 +91,7 @@
               </td>
               <td>總計</td>
               <td v-if="!couponState.success" class="text-end">{{ cartTotal }}元</td>
-              <td v-else class="text-end">{{ couponState.data.final_total }}元</td>
+              <td v-else class="text-end">{{ Math.round(couponState.data.final_total) }}元</td>
               <td></td>
             </tr>
             <tr>

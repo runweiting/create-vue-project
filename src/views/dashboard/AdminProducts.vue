@@ -23,11 +23,11 @@
               ref="editModal"
               :tempData="tempData"
               :is-new="isNew"
-              @getData="getData"
+              @getData="getProducts"
             >
             </edit-modal>
             <!-- delModal -->
-            <del-modal ref="delModal" :tempData="tempData" @getData="getData">
+            <del-modal ref="delModal" :tempData="tempData" @getData="getProducts">
             </del-modal>
           </div>
         </div>
@@ -83,7 +83,7 @@
             </tbody>
           </table>
         </div>
-        <Pagination :pages="pagination" @showPage="getData" />
+        <Pagination :pages="pagination" @showPage="getProducts" />
       </div>
     </div>
   </main>
@@ -115,18 +115,17 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    this.getProducts();
   },
   methods: {
     // GET 商品列表
     // 預設為第一頁，若 page 傳入值則取代 1
-    getData(page = 1) {
+    getProducts(page = 1) {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products?page=${page}`;
       this.axios.get(url).then((res) => {
         const { products, pagination } = res.data;
         this.products = products;
         this.pagination = pagination;
-        console.log(this.products)
       });
     },
     // 切換 modal 狀態：新增、編輯、刪除

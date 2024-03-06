@@ -11,7 +11,7 @@
 
 <script>
 import { mapState, mapActions } from 'pinia';
-import productsStore from '@/stores/productsStore';
+import userProductsStore from '@/stores/userProductsStore';
 import categoryStore from '@/stores/categoryStore';
 
 export default {
@@ -30,7 +30,7 @@ export default {
     ...mapState(categoryStore, ['categoryList']),
   },
   methods: {
-    ...mapActions(productsStore, ['getProducts']),
+    ...mapActions(userProductsStore, ['getProducts']),
   },
 };
 </script>

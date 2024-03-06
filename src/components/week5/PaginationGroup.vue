@@ -60,14 +60,14 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { mapState, mapActions } from 'pinia';
-import productsStore from '@/stores/productsStore';
+import userProductsStore from '@/stores/userProductsStore';
 
 export default {
   computed: {
-    ...mapState(productsStore, ['pagination']),
+    ...mapState(userProductsStore, ['pagination']),
   },
   methods: {
-    ...mapActions(productsStore, ['getProducts']),
+    ...mapActions(userProductsStore, ['getProducts']),
   },
 };
 </script>
