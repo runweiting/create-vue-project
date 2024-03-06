@@ -57,7 +57,8 @@
                                   {{ (Object.keys(item.products)).length }}
                               </td>
                               <td>
-                                <span v-if="item.total">
+                                <!-- 有優惠卷 total 折後金額，沒有優惠卷不能用 -->
+                                <span v-if="Object.values(item.products).some(item => item.coupon)">
                                   {{ Math.round(item.total) }}
                                 </span>
                                 <span v-else>

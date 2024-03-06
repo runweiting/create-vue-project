@@ -1,4 +1,3 @@
-<!-- eslint-disable max-len -->
 <template>
   <!-- orderModal -->
   <div
@@ -121,7 +120,7 @@
                         <td class="pe-0">
                           <div class="d-flex justify-content-between align-items-center">
                             <div class="input-group input-group-sm">
-                              <input v-model="item.qty" :disabled="inputDisabled" @click="updateTotal" 
+                              <input v-model="item.qty" :disabled="item.coupon" @click="updateSubTotal" 
                               type="number" min="1"
                               class="form-control" 
                               />
@@ -166,10 +165,10 @@
                               {{ subTotal }}元
                           </span>
                           <br>
-                          <span v-if="tempOrder.calculateTotal !== tempOrder.total">
+                          <span v-if="Object.values(tempOrder.products).some(item => item.coupon)">
                             {{ Math.round(tempOrder.total) }}元
                           </span>
-                          <span v-else :class="{ 'fw-normal': tempOrder.calculateTotal == tempOrder.total, 'text-dark': tempOrder.calculateTotal == tempOrder.total }">無優惠碼</span>
+                          <span v-else class="fw-normal text-dark">無優惠碼</span>
                         </td>
                         <td></td>
                       </tr>
@@ -252,7 +251,6 @@ export default {
       // 禁止點擊 Modal 以外區域以關閉對話框
       backdrop: 'static',
     });
-    console.log(this.tempOrder)
   },
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
@@ -264,11 +262,17 @@ export default {
     // 修改訂單
     togglerEdit() {
       this.inputDisabled = false;
-      this.updateTotal();
+      const productValues = Object.values(this.tempOrder.products);
+      if (productValues.some(item => item.coupon && item.coupon.code)) {
+        // 如果訂單中有優惠券
+        this.subTotal = 0;
+      } else {
+        this.updateSubTotal();
+      }
     },
     // 重新計算訂單總價
-    updateTotal() {
-      this.subTotal = this.tempOrder.calculateTotal;
+    updateSubTotal() {
+      // this.subTotal = this.tempOrder.calculateTotal;
       let total = 0;
       Object.values(this.tempOrder.products).forEach((product) => {
         total += product.qty * product.product.price;
@@ -300,8 +304,6 @@ export default {
         this.inputDisabled = true;
         this.orderModal.hide();
         this.getOrders();
-        // 將新的訂單數據設置給組件的數據屬性
-        this.tempOrder = [...this.currentOrder];
       })
       .catch((err) => {
         Swal.fire({
