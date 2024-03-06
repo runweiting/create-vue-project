@@ -1,4 +1,3 @@
-<!-- eslint-disable max-len -->
 <template>
   <!-- couponModal -->
   <div
@@ -249,10 +248,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.order-img {
-  object-fit: cover;
-  height: 50px;
-}
-</style>

@@ -22,13 +22,13 @@
                 <div class="container">
                   <table class="table table-hover">
                       <thead class="table-dark">
-                      <tr>
-                          <th scope="col" class="fw-bold">優惠卷標題</th>
-                          <th scope="col" class="fw-bold">優惠碼</th>
-                          <th scope="col" class="fw-bold">折扣</th>
-                          <th scope="col" class="fw-bold">起始日</th>
-                          <th scope="col" class="fw-bold">截止日</th>
-                          <th scope="col" class="fw-bold">啟用狀態</th>
+                      <tr class="fw-bold">
+                          <th scope="col">優惠卷標題</th>
+                          <th scope="col">優惠碼</th>
+                          <th scope="col">折扣</th>
+                          <th scope="col">起始日</th>
+                          <th scope="col">截止日</th>
+                          <th scope="col">啟用狀態</th>
                           <th></th>
                       </tr>
                       </thead>
@@ -83,15 +83,12 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import couponsStore from '@/stores/couponsStore';
 import timestampToDate from '@/components/utils/timestampToDate';
 
 import CouponModal from '@/components/week7/CouponModal.vue';
 import Pagination from '@/components/week7/Pagination.vue';
-
-const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 export default {
   components: {
@@ -126,7 +123,7 @@ export default {
     this.getCoupons();
   },
   methods: {
-    ...mapActions(couponsStore, ['getCoupons']),
+    ...mapActions(couponsStore, ['getCoupons', 'deleteCoupon']),
     // 轉換 timestamp
     formatDate(timestamp) {
       const { formattedDate } = timestampToDate(timestamp);
@@ -145,22 +142,6 @@ export default {
         this.isNew = false;
         this.$refs.couponModal.couponModal.show();
       }
-    },
-    // DELETE 刪除指定優惠卷
-    deleteCoupon(couponId) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${couponId}`;
-      this.axios.delete(url)
-      .then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .then(() => {
-        this.getCoupons();
-      })
     },
   },
 };

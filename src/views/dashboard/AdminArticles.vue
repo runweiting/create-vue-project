@@ -22,11 +22,11 @@
                 <div class="container">
                   <table class="table table-hover">
                       <thead class="table-dark">
-                        <tr>
-                            <th scope="col" class="fw-bold">發佈日期</th>
-                            <th scope="col" class="fw-bold">文章標題</th>
-                            <th scope="col" class="fw-bold">作者名稱</th>
-                            <th scope="col" class="fw-bold">是否公開</th>
+                        <tr class="fw-bold">
+                            <th scope="col">發佈日期</th>
+                            <th scope="col">文章標題</th>
+                            <th scope="col">作者名稱</th>
+                            <th scope="col">是否公開</th>
                             <th></th>
                         </tr>
                       </thead>

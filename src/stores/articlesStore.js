@@ -18,30 +18,18 @@ export default defineStore("articlesStore", {
     getArticles(page = 1) {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/articles?page=${page}`;
       axios.get(url).then((res) => {
-        console.log(res.data);
         const { articles, pagination } = res.data;
         this.articleList = articles;
         this.pagination = pagination;
-        console.log("articleList", this.articleList);
       });
     },
-    // getArticle(id) {
-    //   const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/article/${id}`;
-    //   axios.get(url).then((res) => {
-    //     console.log(res.data);
-    //     this.selectedArticle = res.data.article;
-    //     console.log("selectedArticle", this.selectedArticle);
-    //   });
-    // },
     postArticle() {
       this.selectedArticle = {};
     },
     getArticle(id) {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/article/${id}`;
       return axios.get(url).then((res) => {
-        console.log(res.data);
         this.selectedArticle = res.data.article;
-        console.log("selectedArticle", this.selectedArticle);
       });
     },
     // DELETE 刪除指定文章

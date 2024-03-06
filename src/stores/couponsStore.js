@@ -18,7 +18,6 @@ export default defineStore("couponsStore", {
     getCoupons(page = 1) {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupons?page=${page}`;
       axios.get(url).then((res) => {
-        console.log(res.data);
         const { coupons, pagination } = res.data;
         const newCouponFormat = coupons.map((coupon) => ({
           ...coupon,
@@ -27,7 +26,6 @@ export default defineStore("couponsStore", {
         }));
         this.couponList = newCouponFormat;
         this.pagination = pagination;
-        console.log(this.couponList);
       });
     },
     // POST 優惠卷
@@ -39,7 +37,6 @@ export default defineStore("couponsStore", {
         })
         .then((res) => {
           this.couponState = res.data;
-          console.log(this.couponState);
         })
         .catch((err) => {
           Swal.fire({
@@ -52,6 +49,23 @@ export default defineStore("couponsStore", {
     // 清除優惠卷
     clearCoupon() {
       this.couponState = {};
+    },
+    // DELETE 刪除指定優惠卷
+    deleteCoupon(couponId) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupon/${couponId}`;
+      axios
+        .delete(url)
+        .then((res) => {
+          Swal.fire({
+            title: res.data.message,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        })
+        .then(() => {
+          this.getCoupons();
+        });
     },
   },
 });
