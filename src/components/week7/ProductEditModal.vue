@@ -42,19 +42,19 @@
                 <h4 class="fw-bold">多圖新增</h4>
                 <!-- // ? v-if 資料是否已有多圖，有則顯示，沒有不顯示 -->
                 <div v-if="Array.isArray(tempProduct.imagesUrl)" class="mb-4">
-                  <div v-for="(key) in tempProduct.imagesUrl" :key="key">
-                    <label :for="`url${key}`" class="form-label"
+                  <div v-for="(imgUrl, index) in tempProduct.imagesUrl" :key="`url${index}`">
+                    <label :for="`url${index}`" class="form-label"
                       >圖片網址</label
                     >
                     <input
-                      :id="`url${key}`"
-                      v-model="tempProduct.imagesUrl[key]"
+                      :id="`url${index}`"
+                      v-model="tempProduct.imagesUrl[index]"
                       type="url"
                       class="form-control mb-2"
                       placeholder="請輸入網址"
                     />
                     <img
-                      :src="tempProduct.imagesUrl[key]"
+                      :src="tempProduct.imagesUrl[index]"
                       class="img-fluid mb-2"
                     />
                   </div>
