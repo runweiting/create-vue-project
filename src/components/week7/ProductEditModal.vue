@@ -173,10 +173,10 @@
                   <div class="col-md-6">
                     <label for="range" class="form-label">商品評價</label>
                     <span class="ms-2 text-primary fw-bold fs-5">
-                      {{ selectedRating }} 分
+                      {{ tempProduct.productRatings }} 分
                     </span>
                     <input
-                      v-model="selectedRating"
+                      v-model="tempProduct.productRatings"
                       type="range"
                       class="form-range"
                       min="0"
@@ -217,8 +217,9 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import modalMixin from '@/mixins/modalMixin';
+import showSuccessToast from '@/utils/showSuccessToast';
+import showErrorToast from '@/utils/showErrorToast'
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
@@ -231,8 +232,8 @@ export default {
       editModal: null,
       tempProduct: {
         imagesUrl: [],
+        productRatings: 0, 
       },
-      selectedRating: 0,
     };
   },
   emit: ['getData'],
@@ -267,22 +268,12 @@ export default {
         data: this.tempProduct,
       })
         .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-        })
-        .then(() => {
+          showSuccessToast(res.data.message);
           this.modal.hide();
           this.$emit('getData');
         })
         .catch((err) => {
-          Swal.fire({
-            title: err.response.data.message,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
+          showErrorToast(err.response.data.message);
         });
     },
     // 上傳圖片

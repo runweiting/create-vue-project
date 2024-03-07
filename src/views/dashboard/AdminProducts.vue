@@ -110,6 +110,7 @@ export default {
       isNew: false,
       tempData: {
         imagesUrl: [],
+        productRatings: 0, 
       },
       // 分頁
       pagination: {},
@@ -135,11 +136,13 @@ export default {
       if (isNew === 'new') {
         this.tempData = {
           imagesUrl: [],
+          productRatings: 0, 
         };
         this.isNew = true;
         // 使用 modalMixin.js
         this.$refs.editModal.openModal();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
+        console.log(this.products)
       } else if (isNew === 'edit') {
         this.tempData = { ...item };
         // * 如果沒有多圖的 item，要新增多圖
@@ -148,6 +151,7 @@ export default {
         }
         this.isNew = false;
         this.$refs.editModal.openModal();
+        console.log(this.products)
         // 刪除 -> 淺拷貝、開啟 delModal
       } else if (isNew === 'delete') {
         this.tempData = { ...item };
