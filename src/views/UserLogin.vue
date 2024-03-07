@@ -57,16 +57,6 @@ export default {
       },
     };
   },
-  created() {
-    // // 從 cookies 讀取 token
-    // const token = document.cookie.replace(
-    //   /(?:(?:^|.*;\s*)myToken\s*=\s*([^;]*).*$)|^.*$/, '$1',
-    // );
-    // // axios headers 預設寫法
-    // if (token) {
-    //   this.axios.defaults.headers.common.Authorization = token;
-    // }
-  },
   methods: {
     // POST 登入及驗證
     login() {

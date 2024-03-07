@@ -47,7 +47,7 @@ const baseRoutes = [
   {
     path: "/login",
     name: "login",
-    component: () => import("../views/AdminLogin.vue"),
+    component: () => import("../views/UserLogin.vue"),
     // meta 屬性添加 requiresAuth 和 message，前者表示是否需要驗證，後者是額外的信息
     meta: {
       title: "登入後台",
