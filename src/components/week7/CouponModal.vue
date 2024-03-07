@@ -6,6 +6,7 @@
   tabindex="-1"
   aria-labelledby="couponModalLabel"
   aria-hidden="true"
+  ref="modal"
   >
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -122,10 +123,11 @@
 
 <script>
 import Swal from 'sweetalert2';
-import Modal from 'bootstrap/js/dist/modal';
 import { mapActions } from 'pinia';
+
+import modalMixin from '@/mixins/modalMixin';
 import couponsStore from '@/stores/couponsStore';
-import timestampToDate from '../utils/timestampToDate';
+import timestampToDate from '@/utils/timestampToDate';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -143,6 +145,7 @@ export default {
       dueDateTimestamp: null,
     }
   },
+  mixins: [modalMixin],
   created() {
     // 初始化 tempCoupon
     this.tempCoupon = {
@@ -161,14 +164,6 @@ export default {
         // this.putOrder(updateOrder);
       },
     },
-  },
-  mounted() {
-    this.couponModal = new Modal(document.querySelector('#couponModal'), {
-      // 禁用鍵盤 Esc 關閉 modal
-      keyboard: false,
-      // 禁止點擊 Modal 以外區域以關閉對話框
-      backdrop: 'static',
-    });
   },
   methods: {
     ...mapActions(couponsStore, ['getCoupons']),
@@ -235,7 +230,7 @@ export default {
       })
       .then(() => {
         this.inputDisabled = true;
-        this.couponModal.hide();
+        this.modal.hide();
       })
       .catch((err) => {
         Swal.fire({
@@ -247,4 +242,4 @@ export default {
     },
   },
 };
-</script>../../utils/timestampToDate
+</script>

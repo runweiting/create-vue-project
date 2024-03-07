@@ -6,6 +6,7 @@
   tabindex="-1"
   aria-labelledby="orderModalLabel"
   aria-hidden="true"
+  ref="modal"
   >
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -198,13 +199,13 @@
 
 <script>
 import Swal from 'sweetalert2';
-import Modal from 'bootstrap/js/dist/modal';
 import { mapActions } from 'pinia';
+
 import ordersStore from '@/stores/ordersStore';
-import timestampToDate from '../utils/timestampToDate';
+import timestampToDate from '@/utils/timestampToDate';
+import modalMixin from '@/mixins/modalMixin';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-
 export default {
   props: {
     currentOrder: Object,
@@ -217,6 +218,7 @@ export default {
       subTotal: 0,
     }
   },
+  mixins: [modalMixin],
   created() {
     // 確保 tempOrder, user 使用前已初始化
     this.tempOrder = {
@@ -244,14 +246,6 @@ export default {
     },
     
   },
-  mounted() {
-    this.orderModal = new Modal(document.querySelector('#orderModal'), {
-      // 禁用鍵盤 Esc 關閉 modal
-      keyboard: false,
-      // 禁止點擊 Modal 以外區域以關閉對話框
-      backdrop: 'static',
-    });
-  },
   methods: {
     ...mapActions(ordersStore, ['getOrders', 'timestampToDate']),
     // 轉換 timestamp
@@ -272,7 +266,6 @@ export default {
     },
     // 重新計算訂單總價
     updateSubTotal() {
-      // this.subTotal = this.tempOrder.calculateTotal;
       let total = 0;
       Object.values(this.tempOrder.products).forEach((product) => {
         total += product.qty * product.product.price;
@@ -302,7 +295,7 @@ export default {
       .then(() => {
         this.subTotal = 0;
         this.inputDisabled = true;
-        this.orderModal.hide();
+        this.modal.hide();
         this.getOrders();
       })
       .catch((err) => {
@@ -322,4 +315,4 @@ export default {
   object-fit: cover;
   height: 50px;
 }
-</style>../../utils/timestampToDate
+</style>

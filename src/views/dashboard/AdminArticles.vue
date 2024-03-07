@@ -81,8 +81,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import articlesStore from '@/stores/articlesStore';
-import timestampToDate from '@/components/utils/timestampToDate';
-
+import timestampToDate from '@/utils/timestampToDate';
 import ArticleModal from '@/components/week7/ArticleModal.vue'
 import Pagination from '@/components/week7/Pagination.vue';
 
@@ -129,15 +128,15 @@ export default {
             if (state === 'new') {
                 this.postArticle();
                 this.isNew = true;
-                this.$refs.articleModal.articleModal.show();
+                this.$refs.articleModal.openModal();
                 // 編輯 
             } else if (state === 'edit') {
                 this.getArticle(id).then(() => {
                     this.isNew = false;
-                    this.$refs.articleModal.articleModal.show();
+                    this.$refs.articleModal.openModal();
                 });
             }
         }
     }
 }
-</script>@/utils/timestampToDate
+</script>

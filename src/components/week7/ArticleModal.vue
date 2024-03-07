@@ -7,6 +7,7 @@
   tabindex="-1"
   aria-labelledby="articleModalLabel"
   aria-hidden="true"
+  ref="modal"
   >
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -137,12 +138,12 @@
 
 <script>
 import Swal from 'sweetalert2';
-import Modal from 'bootstrap/js/dist/modal';
 import { mapActions, mapState } from 'pinia';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+import modalMixin from '@/mixins/modalMixin';
 import articlesStore from '@/stores/articlesStore';
-import timestampToDate from '../utils/timestampToDate';
+import timestampToDate from '@/utils/timestampToDate';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -165,6 +166,7 @@ export default {
       newTag: '',
     }
   },
+  mixins: [modalMixin],
   created() {
     // 初始化 tempArticle
     this.tempArticle = {
@@ -181,14 +183,6 @@ export default {
   },
   computed: {
     ...mapState(articlesStore, ['selectedArticle']),
-  },
-  mounted() {
-    this.articleModal = new Modal(document.querySelector('#articleModal'), {
-      // 禁用鍵盤 Esc 關閉 modal
-      keyboard: false,
-      // 禁止點擊 Modal 以外區域以關閉對話框
-      backdrop: 'static',
-    });
   },
   methods: {
     ...mapActions(articlesStore, ['getArticles']),
@@ -235,7 +229,6 @@ export default {
       this.axios[method](url, {
         "data": this.tempArticle})
       .then((res) => {
-        console.log(res);
         Swal.fire({
           title: res.data.message,
           icon: 'success',
@@ -246,10 +239,9 @@ export default {
       })
       .then(() => {
         this.inputDisabled = true;
-        this.articleModal.hide();
+        this.modal.hide();
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({
           title: err,
           icon: 'error',
@@ -259,4 +251,4 @@ export default {
     },
   },
 };
-</script>../../utils/timestampToDate
+</script>

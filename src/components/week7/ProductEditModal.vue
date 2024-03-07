@@ -218,7 +218,6 @@
 
 <script>
 import Swal from 'sweetalert2';
-// import Modal from 'bootstrap/js/dist/modal';
 import modalMixin from '@/mixins/modalMixin';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;

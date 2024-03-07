@@ -85,7 +85,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import couponsStore from '@/stores/couponsStore';
-import timestampToDate from '@/components/utils/timestampToDate';
+import timestampToDate from '@/utils/timestampToDate';
 
 import CouponModal from '@/components/week7/CouponModal.vue';
 import Pagination from '@/components/week7/Pagination.vue';
@@ -135,14 +135,14 @@ export default {
       if (state === 'new') {
         this.selectedCoupon = {};
         this.isNew = true;
-        this.$refs.couponModal.couponModal.show();
+        this.$refs.couponModal.openModal();
         // 編輯
       } else if (state === 'edit') {
         this.selectedCoupon = { ...item };
         this.isNew = false;
-        this.$refs.couponModal.couponModal.show();
+        this.$refs.couponModal.openModal();
       }
     },
   },
 };
-</script>@/utils/timestampToDate
+</script>

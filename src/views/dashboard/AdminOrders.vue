@@ -108,7 +108,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import ordersStore from '@/stores/ordersStore';
-import timestampToDate from '@/components/utils/timestampToDate';
+import timestampToDate from '@/utils/timestampToDate';
 
 import OrderModal from '../../components/week7/OrderModal.vue';
 import Pagination from '../../components/week7/Pagination.vue';
@@ -156,9 +156,8 @@ export default {
     // 查看訂單
     checkOrder(item) {
       this.selectedOrder = { ...item };
-      this.$refs.orderModal.orderModal.show();
+      this.$refs.orderModal.openModal();
     },
   },
 };
 </script>
-@/utils/timestampToDate
