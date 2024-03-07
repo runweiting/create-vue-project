@@ -137,16 +137,16 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import modalMixin from '@/mixins/modalMixin';
 import articlesStore from '@/stores/articlesStore';
 import timestampToDate from '@/utils/timestampToDate';
+import showErrorToast from "@/utils/showErrorToast";
+import showSuccessToast from "@/utils/showSuccessToast";
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-
 export default {
   props: {
     isNew: Boolean,
@@ -229,12 +229,7 @@ export default {
       this.axios[method](url, {
         "data": this.tempArticle})
       .then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        showSuccessToast(res.data.message);
         this.getArticles();
       })
       .then(() => {
@@ -242,11 +237,7 @@ export default {
         this.modal.hide();
       })
       .catch((err) => {
-        Swal.fire({
-          title: err,
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        showErrorToast(err.response.data.message)
       });
     },
   },

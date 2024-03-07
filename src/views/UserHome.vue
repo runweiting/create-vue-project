@@ -110,7 +110,6 @@ export default {
         async loadingData() {
             await Promise.all([this.getProducts(), this.getCart()]);
             this.mensWearCards = this.productList.filter(item => item.category === "男裝");
-            console.log(this.mensWearCards);
             this.womensWearCards = this.productList.filter(item => item.category === "女裝");
         },
     }

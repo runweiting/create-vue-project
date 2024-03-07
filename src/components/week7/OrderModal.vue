@@ -198,12 +198,13 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions } from 'pinia';
 
 import ordersStore from '@/stores/ordersStore';
 import timestampToDate from '@/utils/timestampToDate';
 import modalMixin from '@/mixins/modalMixin';
+import showSuccessToast from '@/utils/showSuccessToast';
+import showErrorToast from '@/utils/showErrorToast';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
@@ -285,25 +286,14 @@ export default {
         "data": this.tempOrder,
       })
       .then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .then(() => {
+        showSuccessToast(res.data.message);
         this.subTotal = 0;
         this.inputDisabled = true;
         this.modal.hide();
         this.getOrders();
       })
       .catch((err) => {
-        Swal.fire({
-          title: err.response.data.message,
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        showErrorToast(err.response.data.message);
       });
     },
   },

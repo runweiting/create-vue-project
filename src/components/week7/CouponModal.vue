@@ -122,12 +122,13 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions } from 'pinia';
 
 import modalMixin from '@/mixins/modalMixin';
 import couponsStore from '@/stores/couponsStore';
 import timestampToDate from '@/utils/timestampToDate';
+import showSuccessToast from '@/utils/showSuccessToast';
+import showErrorToast from '@/utils/showErrorToast';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -179,12 +180,7 @@ export default {
       const dueDate = Math.floor(Date.parse(this.tempCoupon.due_date) / 1000);
       // 啟用日不可大於截止日
       if (startDate > dueDate) {
-        Swal.fire({
-          title: '啟用日不可大於截止日',
-          icon: 'info',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        showErrorToast('啟用日不可大於截止日');
       }
       this.startDateTimestamp = startDate;
       this.dueDateTimestamp = dueDate;
@@ -220,12 +216,7 @@ export default {
         }
       })
       .then((res) => {
-        Swal.fire({
-          title: res.data.message,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        showSuccessToast(res.data.message);
         this.getCoupons();
       })
       .then(() => {
@@ -233,11 +224,7 @@ export default {
         this.modal.hide();
       })
       .catch((err) => {
-        Swal.fire({
-          title: err,
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        showErrorToast(err.response.data.message);
       });
     },
   },

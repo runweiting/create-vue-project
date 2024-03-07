@@ -124,7 +124,6 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '@/stores/cartStore';
 import loadingStore from '@/stores/loadingStore';
@@ -149,18 +148,10 @@ export default {
   methods: {
     ...mapActions(cartStore, ['getCart', 'putCart', 'deleteCart', 'deleteCarts']),
     ...mapActions(couponsStore, ['postCoupon']),
-    applyCoupon() {
-      this.postCoupon(this.couponCode)
+    async applyCoupon() {
+      await this.postCoupon(this.couponCode)
       .then(() => {
         this.couponCode = '';
-      })
-      .catch((err) => {
-        Swal.fire({
-          title: '套用優惠卷失敗',
-          text: err.message || '發生未知錯誤',
-          icon: 'error',
-          confirmButtonText: '確定'
-        });
       })
     },
   },

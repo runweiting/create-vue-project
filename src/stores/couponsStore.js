@@ -1,6 +1,7 @@
 import axios from "axios";
-import Swal from "sweetalert2";
 import { defineStore } from "pinia";
+import showSuccessToast from "@/utils/showSuccessToast";
+import showErrorToast from "@/utils/showErrorToast";
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -17,34 +18,34 @@ export default defineStore("couponsStore", {
     // 預設為第一頁，若 page 傳入值則取代 1
     getCoupons(page = 1) {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupons?page=${page}`;
-      axios.get(url).then((res) => {
-        const { coupons, pagination } = res.data;
-        const newCouponFormat = coupons.map((coupon) => ({
-          ...coupon,
-          // Number to Boolean
-          is_enabled: Boolean(coupon.is_enabled),
-        }));
-        this.couponList = newCouponFormat;
-        this.pagination = pagination;
-      });
-    },
-    // POST 優惠卷
-    postCoupon(code) {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`;
-      return axios
-        .post(url, {
-          data: { code },
-        })
+      axios
+        .get(url)
         .then((res) => {
-          this.couponState = res.data;
+          const { coupons, pagination } = res.data;
+          const newCouponFormat = coupons.map((coupon) => ({
+            ...coupon,
+            // Number to Boolean
+            is_enabled: Boolean(coupon.is_enabled),
+          }));
+          this.couponList = newCouponFormat;
+          this.pagination = pagination;
         })
         .catch((err) => {
-          Swal.fire({
-            title: err.data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-          });
+          showErrorToast(err.response.data.message);
         });
+    },
+    // POST 優惠卷
+    async postCoupon(code) {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`;
+      try {
+        const res = await axios.post(url, {
+          data: { code },
+        });
+        this.couponState = res.data;
+        showSuccessToast(res.data.message);
+      } catch (err) {
+        showErrorToast(err.response.data.message);
+      }
     },
     // 清除優惠卷
     clearCoupon() {
@@ -56,15 +57,11 @@ export default defineStore("couponsStore", {
       axios
         .delete(url)
         .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        })
-        .then(() => {
+          showSuccessToast(res.data.message);
           this.getCoupons();
+        })
+        .catch((err) => {
+          showErrorToast(err.response.data.message);
         });
     },
   },

@@ -42,7 +42,7 @@
 
 <script>
 import { mapActions, mapState } from 'pinia';
-import productInfoStore from '@/stores/productInfoStore';
+import userProductsStore from '@/stores/userProductsStore';
 import cartStore from '@/stores/cartStore';
 
 export default {
@@ -51,11 +51,8 @@ export default {
       qty: 1,
     };
   },
-  mounted() {
-    
-  },
   computed: {
-    ...mapState(productInfoStore, ['selectedProduct'])
+    ...mapState(userProductsStore, ['selectedProduct'])
   },
   methods: {
     ...mapActions(cartStore, ['addToCart']),

@@ -1,7 +1,7 @@
 import axios from "axios";
-import Swal from "sweetalert2";
 import { defineStore } from "pinia";
 import showErrorToast from "@/utils/showErrorToast";
+import showSuccessToast from "@/utils/showSuccessToast";
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
@@ -30,7 +30,14 @@ export default defineStore("articlesStore", {
         });
     },
     postArticle() {
-      this.selectedArticle = {};
+      this.selectedArticle = {
+        title: "",
+        description: "",
+        image: "",
+        tag: [],
+        create_at: null,
+        author: "",
+      };
     },
     async getArticle(id) {
       try {
@@ -47,12 +54,7 @@ export default defineStore("articlesStore", {
       axios
         .delete(url)
         .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          showSuccessToast(res.data.message);
           this.getArticles();
         })
         .catch((err) => {

@@ -9,12 +9,12 @@
     <div class="container table-responsive">
       <table class="table table-hover align-middle">
         <thead class="table-secondary">
-          <tr class="align-middle" style="height: 48px">
+          <tr class="align-middle fw-bold" style="height: 48px">
             <th scope="col" style="width: 17%">
               <category-list />
             </th>
-            <th scope="col" class="fw-bold" style="width: 30%">商品名稱</th>
-            <th scope="col" class="fw-bold" style="width: 28%">價格</th>
+            <th scope="col" style="width: 30%">商品名稱</th>
+            <th scope="col" style="width: 28%">價格</th>
             <th scope="col" style="width: 25%"></th>
           </tr>
         </thead>
@@ -85,16 +85,16 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 
-// 匯入 stores
 import userProductsStore from '@/stores/userProductsStore';
 import cartStore from '@/stores/cartStore';
 import categoryStore from '@/stores/categoryStore';
 import loadingStore from '@/stores/loadingStore';
 
-// 匯入 components
+import showErrorToast from '@/utils/showErrorToast'
 import CategoryList from '../week5/CategoryList.vue';
 import PaginationGroup from '../week5/PaginationGroup.vue';
 
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   components: {
     CategoryList,
@@ -102,9 +102,6 @@ export default {
   },
   data() {
     return {
-      // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_APP_URL,
-      apiPath: import.meta.env.VITE_APP_PATH,
       title: '商品列表',
       // 指定商品
       product: {},
@@ -129,12 +126,14 @@ export default {
       // 使用 loadingStore
       const loading = loadingStore();
       loading.loadingStatus.getProduct = targetId;
-      const url = `${this.apiUrl}/api/${this.apiPath}/product/${targetId}`;
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/product/${targetId}`;
       this.$route.params.id = targetId;
       try {
         const res = await this.axios.get(url);
         this.product = res.data.product;
         loading.loadingStatus.getProduct = "";
+      } catch(err) {
+        showErrorToast(err.response.data.message)
       } finally {
         this.$router.push({ name: "productInfo" });
       }

@@ -1,9 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-const apiUrl = import.meta.env.VITE_APP_URL;
-const apiPath = import.meta.env.VITE_APP_PATH;
-
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default defineStore("categoryStore", {
   state: () => ({
     // 從 GET 購物車列表中的 category 來分類
@@ -12,7 +10,7 @@ export default defineStore("categoryStore", {
   actions: {
     // GET 商品列表
     getCategory() {
-      const url = `${apiUrl}/api/${apiPath}/products/all`;
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/products/all`;
       axios.get(url).then((res) => {
         const { products } = res.data;
         // new Set(...) 是一種 ES6 中的集合類型，可以存儲唯一的值，重複的值會被忽略

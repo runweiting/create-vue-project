@@ -44,10 +44,10 @@
 
 <script>
 import Swal from "sweetalert2";
-import isUserLoggedIn from '../components/utils/isUserLoggedIn';
+import isUserLoggedIn from '@/utils/isUserLoggedIn';
+import showSuccessToast from "@/utils/showSuccessToast";
 
 const { VITE_APP_URL } = import.meta.env;
-
 export default {
   data() {
     return {
@@ -72,12 +72,8 @@ export default {
           // 將 expired 和 token 存入 cookies
           const { expired, token } = res.data;
           document.cookie = `myToken=${token}; expires=${new Date(expired)}`;
-          Swal.fire({
-            title: '您已成功登入',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
+          showSuccessToast(res.data.message)
+          .then(() => {
             this.goToAdmin();
           });
           // 清空 user
@@ -86,8 +82,7 @@ export default {
         .catch((err) => {
           if (err.response && err.response.status === 400) {
             Swal.fire({
-              title: '登入帳號或密碼錯誤',
-              text: '請輸入正確的帳號和密碼',
+              title: '請輸入正確的帳號和密碼',
               icon: 'error',
               confirmButtonText: 'OK',
             });
@@ -98,7 +93,6 @@ export default {
               confirmButtonText: 'OK',
             });
           };
-          console.log(err)
         });
     },
     // 如有 token 導向後台
@@ -118,4 +112,4 @@ export default {
     },
   },
 };
-</script>../utils/isUserLoggedIn
+</script>
