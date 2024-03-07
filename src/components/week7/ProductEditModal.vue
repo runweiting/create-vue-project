@@ -7,6 +7,7 @@
     tabindex="-1"
     aria-labelledby="editModalLabel"
     aria-hidden="true"
+    ref="modal"
   >
     <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -217,7 +218,8 @@
 
 <script>
 import Swal from 'sweetalert2';
-import Modal from 'bootstrap/js/dist/modal';
+// import Modal from 'bootstrap/js/dist/modal';
+import modalMixin from '@/mixins/modalMixin';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
@@ -225,7 +227,6 @@ export default {
     tempData: Object,
     isNew: Boolean,
   },
-  emit: ['getData'],
   data() {
     return {
       editModal: null,
@@ -235,6 +236,8 @@ export default {
       selectedRating: 0,
     };
   },
+  emit: ['getData'],
+  mixins: [modalMixin],
   created() {
     // 將 tempData 的值複製到 tempProduct
     this.tempProduct = { ...this.tempData };
@@ -249,14 +252,6 @@ export default {
         this.tempProduct = updateData;
       },
     },
-  },
-  mounted() {
-    this.editModal = new Modal(document.querySelector('#editModal'), {
-      // 禁用鍵盤 Esc 關閉 modal
-      keyboard: false,
-      // 禁止點擊 Modal 以外區域以關閉對話框
-      backdrop: 'static',
-    });
   },
   methods: {
      // POST or PUT 新增商品
@@ -280,7 +275,7 @@ export default {
           });
         })
         .then(() => {
-          this.editModal.hide();
+          this.modal.hide();
           this.$emit('getData');
         })
         .catch((err) => {

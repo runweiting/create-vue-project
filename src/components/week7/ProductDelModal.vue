@@ -1,55 +1,3 @@
-<script>
-import Swal from 'sweetalert2';
-import Modal from 'bootstrap/js/dist/modal';
-
-export default {
-  props: {
-    tempData: Object,
-  },
-  emit: ['getData'],
-  data() {
-    return {
-      // 新增 apiUrl、apiPath
-      apiUrl: import.meta.env.VITE_APP_URL,
-      apiPath: import.meta.env.VITE_APP_PATH,
-      delModal: null,
-    };
-  },
-  mounted() {
-    this.delModal = new Modal(document.querySelector('#delModal'), {
-      keyboard: false,
-      backdrop: 'static',
-    });
-  },
-  methods: {
-    // DELETE 刪除商品
-    deleteData() {
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempData.id}`;
-      this.axios
-        .delete(url)
-        .then((res) => {
-          Swal.fire({
-            title: res.data.message,
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-        })
-        .then(() => {
-          this.delModal.hide();
-          this.$emit('getData');
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: err.response.data.message,
-            icon: 'error',
-            confirmButtonText: 'OK',
-          });
-        });
-    },
-  },
-};
-</script>
-
 <template>
   <!-- delModal -->
   <div
@@ -58,6 +6,7 @@ export default {
     tabindex="-1"
     aria-labelledby="delModalLabel"
     aria-hidden="true"
+    ref="modal"
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -111,3 +60,49 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+import Swal from 'sweetalert2';
+import modalMixin from '@/mixins/modalMixin';
+
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
+export default {
+  props: {
+    tempData: Object,
+  },
+  data() {
+    return {
+      delModal: null,
+    };
+  },
+  emit: ['getData'],
+  mixins: [modalMixin],
+  methods: {
+    // DELETE 刪除商品
+    deleteData() {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${this.tempData.id}`;
+      this.axios
+        .delete(url)
+        .then((res) => {
+          Swal.fire({
+            title: res.data.message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          });
+        })
+        .then(() => {
+          this.modal.hide();
+          // this.delModal.hide();
+          this.$emit('getData');
+        })
+        .catch((err) => {
+          Swal.fire({
+            title: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        });
+    },
+  },
+};
+</script>

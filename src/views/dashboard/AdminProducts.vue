@@ -27,7 +27,8 @@
             >
             </edit-modal>
             <!-- delModal -->
-            <del-modal ref="delModal" :tempData="tempData" @getData="getProducts">
+            <del-modal
+              ref="delModal" :tempData="tempData" @getData="getProducts">
             </del-modal>
           </div>
         </div>
@@ -136,8 +137,8 @@ export default {
           imagesUrl: [],
         };
         this.isNew = true;
-        // $refs.editModal 是對子組件的引用，而 .editModal 則是子組件中 Bootstrap Modal 實例的屬性或方法
-        this.$refs.editModal.editModal.show();
+        // 使用 modalMixin.js
+        this.$refs.editModal.openModal();
         // 編輯 -> 淺拷貝、PUT、開啟 editModal
       } else if (isNew === 'edit') {
         this.tempData = { ...item };
@@ -146,11 +147,11 @@ export default {
           this.tempData.imagesUrl = [];
         }
         this.isNew = false;
-        this.$refs.editModal.editModal.show();
+        this.$refs.editModal.openModal();
         // 刪除 -> 淺拷貝、開啟 delModal
       } else if (isNew === 'delete') {
         this.tempData = { ...item };
-        this.$refs.delModal.delModal.show();
+        this.$refs.delModal.openModal();
       }
     },
   },
