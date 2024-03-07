@@ -322,4 +322,4 @@ export default {
   object-fit: cover;
   height: 50px;
 }
-</style>
+</style>../../utils/timestampToDate

@@ -247,4 +247,4 @@ export default {
     },
   },
 };
-</script>
+</script>../../utils/timestampToDate

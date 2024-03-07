@@ -118,4 +118,4 @@ export default {
     },
   },
 };
-</script>
+</script>../utils/isUserLoggedIn
