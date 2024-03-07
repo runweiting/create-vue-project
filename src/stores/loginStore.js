@@ -25,9 +25,7 @@ export default defineStore("loginStore", {
       }
       axios
         .post(url)
-        .then((res) => {
-          console.log(res);
-        })
+        .then(() => {})
         .catch((err) => {
           Swal.fire({
             title: err.response.data.message,

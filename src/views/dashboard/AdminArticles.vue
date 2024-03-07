@@ -123,7 +123,7 @@ export default {
             const { formattedDate } = timestampToDate(timestamp);
             return formattedDate;
         },
-        openModal(state, id) {
+        async openModal(state, id) {
             // 新增
             if (state === 'new') {
                 this.postArticle();
@@ -131,10 +131,9 @@ export default {
                 this.$refs.articleModal.openModal();
                 // 編輯 
             } else if (state === 'edit') {
-                this.getArticle(id).then(() => {
-                    this.isNew = false;
-                    this.$refs.articleModal.openModal();
-                });
+                await this.getArticle(id);
+                this.isNew = false;
+                this.$refs.articleModal.openModal();
             }
         }
     }
