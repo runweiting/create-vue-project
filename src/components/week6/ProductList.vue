@@ -11,7 +11,7 @@
         <thead class="table-secondary">
           <tr class="align-middle fw-bold" style="height: 48px">
             <th scope="col" style="width: 17%">
-              <category-list />
+              <category-list @category-selected="handleCategoryChange" />
             </th>
             <th scope="col" style="width: 30%">商品名稱</th>
             <th scope="col" style="width: 28%">價格</th>
@@ -77,7 +77,7 @@
           </tr>
         </tbody>
       </table>
-      <pagination-group></pagination-group>
+      <pagination-group @page-selected="handlePageChange"></pagination-group>
     </div>
   </div>
 </template>
@@ -120,7 +120,14 @@ export default {
     ...mapActions(userProductsStore, ['getProducts']),
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(categoryStore, ['getCategory']),
-
+    // 更新選取類別的商品列表
+    handleCategoryChange(category) {
+      this.getProducts(category)
+    },
+    // 更新選取頁面的商品列表
+    handlePageChange(category, page) {
+      this.getProducts(category, page)
+    },
     // GET 指定商品
     async getProduct(targetId) {
       // 使用 loadingStore

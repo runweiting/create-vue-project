@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'pinia';
-import userProductsStore from '@/stores/userProductsStore';
+import { mapState } from 'pinia';
 import categoryStore from '@/stores/categoryStore';
 
 export default {
+  emits: ['category-selected'],
   data() {
     return {
       currentCategory: '',
@@ -23,14 +23,11 @@ export default {
   watch: {
     // 帶入類別參數
     currentCategory() {
-      this.getProducts(this.currentCategory, 1);
+      this.$emit('category-selected', this.currentCategory, 1)
     },
   },
   computed: {
     ...mapState(categoryStore, ['categoryList']),
-  },
-  methods: {
-    ...mapActions(userProductsStore, ['getProducts']),
   },
 };
 </script>

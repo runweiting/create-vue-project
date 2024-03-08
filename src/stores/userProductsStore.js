@@ -33,6 +33,9 @@ export default defineStore("userProductsStore", {
         const { products, pagination } = res.data;
         this.productList = products;
         this.pagination = pagination;
+        console.log(res.data);
+        console.log(this.productList);
+        console.log(this.pagination);
         // 異步操作完成後，調用排序邏輯
         this.sortProducts();
       } catch (err) {
