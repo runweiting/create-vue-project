@@ -1,1 +1,0 @@
-import{S as e}from"./index-sroXMQlE.js";function n(t){return new Promise(o=>{e.mixin({toast:!0,position:"bottom-end",showConfirmButton:!1,timer:3e3,timerProgressBar:!1,didOpen:s=>{s.addEventListener("mouseenter",e.stopTimer),s.addEventListener("mouseleave",e.resumeTimer)}}).fire({icon:"success",title:t}).then(()=>{o()})})}export{n as s};
