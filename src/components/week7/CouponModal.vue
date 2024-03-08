@@ -36,21 +36,24 @@
                   </div>
                 </div>
                 <div class="row mb-2">
-                  <div class="col-md-6 d-flex align-items-center gap-3">
-                    <label for="enabled" class="col-form-label">啟用狀態：</label>
-                    <div class="col-sm-6">
-                      <select v-model="tempCoupon.is_enabled" :disabled="inputDisabled" class="form-select w-100" id="enabled">
-                        <option :value="true">
-                          已啟用
-                        </option>
-                        <option :value="false">
-                          未啟用
-                        </option>
-                      </select>
+                  <VForm v-slot="{ errors }" ref="enabledForm" @submit="onSubmit" class="col-md-6 ">
+                    <div class="d-flex align-items-center gap-3">
+                      <label for="enabled" class="col-form-label">啟用狀態：</label>
+                      <div class="col-sm-6">
+                        <VField v-model="tempCoupon.is_enabled" rules="required" :class="{ 'is-invalid': errors['啟用狀態'] }"  :disabled="inputDisabled" class="form-select w-100" id="enabled" name="啟用狀態" as="select">
+                          <option value="已啟用">
+                            已啟用
+                          </option>
+                          <option value="未啟用">
+                            未啟用
+                          </option>
+                        </VField>
+                        <ErrorMessage name="啟用狀態" class="invalid-feedback"/>
+                      </div>
+                      <i v-if="tempCoupon.is_enabled === '已啟用'" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
+                      <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
                     </div>
-                    <i v-if="tempCoupon.is_enabled" class="bi bi-check-circle-fill text-success" style="scale: 150%;"></i>
-                    <i v-else class="bi bi-x-circle-fill text-danger" style="scale: 150%;"></i>
-                  </div>
+                  </VForm>
                   <div class="col-md-6">
                     <button @click="togglerEdit" type="button" class="btn btn-warning">修改優惠卷</button>
                   </div>
@@ -60,46 +63,52 @@
             <div class="row">
               <div class="col-md-6">
                 <h5>優惠卷資訊</h5>
-                <form>
+                <!-- 在 <VForm> 往 v-slot 傳入 errors 錯誤訊息，所以 <VField> 和 <ErrorMessage> 都可讀取 errors -->
+                <VForm v-slot="{ errors }" ref="couponForm" @submit="onSubmit">
                   <div class="row mb-2">
                     <label for="title" class="col-sm-4 col-form-label">優惠卷標題：</label>
                     <div class="col-sm-8">
-                      <input
-                      v-model.lazy="tempCoupon.title" :disabled="inputDisabled" type="text" class="form-control" id="title">
+                      <VField
+                      v-model.lazy="tempCoupon.title" rules="required" :class="{ 'is-invalid': errors['標題'] }"         :disabled="inputDisabled" type="text" class="form-control" id="title" name="標題"/>
+                      <ErrorMessage name="標題" class="invalid-feedback" />
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="code" class="col-sm-4 col-form-label">優惠卷碼：</label>
                     <div class="col-sm-8">
-                      <input
-                      v-model.lazy="tempCoupon.code" :disabled="inputDisabled" type="text" class="form-control" id="code">
+                      <VField
+                      v-model.lazy="tempCoupon.code" rules="required" :class="{ 'is-invalid': errors['優惠卷碼'] }" :disabled="inputDisabled" type="text" class="form-control" id="code" name="優惠卷碼" />
+                      <ErrorMessage name="優惠卷碼" class="invalid-feedback" />
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="percent" class="col-sm-4 col-form-label">折扣百分比：</label>
                     <div class="col-sm-8">
-                      <input
-                      v-model.lazy="tempCoupon.percent" :disabled="inputDisabled" type="text" class="form-control" id="percent">
+                      <VField
+                      v-model.lazy="tempCoupon.percent" rules="required" :class="{ 'is-invalid': errors['折扣']}" :disabled="inputDisabled" type="text" class="form-control" id="percent" name="折扣" />
+                      <ErrorMessage name="折扣" class="invalid-feedback" />
                     </div>
                   </div>
-                </form>
+                </VForm>
               </div>
               <div class="col-md-6">
                 <h5>修改期限</h5>
-                <form>
+                <VForm v-slot="{ errors }" ref="form" @submit="onSubmit">
                   <div class="row mb-2">
                     <label for="dateInput" class="col-sm-4 col-form-label">啟用日期：</label>
                     <div class="col-sm-8">
-                      <input @change="validateDateInput" v-model="tempCoupon.start_date" :disabled="inputDisabled" class="form-control" type="date" id="dateInput">
+                      <VField @change="validateDateInput" v-model="tempCoupon.start_date" rules="required" :class="{ 'is-invalid': errors['啟用日']}" :disabled="inputDisabled" class="form-control" type="date" id="dateInput" name="啟用日" />
+                      <ErrorMessage name="啟用日" class="invalid-feedback" />
                     </div>
                   </div>
                   <div class="row mb-2">
                     <label for="dateInput" class="col-sm-4 col-form-label">截止日期：</label>
                     <div class="col-sm-8">
-                      <input @change="validateDateInput" v-model="tempCoupon.due_date" :disabled="inputDisabled" class="form-control" type="date" id="dateInput">
+                      <VField @change="validateDateInput" v-model="tempCoupon.due_date" rules="required" :class="{ 'is-invalid': errors['截止日'] }" :disabled="inputDisabled" class="form-control" type="date" id="dateInput" name="截止日" />
+                      <ErrorMessage name="截止日" class="invalid-feedback" />
                     </div>
                   </div>
-                </form>
+                </VForm>
               </div>
             </div>
           </div>
@@ -122,6 +131,7 @@
 </template>
 
 <script>
+import { ErrorMessage } from 'vee-validate';
 import { mapActions } from 'pinia';
 
 import modalMixin from '@/mixins/modalMixin';
@@ -131,7 +141,6 @@ import showSuccessToast from '@/utils/showSuccessToast';
 import showErrorToast from '@/utils/showErrorToast';
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-
 export default {
   props: {
     currentCoupon: Object,
@@ -146,6 +155,7 @@ export default {
       dueDateTimestamp: null,
     }
   },
+  components: { ErrorMessage },
   mixins: [modalMixin],
   created() {
     // 初始化 tempCoupon
@@ -168,6 +178,12 @@ export default {
   },
   methods: {
     ...mapActions(couponsStore, ['getCoupons']),
+    // VeeValidate
+    onSubmit() {
+      this.updateCoupon();
+      this.$refs.enabledForm.resetForm();
+      this.$refs.couponForm.resetForm();
+    },
     // timestamp to String
     formatDate(timestamp) {
       const { formattedDate } = timestampToDate(timestamp);
@@ -207,7 +223,7 @@ export default {
       this.tempCoupon.start_date = this.startDateTimestamp;
       this.tempCoupon.due_date = this.dueDateTimestamp;
       // Boolean to Number
-      const isEnabledValue = this.tempCoupon.is_enabled ? 1 : 0;
+      const isEnabledValue = this.tempCoupon.is_enabled === '已啟用' ? 1 : 0;
       this.axios[method](url, {
         "data": {
           ...this.tempCoupon,

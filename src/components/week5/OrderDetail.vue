@@ -1,7 +1,8 @@
 <template>
   <div class="col-8" style="padding-inline: 4.5rem">
     <h2>{{ title }}</h2>
-    <VForm v-slot="{ errors }" ref="form" @submit="OnSubmit">
+    <!-- 在 <VForm> 往 v-slot 傳入 errors 錯誤訊息，所以 <VField> 和 <ErrorMessage> 都可讀取 errors -->
+    <VForm v-slot="{ errors }" ref="form" @submit="onSubmit">
       <div class="form-floating mb-3">
         <VField
           v-model="data.user.email"
@@ -100,7 +101,7 @@ export default {
   components: { ErrorMessage },
   methods: {
     ...mapActions(couponsStore, ['clearCoupon']),
-    OnSubmit() {
+    onSubmit() {
       this.$emit('sendOrder', this.data);
       this.clearCoupon();
     },
