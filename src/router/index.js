@@ -54,12 +54,12 @@ const baseRoutes = [
     },
   },
   {
-    // 404 頁面
+    // 匹配任意路徑 -> 404 頁面
     path: "/:pathMatch(.*)*",
     component: () => import("../views/NotFound.vue"),
   },
   {
-    // 特定頁面下的重新導向
+    // 特定頁面下的重新導向 -> products 頁面
     path: "/home/:pathMatch(.*)*",
     redirect: {
       name: "products",

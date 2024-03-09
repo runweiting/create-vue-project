@@ -33,13 +33,13 @@
 
 5. 串接 API
    - 產品列表
-     - 分類 category 作法
+     - 分類 category 利用 API query
    - 單一產品頁
      1. 在路由表中寫入動態路由 path: "products/:id'
      2. 在父組件加入 <RouterLink :to="/product/$(product.id”>
      3. 在子組件 const { id } = this.$route.params，id 帶入 axios.get 發出單一商品頁面請求
    - 購物車
-   - 結帳頁
+   - 結帳
 
 6. 畫面特效
 
